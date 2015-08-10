@@ -7,7 +7,7 @@
 
         <template id="upload_attachement" name="Upload attachement" >
                   <t t-call="website.layout">
-                  <t t-set="additional_title">Upload attachement</t>
+                  <t t-set="additional_title">Send in a voucher</t>
                         <div id="wrap">
                             <div class="container">
                                 <h1 class="text-center">
@@ -18,86 +18,41 @@
                                 </h2>
 
                                 <div class="row">
-                                    <section id="forms">
+                                    <section id="forms" class="col-xs-10 col-md-3 col-md-offset-4">
                                         <!-- TODO Multilingual form action support ? -->
-                                        <form class="form-horizontal mt32" method="post" enctype="multipart/form-data">
-
-                                       
-
-                                                <!-- Form Name -->
-                                                <legend>Form Name</legend>
+                                        <form class="mt32" method="post" enctype="multipart/form-data">
 
                                                 <!-- Text input-->
                                                 <div t-attf-class="form-group #{error.get('name') and 'has-error' or ''}">
-                                                    <label class="col-md-3 col-sm-4 control-label" for="name">Issue</label>
-                                                    <div class="col-md-7 col-sm-8">
-                                                        <input type="text" t-att-value="default.get('name')" class="form-control" name="name" required="True"/>
-                                                        <p class="help-block">Give us a hint of what this is about</p>
-                                                    </div>
+                                                    <label for="name">Issue</label>
+                                                    <input type="text" t-attf-value="#{issue and issue.name or ''}" placeholder="Give us a hint of what this is about" class="form-control" name="name" />
+                                                  
                                                 </div>
                                                 <!-- File Button --> 
-                                                <div t-attf-class="form-group #{error.get('uname') and 'has-error' or ''}">
-                                                    <label class="col-md-3 col-sm-4 control-label" for="name">Voucher</label>
-                                                    <div class="col-md-7 col-sm-8">
-                                                        <input type="file" t-att-value="default.get('ufile')" class="form-control" name="name" required="True"/>
+                                                <t t-if="attachements">
+                                                    <b>Vouchers</b><br/>
+                                                    <t t-foreach="attachements" t-as="a">
+                                                        <a t-attf-href="/file/#{a.id}" t-field="a.name"/>
+                                                    </t>
+                                                </t>
+                                                <t t-if="not attachements">                                                                                    
+                                                    <div t-attf-class="form-group #{error.get('ufile') and 'has-error' or ''}">
+                                                        <label for="name">Voucher</label>
+                                                        <input type="file" name="ufile" placeholder="File to upload pdf/jpg/png" required="True"/>
                                                         <p class="help-block">File to upload</p>
                                                     </div>
-                                                </div>
+                                                </t>
                                                 <!-- Textarea -->
                                                 <div t-attf-class="form-group #{error.get('description') and 'has-error' or ''}">
-                                                    <label class="col-md-3 col-sm-4 control-label" for="description">Description</label>
-                                                    <div class="col-md-7 col-sm-8">
-                                                        <textarea id="description" name="description">Extra information</textarea>
-                                                        <p class="help-block">Extra information</p>
-                                                    </div>
+                                                    <label for="description">Description</label>
+                                                    <textarea id="description" name="description" placeholder="Extra information" t-attf-value="#{issue and issue.description or ''}" class="form-control"><t t-esc="issue and issue.description or ''"/></textarea>
+                                                    
                                                 </div>
-                                                                            <div class="form-group">
-                                <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-<fieldset>
-
-<!-- Form Name -->
-<legend>Form Name</legend>
-
-<!-- Text input-->
-<div class="control-group">
-  <label class="control-label" for="name">Issue</label>
-  <div class="controls">
-    <input id="name" name="name" placeholder="issue name" class="input-xlarge" type="text"/>
-    <p class="help-block">Give us a hint of what this is about</p>
-  </div>
-</div>
-
-<!-- File Button --> 
-<div class="control-group">
-  <label class="control-label" for="ufile">Voucher</label>
-  <div class="controls">
-    <input id="ufile" name="ufile" class="input-file" type="file"/>
-  </div>
-</div>
-
-<!-- Textarea -->
-<div class="control-group">
-  <label class="control-label" for="description">Description</label>
-  <div class="controls">                     
-    <textarea id="description" name="description">Extra information</textarea>
-  </div>
-</div>
-
-</fieldset>
-                                   
-
-
-<!-- Button (Double) -->
-<div class="control-group">
-  <label class="control-label" for="send"></label>
-  <div class="controls">
-    <submit id="send" name="send" class="btn btn-success">Send</submit>
-    <submit id="cancel" name="cancel" class="btn btn-inverse">Cancel</submit>
-  </div>
-</div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                            
+                                                    
                                         </form>
                                     </section>
                                 </div> <!-- row -->
