@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+    <record model="ir.ui.view" id="project_issue_form_view">
+            <field name="name">project.issue.form.inherit</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
+            <field name="priority" eval="10"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header/field[@name='stage_id']" position="before">
+                        <button name="create_voucher_customer" string="Customer Voucher" type="object" groups="base.group_user"/>
+                        <button name="create_voucher_supplier" string="Supplier Voucher" type="object" groups="base.group_user"/>
+                </xpath>
+            </field>
+    </record>
+                
+        
+
+    </data>
+</openerp>
