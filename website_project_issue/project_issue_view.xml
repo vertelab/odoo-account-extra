@@ -22,30 +22,34 @@
                                         <!-- TODO Multilingual form action support ? -->
                                         <form class="mt32" method="post" enctype="multipart/form-data">
 
+                                                <div class="alert alert-success" role="alert"  t-if="message.get('success')"><t t-esc="message.get('success')"/></div>
+                                                <div class="alert alert-info"    role="alert"  t-if="message.get('info')"   ><t t-esc="message.get('info')"/></div>
+                                                <div class="alert alert-danger"  role="alert"  t-if="message.get('danger')"><t t-esc="message.get('danger')"/></div>
+                                                <div class="alert alert-warning" role="alert"  t-if="message.get('warning')"><t t-esc="message.get('warning')"/></div>
                                                 <!-- Text input-->
-                                                <div t-attf-class="form-group #{error.get('name') and 'has-error' or ''}">
+                                                <div t-attf-class="form-group #{message.get('name') and 'has-error' or ''}">
                                                     <label for="name">Issue</label>
-                                                    <input type="text" t-attf-value="#{issue and issue.name or ''}" placeholder="Give us a hint of what this is about" class="form-control" name="name" />
-                                                  
+                                                    <input type="text" t-att-value="issue and issue.name or ''" placeholder="Give us a hint of what this is about (optional)" class="form-control input-lg" name="name" />
                                                 </div>
                                                 <!-- File Button --> 
-                                                <t t-if="attachements">
+                                                <t t-if="issue and attachements">
                                                     <b>Vouchers</b><br/>
+                                                    <t t-raw="issue"/>
                                                     <t t-foreach="attachements" t-as="a">
                                                         <a t-attf-href="/file/#{a.id}" t-field="a.name"/>
                                                     </t>
                                                 </t>
-                                                <t t-if="not attachements">                                                                                    
-                                                    <div t-attf-class="form-group #{error.get('ufile') and 'has-error' or ''}">
+                                                <t t-if="not issue">                                                                                    
+                                                    <div t-attf-class="form-group #{message.get('ufile') and 'has-error' or ''}">
                                                         <label for="name">Voucher</label>
-                                                        <input type="file" name="ufile" placeholder="File to upload pdf/jpg/png" required="True"/>
+                                                        <input type="file" name="ufile" placeholder="File to upload pdf/jpg/png" required="True" />
                                                         <p class="help-block">File to upload</p>
                                                     </div>
                                                 </t>
                                                 <!-- Textarea -->
-                                                <div t-attf-class="form-group #{error.get('description') and 'has-error' or ''}">
+                                                <div t-attf-class="form-group #{message.get('description') and 'has-error' or ''}">
                                                     <label for="description">Description</label>
-                                                    <textarea id="description" name="description" placeholder="Extra information" t-attf-value="#{issue and issue.description or ''}" class="form-control"><t t-esc="issue and issue.description or ''"/></textarea>
+                                                    <textarea id="description" name="description" placeholder="Extra information (optional)" t-attf-value="#{issue and issue.description or ''}" class="form-control input-lg"><t t-esc="issue and issue.description or ''"/></textarea>
                                                     
                                                 </div>
                                                 <div class="form-group">

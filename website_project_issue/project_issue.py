@@ -29,6 +29,8 @@ import pytz
 import base64
 from openerp.tools import ustr
 import urllib2
+import re
+import time
 
 
 import logging
@@ -50,17 +52,27 @@ def content_disposition(filename):
 
 class website_project_issue(http.Controller):
         
-    @http.route(['/project/issue/<model("project.issue"):issue>/attachement','/project/issue/new/attachement',], type='http', auth="user", website=True)
+    @http.route(['/project/issue/<model("project.issue"):issue>/attachment','/project/issue/new/attachment', '/upload_voucher'], type='http', auth="user", website=True)
     def upload_attachement(self, issue=False, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        error = {}
+        message = {}
         user = request.env['res.users'].browse(uid)
+        
         if not issue and request.httprequest.method == 'POST':
-            issue = request.env['project.issue'].create({'partner_id': user.partner_id.id, 'name': post.get('name'), 'description': post.get('description')})
+            try: 
+                if len(post.get('name'))<1:
+                    post['name'] = 'Voucher %s %s' % (user.name,time.strftime("%x")) # Why?
+                issue = request.env['project.issue'].create({'partner_id': user.partner_id.id, 
+                                                             'name': post.get('name'), 
+                                                             'description': post.get('description'), 
+                                                             'project_id': request.env['project.project'].search(['|',('partner_id','=',user.partner_id.id),(1,'=',1)])[0].id })
+            except:
+                message['danger'] = 'Could not create an issue'               
+            
         if issue and request.httprequest.method == 'POST':
             issue.write({'partner_id': user.partner_id.id, 'name': post.get('name'), 'description': post.get('description')})
         
-        if request.httprequest.method == 'POST' and post.get('ufile'):
+        if issue and request.httprequest.method == 'POST' and post.get('ufile'):
             _logger.debug("This is attachement post %s /issue/nn" % (post))
             request.env['ir.attachment'].create({
                     'name': post['ufile'].filename,
@@ -70,11 +82,12 @@ class website_project_issue(http.Controller):
                     'datas': base64.encodestring(post['ufile'].read()),
                     'datas_fname': post['ufile'].filename,
                 })
-                
+            message['success'] = _('Voucher uploaded %s (%s)' % (issue.name,issue.id))
         
+        _logger.error("This is a %s and %s and %s, %s" % (type(issue),isinstance(issue,models.Model),issue,request.httprequest.url))
         return request.website.render("website_project_issue.upload_attachement", {
-                'issue': issue,
-                'error': error,
+                'issue': False if re.search("upload_voucher",request.httprequest.url) is not None else issue,
+                'message': message,
                 'attachements': issue and request.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]) or False,
             })
         
