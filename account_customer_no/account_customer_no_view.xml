@@ -1,6 +1,7 @@
 <openerp>
 <data>
 
+<!-- account.inovice -->
     <!-- tree view for both customer and supplier-->
     <record id="view_invoice_tree" model="ir.ui.view">
         <field name="name">account.invoice.tree</field>
@@ -41,7 +42,7 @@
     </record>
 
     <!-- customer / supplier number filter -->
-    <record id="custom_no_view_account_invoice_filter" model="ir.ui.view">
+    <record id="customer_no_view_account_invoice_filter" model="ir.ui.view">
         <field name="name">account.invoice.select</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
@@ -51,6 +52,43 @@
             </field>
             <filter name="group_by_partner_id" position="before">
                 <filter string="Customer/Supplier Number" context="{'group_by':'customer_no'}"/>
+            </filter>
+        </field>
+    </record>
+
+<!-- account.move -->
+    <!-- view for move filter -->
+    <record id="cusomer_no_view_account_move_filter" model="ir.ui.view">
+        <field name="name">account.move.select</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="filter_domain">['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]</attribute>
+            </field>
+            <field name="period_id" position="after">
+                <field name="customer_no"/>
+            </field>
+            <filter string="Period" position="after">
+                <filter string="Customer number" icon="terp-partner" domain="[]" context="{'group_by':'customer_no'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- viewfor move line filter -->
+    <record id="customer_no_view_account_move_line_filter" model="ir.ui.view">
+        <field name="name">Journal Items</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="filter_domain">['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]</attribute>
+            </field>
+            <field name="period_id" position="after">
+                <field name="customer_no"/>
+            </field>
+            <filter string="Period" position="after">
+                <filter string="Customer number" icon="terp-partner" domain="[]" context="{'group_by':'customer_no'}"/>
             </filter>
         </field>
     </record>
