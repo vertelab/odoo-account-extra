@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_invoice_document" inherit_id="account.report_invoice_document" >
+            <!-- Customer number -->
+            <xpath expr="//div[@t-if='o.name']" position="before">
+                <div class="col-xs-2" t-if="o.customer_no">
+                    <strong>Customer no:</strong>
+                    <p t-field="o.customer_no"/>
+                </div>                
+            </xpath>
+            <xpath expr="//div[@t-if='o.partner_id.ref']" position="replace">
+                <div class="col-xs-2" t-if="o.date_due">
+                    <strong>Due Date:</strong>
+                    <p t-field="o.date_due"/>
+                </div> 
+            </xpath>
+
+            <!-- important payment information -->
+            <xpath expr="//p[@t-if='o.comment']" position="after">
+                <p>
+                    <strong>Viktig betalningsinformation:</strong><br/>
+                    <span>Förfallodattum: </span><span t-field="o.date_due"/><br/>
+                    <span>Ange fakturanummer <span t-field="o.number"/> som referens vid betalning.</span><br/>
+                    <span>Ange kundnummer <span t-field="o.customer_no"/> som referens vid betalning.</span><br/>
+                    <span>Summa att betala <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>.</span><br/>
+                    <span>Betalningskonto: BG 5723-7273</span>
+                </p>
+            </xpath>
+
+            
+        
+</template>
+
+          
+  
+</data>
+</openerp>

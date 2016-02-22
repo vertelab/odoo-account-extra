@@ -1,0 +1,59 @@
+<openerp>
+<data>
+
+    <!-- tree view for both customer and supplier-->
+    <record id="view_invoice_tree" model="ir.ui.view">
+        <field name="name">account.invoice.tree</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- form view for customer -->
+    <record id="view_invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="fiscal_position" position="after">
+                <field name="customer_no"/>
+            </field>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="context">{'search_default_customer':1, 'show_address': 1, 'customer_no_search': 1}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- form view for supplier -->
+    <record id="view_invoice_supplier_form" model="ir.ui.view">
+        <field name="name">account.invoice.supplier.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <field name="supplier_invoice_number" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- customer / supplier number filter -->
+    <record id="custom_no_view_account_invoice_filter" model="ir.ui.view">
+        <field name="name">account.invoice.select</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <field name="period_id" position="after">
+                <field name="customer_no" string="Customer/Supplier Number"/>
+            </field>
+            <filter name="group_by_partner_id" position="before">
+                <filter string="Customer/Supplier Number" context="{'group_by':'customer_no'}"/>
+            </filter>
+        </field>
+    </record>
+
+</data>
+</openerp>
