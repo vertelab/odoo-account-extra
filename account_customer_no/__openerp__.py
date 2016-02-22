@@ -19,7 +19,7 @@
 #
 ##############################################################################
 {
-'name': 'Account Invoice Customer Number',
+'name': 'Account Customer Number',
 'version': '0.1',
 'summary': '',
 'category': 'account',
@@ -28,7 +28,7 @@
 'website': 'http://www.vertel.se',
 'depends': ['account'],
 'data': [
-'account_invoice_customer_no_view.xml',
+'account_customer_no_view.xml',
 ],
 'installable': True,
 }
