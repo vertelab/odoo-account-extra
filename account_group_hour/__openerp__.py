@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -18,24 +18,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp import api, models, fields, _
-import logging
-_logger = logging.getLogger(__name__)
-
-
-
-class account_move_line(models.Model):
-    _inherit = "account.move.line"
-
-    def _calc_tax(self):
-        calc_tax = self.env['ir.config_parameter'].get_param('account_calc_tax',default=False)
-        if not calc_tax:
-            calc_tax = '0.80'
-            self.env['ir.config_par_ameter'].set_param('account_calc_tax',calc_tax)
-        if self.debit > 0:
-            self.debit = self.debit * float(calc_tax)
-        if self.credit > 0:
-            self.credit = self.credit * float(calc_tax)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+{
+'name': 'Account Group Hour',
+'version': '0.1',
+'summary': '',
+'category': 'account',
+'description': """Group account moves per hour""",
+'author': 'Vertel AB',
+'website': 'http://www.vertel.se',
+'depends': ['account'],
+'data': [
+        'account_view.xml',
+],
+'installable': True,
+}

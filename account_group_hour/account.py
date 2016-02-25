@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -18,17 +18,21 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-'name': 'Account Calc Tax',
-'version': '0.1',
-'summary': '',
-'category': 'account',
-'description': """Button which attracts VAT at the registration of a transaction""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['account'],
-'data': [
-        'account_view.xml',
-],
-'installable': True,
-}
+
+from openerp import api, models, fields, _
+from datetime import datetime
+import logging
+
+_logger = logging.getLogger(__name__)
+
+class account_move(models.Model):
+    _inherit = "account.move"
+
+    @api.one
+    @api.depends('create_date')
+    def _date_hour(self):
+        self.date_hour = datetime.strptime(self.create_date,'%Y-%m-%d %H:%M:%S').strftime('%Y%m%d-%H')
+    
+    date_hour = fields.Char(string="Hour",compute='_date_hour',store=True)
+    
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
