@@ -38,6 +38,9 @@
             <field name="supplier_invoice_number" position="after">
                 <field name="customer_no"/>
             </field>
+            <xpath expr="//field[@string='Supplier']" position="attributes">
+                <attribute name="context">{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1, 'customer_no_search': 1}</attribute>
+            </xpath>
         </field>
     </record>
 
