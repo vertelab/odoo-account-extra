@@ -26,7 +26,7 @@
 'description': """Extends invoice with more text .""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['account'],
+'depends': ['account', 'sale'],
 'data': [
         'report_invoice.xml',
 ],

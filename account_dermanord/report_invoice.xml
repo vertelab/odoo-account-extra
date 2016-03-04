@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-<data>
-<template id="report_invoice_document" inherit_id="account.report_invoice_document" >
+    <data>
+        <template id="report_invoice_document" inherit_id="account.report_invoice_document" >
+
+            <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="before">
+                <div class="col-xs-5">
+                    <address t-field="o.partner_shipping_id"
+                        t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                </div>
+            </xpath>
+
+            <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="attributes">
+                <attribute name="class">col-xs-5 col-xs-offset-2</attribute>
+            </xpath>
+
             <!-- Customer number -->
             <xpath expr="//div[@t-if='o.name']" position="before">
                 <div class="col-xs-2" t-if="o.customer_no">
                     <strong>Customer no:</strong>
                     <p t-field="o.customer_no"/>
-                </div>                
+                </div>
             </xpath>
             <xpath expr="//div[@t-if='o.partner_id.ref']" position="replace">
                 <div class="col-xs-2" t-if="o.date_due">
                     <strong>Due Date:</strong>
                     <p t-field="o.date_due"/>
-                </div> 
+                </div>
             </xpath>
 
             <!-- important payment information -->
@@ -28,11 +40,6 @@
                 </p>
             </xpath>
 
-            
-        
-</template>
-
-          
-  
-</data>
+        </template>
+    </data>
 </openerp>

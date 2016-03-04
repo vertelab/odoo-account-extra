@@ -48,3 +48,16 @@ class account_invoice(models.Model):
     _inherit = 'account.invoice'
 
     customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=True)
+    order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
+    partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
+
+
+class sale_order(models.Model):
+    _inherit = 'sale.order'
+
+    @api.model
+    def _make_invoice(self, order, lines):
+        inv_id = super(sale_order, self)._make_invoice(order, lines)
+        self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
+        return inv_id
+
