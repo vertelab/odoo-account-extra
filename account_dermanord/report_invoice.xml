@@ -22,16 +22,6 @@
                 </div>
             </xpath>
 
-            <!-- tariff header -->
-            <xpath expr="//th" position="after">
-                <th>Tariff</th>
-            </xpath>
-
-            <!-- tariff body -->
-            <xpath expr="//tr[@t-foreach='o.invoice_line']/td" position="after">
-                <td><span t-field="l.tariff"/></td>
-            </xpath>
-
             <xpath expr="//div[@t-if='o.partner_id.ref']" position="replace">
                 <div class="col-xs-2" t-if="o.date_due">
                     <strong>Due Date:</strong>
@@ -51,6 +41,17 @@
                 </p>
             </xpath>
 
+        </template>
+
+        <template id="report_intrastatinvoice_document_additional"  inherit_id="report_intrastat.report_intrastatinvoice_document">
+            <!-- tariff header -->
+            <xpath expr="//tr/th[3]" position="replace">
+                <th class="text-right">Tariff</th>
+            </xpath>
+            <!-- tariff body -->
+            <xpath expr="//tr[@t-foreach='o.invoice_line']/td[3]" position="replace">
+                <td class="text-right"><span t-field="l.tariff"/></td>
+            </xpath>
         </template>
     </data>
 </openerp>
