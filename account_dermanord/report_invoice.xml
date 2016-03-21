@@ -44,6 +44,17 @@
         </template>
 
         <template id="report_intrastatinvoice_document_additional"  inherit_id="report_intrastat.report_intrastatinvoice_document">
+            <!-- delivery address -->
+            <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="before">
+                <div class="col-xs-5">
+                    <address t-field="o.partner_shipping_id"
+                        t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                </div>
+            </xpath>
+            <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="attributes">
+                <attribute name="class">col-xs-5 col-xs-offset-2</attribute>
+            </xpath>
+
             <!-- tariff header -->
             <xpath expr="//tr/th[3]" position="replace">
                 <th class="text-right">Tariff</th>
