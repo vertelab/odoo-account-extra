@@ -23,27 +23,6 @@ from openerp import api, models, fields, _
 import logging
 _logger = logging.getLogger(__name__)
 
-class res_partner(models.Model):
-    _inherit ='res.partner'
-
-    customer_no = fields.Char('Customer Number', compute='_get_customer_no', store=True)
-
-    @api.depends('ref', 'parent_id.ref')
-    @api.one
-    def _get_customer_no(self):
-        if self.parent_id:
-            self.customer_no = self.parent_id.customer_no
-        else:
-            self.customer_no = self.ref
-
-    @api.v7
-    def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=10):
-        if context.get('customer_no_search'):
-            return self.name_get(cr, uid, self.pool.get('res.partner').search(cr, uid, [('ref', '=ilike', '%s%%' % name)])) + super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
-        else:
-            return super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
-
-
 class account_invoice(models.Model):
     _inherit = 'account.invoice'
 
