@@ -26,7 +26,7 @@
 'description': """Show customer number for customer and supplier .""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['account'],
+'depends': ['account', 'sale_customer_no'],
 'data': [
 'account_customer_no_view.xml',
 ],
