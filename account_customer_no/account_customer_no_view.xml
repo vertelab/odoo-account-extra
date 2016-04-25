@@ -60,6 +60,18 @@
     </record>
 
 <!-- account.move -->
+    <!-- form view for customer -->
+    <record id="view_account_move_form" model="ir.ui.view">
+        <field name="name">account.move.customer.no.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="to_check" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
+    
     <!-- view for move filter -->
     <record id="cusomer_no_view_account_move_filter" model="ir.ui.view">
         <field name="name">account.move.select</field>
