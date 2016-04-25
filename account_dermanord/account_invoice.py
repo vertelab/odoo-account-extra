@@ -26,8 +26,6 @@ _logger = logging.getLogger(__name__)
 class account_invoice(models.Model):
     _inherit = 'account.invoice'
 
-    #Duplicate field from account_customer_no.
-    customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=True)
     order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
     partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
 
