@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_dermanord
+#   * account_dermanord
 #
 msgid ""
 msgstr ""
@@ -88,11 +88,11 @@ msgstr "Viktig betalningsinformation:"
 #. module: account_dermanord
 #: view:website:account.report_invoice_document
 #: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "col-xs-5 col-xs-offset-2"
-msgstr ""
+msgid "Document"
+msgstr "Dokument"
 
 #. module: account_dermanord
 #: view:website:account.report_invoice_document
-msgid "som referens vid betalning."
-msgstr ""
+msgid "Unit of measure"
+msgstr "Måttenhet"
 

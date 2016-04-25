@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_customer_no
+#   * account_customer_no
 #
 msgid ""
 msgstr ""
@@ -59,20 +59,4 @@ msgstr "Kund"
 #: view:account.move.line:account_customer_no.customer_no_view_account_move_line_filter
 msgid "Period"
 msgstr "Period"
-
-#. module: account_customer_no
-#: view:account.move:account_customer_no.cusomer_no_view_account_move_filter
-#: view:account.move.line:account_customer_no.customer_no_view_account_move_line_filter
-msgid "['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]"
-msgstr ""
-
-#. module: account_customer_no
-#: view:account.invoice:account_customer_no.view_invoice_supplier_form
-msgid "{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1, 'customer_no_search': 1}"
-msgstr ""
-
-#. module: account_customer_no
-#: view:account.invoice:account_customer_no.view_invoice_form
-msgid "{'search_default_customer':1, 'show_address': 1, 'customer_no_search': 1}"
-msgstr ""
 
