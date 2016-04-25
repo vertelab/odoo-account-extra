@@ -1,0 +1,98 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_dermanord
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20160410\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-25 08:09+0000\n"
+"PO-Revision-Date: 2016-04-25 08:09+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Ange fakturanummer"
+msgstr "Ange fakturanummer"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Ange kundnummer"
+msgstr "Ange kundnummer"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Betalningskonto: BG 5723-7273"
+msgstr "Betalningskonto: t.ex 5723-7273"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Customer no:"
+msgstr "Kundnummer:"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Due Date:"
+msgstr "Förfallodatum:"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Förfallodattum:"
+msgstr "Förfallodatum:"
+
+#. module: account_dermanord
+#: model:ir.model,name:account_dermanord.model_account_invoice
+msgid "Invoice"
+msgstr "Faktura"
+
+#. module: account_dermanord
+#: model:ir.model,name:account_dermanord.model_res_partner
+msgid "Partner"
+msgstr "Kund"
+
+#. module: account_dermanord
+#: field:account.invoice,order_id:0
+msgid "Sale order"
+msgstr "Kundorder"
+
+#. module: account_dermanord
+#: model:ir.model,name:account_dermanord.model_sale_order
+msgid "Sales Order"
+msgstr "Kundorder"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Summa att betala"
+msgstr "Summa att betala"
+
+#. module: account_dermanord
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Tariff"
+msgstr "Tariff"
+
+#. module: account_dermanord
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Total Without Taxes"
+msgstr "Summa exkl moms"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Viktig betalningsinformation:"
+msgstr "Viktig betalningsinformation:"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "col-xs-5 col-xs-offset-2"
+msgstr ""
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "som referens vid betalning."
+msgstr ""
+
