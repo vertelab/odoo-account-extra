@@ -10,6 +10,14 @@
                 </div>
             </xpath>
 
+            <xpath expr="//div[@t-if='o.tax_line']" position="attributes">
+                <attribute name="t-if">o.tax_line and o.type != 'out_refund'</attribute>
+            </xpath>
+
+            <xpath expr="//p[@t-if='o.payment_term.note']" position="attributes">
+                <attribute name="t-if">o.payment_term.note and o.type != 'out_refund'</attribute>
+            </xpath>
+
             <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="attributes">
                 <attribute name="class">col-xs-5 col-xs-offset-2</attribute>
             </xpath>
@@ -31,7 +39,7 @@
 
             <!-- important payment information -->
             <xpath expr="//p[@t-if='o.comment']" position="after">
-                <p>
+                <p t-if="o.type != 'out_refund'">
                     <strong>Viktig betalningsinformation:</strong><br/>
                     <span>Förfallodattum: </span><span t-field="o.date_due"/><br/>
                     <span>Ange fakturanummer <span t-field="o.number"/> som referens vid betalning.</span><br/>
