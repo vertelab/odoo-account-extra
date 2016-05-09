@@ -28,7 +28,8 @@
 'website': 'http://www.vertel.se',
 'depends': ['account', 'sale', 'report_intrastat', 'account_customer_no',],
 'data': [
-        'report_invoice.xml',
+    'views/account_invoice_view.xml',
+    'report_invoice.xml',
 ],
 'installable': True,
 }
