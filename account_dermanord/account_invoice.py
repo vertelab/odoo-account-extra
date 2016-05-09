@@ -40,13 +40,11 @@ class sale_order(models.Model):
         self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
         return inv_id
 
-    @api.multi
-    def action_invoice_create(self, grouped=False, states=['confirmed', 'done', 'exception'], date_invoice = False):
-        move_obj = self.env["stock.move"]
-        res = super(sale_order,self).action_invoice_create(grouped=grouped, states=states, date_invoice = date_invoice)
-        _logger.warn("\n\n\n%s\n\n\n" % res)
-        for order in self:
-            if order.order_policy == 'picking':
-                for picking in order.picking_ids:
-                    move_obj.write(cr, uid, [x.id for x in picking.move_lines], {'invoice_state': 'invoiced'}, context=context)
-        return res
+class stock_picking(models.Model):
+    _inherit = 'stock.picking'
+    
+    @api.model
+    def _create_invoice_from_picking(self, picking, vals):
+        vals['picking_id'] = picking.id
+        invoice_id = super(stock_picking, self)._create_invoice_from_picking(picking, vals)
+        return invoice_id
