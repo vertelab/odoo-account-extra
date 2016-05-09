@@ -28,7 +28,7 @@ class account_invoice(models.Model):
 
     order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
     partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
-    picking_id = field.Many2one(comodel_name='stock.picking', string='Picking')
+    picking_id = fields.Many2one(comodel_name='stock.picking', string='Picking')
 
 
 class sale_order(models.Model):
@@ -40,12 +40,12 @@ class sale_order(models.Model):
         self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
         return inv_id
 
-    @api.model
-    def action_invoice_create(self, cr, uid, ids, grouped=False, states=['confirmed', 'done', 'exception'], date_invoice = False, context=None):
-
-        move_obj = self.pool.get("stock.move")
-        res = super(sale_order,self).action_invoice_create(cr, uid, ids, grouped=grouped, states=states, date_invoice = date_invoice, context=context)
-        for order in self.browse(cr, uid, ids, context=context):
+    @api.multi
+    def action_invoice_create(self, grouped=False, states=['confirmed', 'done', 'exception'], date_invoice = False):
+        move_obj = self.env["stock.move"]
+        res = super(sale_order,self).action_invoice_create(grouped=grouped, states=states, date_invoice = date_invoice)
+        _logger.warn("\n\n\n%s\n\n\n" % res)
+        for order in self:
             if order.order_policy == 'picking':
                 for picking in order.picking_ids:
                     move_obj.write(cr, uid, [x.id for x in picking.move_lines], {'invoice_state': 'invoiced'}, context=context)
