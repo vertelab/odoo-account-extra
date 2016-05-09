@@ -38,4 +38,3 @@ class sale_order(models.Model):
         inv_id = super(sale_order, self)._make_invoice(order, lines)
         self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
         return inv_id
-

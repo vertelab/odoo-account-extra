@@ -37,3 +37,8 @@ class account_move_line(models.Model):
     _inherit = 'account.move.line'
 
     customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)
+
+class account_voucher(models.Model):
+    _inherit = 'account.voucher'
+
+    customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=True)

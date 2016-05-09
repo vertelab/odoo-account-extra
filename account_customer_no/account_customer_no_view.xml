@@ -1,112 +1,179 @@
 <openerp>
-<data>
+    <data>
 
-<!-- account.inovice -->
-    <!-- tree view for both customer and supplier-->
-    <record id="view_invoice_tree" model="ir.ui.view">
-        <field name="name">account.invoice.tree</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_tree"/>
-        <field name="arch" type="xml">
-            <field name="partner_id" position="before">
-                <field name="customer_no"/>
+    <!-- account.inovice -->
+        <!-- tree view for both customer and supplier-->
+        <record id="view_invoice_tree" model="ir.ui.view">
+            <field name="name">account.invoice.tree</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="before">
+                    <field name="customer_no"/>
+                </field>
             </field>
-        </field>
-    </record>
+        </record>
 
-    <!-- form view for customer -->
-    <record id="view_invoice_form" model="ir.ui.view">
-        <field name="name">account.invoice.form</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_form"/>
-        <field name="arch" type="xml">
-            <field name="fiscal_position" position="after">
-                <field name="customer_no"/>
+        <!-- form view for customer -->
+        <record id="view_invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="fiscal_position" position="after">
+                    <field name="customer_no"/>
+                </field>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="context">{'search_default_customer':1, 'show_address': 1, 'customer_no_search': 1}</attribute>
+                </xpath>
             </field>
-            <xpath expr="//field[@name='partner_id']" position="attributes">
-                <attribute name="context">{'search_default_customer':1, 'show_address': 1, 'customer_no_search': 1}</attribute>
-            </xpath>
-        </field>
-    </record>
+        </record>
 
-    <!-- form view for supplier -->
-    <record id="view_invoice_supplier_form" model="ir.ui.view">
-        <field name="name">account.invoice.supplier.form</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_supplier_form"/>
-        <field name="arch" type="xml">
-            <field name="supplier_invoice_number" position="after">
-                <field name="customer_no"/>
+        <!-- form view for supplier -->
+        <record id="view_invoice_supplier_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="supplier_invoice_number" position="after">
+                    <field name="customer_no"/>
+                </field>
+                <xpath expr="//field[@string='Supplier']" position="attributes">
+                    <attribute name="context">{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1, 'customer_no_search': 1}</attribute>
+                </xpath>
             </field>
-            <xpath expr="//field[@string='Supplier']" position="attributes">
-                <attribute name="context">{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1, 'customer_no_search': 1}</attribute>
-            </xpath>
-        </field>
-    </record>
+        </record>
 
-    <!-- customer / supplier number filter -->
-    <record id="customer_no_view_account_invoice_filter" model="ir.ui.view">
-        <field name="name">account.invoice.select</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
-        <field name="arch" type="xml">
-            <field name="period_id" position="after">
-                <field name="customer_no" string="Customer/Supplier Number"/>
+        <!-- customer / supplier number filter -->
+        <record id="customer_no_view_account_invoice_filter" model="ir.ui.view">
+            <field name="name">account.invoice.select</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="period_id" position="after">
+                    <field name="customer_no" string="Customer/Supplier Number"/>
+                </field>
+                <filter name="group_by_partner_id" position="before">
+                    <filter string="Customer/Supplier Number" context="{'group_by':'customer_no'}"/>
+                </filter>
             </field>
-            <filter name="group_by_partner_id" position="before">
-                <filter string="Customer/Supplier Number" context="{'group_by':'customer_no'}"/>
-            </filter>
-        </field>
-    </record>
+        </record>
 
-<!-- account.move -->
-    <!-- form view for customer -->
-    <record id="view_account_move_form" model="ir.ui.view">
-        <field name="name">account.move.customer.no.form</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="arch" type="xml">
-            <field name="to_check" position="after">
-                <field name="customer_no"/>
+    <!-- account.move -->
+        <!-- form view for customer -->
+        <record id="view_account_move_form" model="ir.ui.view">
+            <field name="name">account.move.customer.no.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="to_check" position="after">
+                    <field name="customer_no"/>
+                </field>
             </field>
-        </field>
-    </record>
-    
-    <!-- view for move filter -->
-    <record id="cusomer_no_view_account_move_filter" model="ir.ui.view">
-        <field name="name">account.move.select</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_account_move_filter"/>
-        <field name="arch" type="xml">
-            <field name="name" position="attributes">
-                <attribute name="filter_domain">['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]</attribute>
-            </field>
-            <field name="period_id" position="after">
-                <field name="customer_no"/>
-            </field>
-            <filter string="Period" position="after">
-                <filter string="Customer number" icon="terp-partner" domain="[]" context="{'group_by':'customer_no'}"/>
-            </filter>
-        </field>
-    </record>
+        </record>
 
-    <!-- viewfor move line filter -->
-    <record id="customer_no_view_account_move_line_filter" model="ir.ui.view">
-        <field name="name">Journal Items</field>
-        <field name="model">account.move.line</field>
-        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
-        <field name="arch" type="xml">
-            <field name="name" position="attributes">
-                <attribute name="filter_domain">['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]</attribute>
+        <!-- view for move filter -->
+        <record id="cusomer_no_view_account_move_filter" model="ir.ui.view">
+            <field name="name">account.move.select</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_move_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]</attribute>
+                </field>
+                <field name="period_id" position="after">
+                    <field name="customer_no"/>
+                </field>
+                <filter string="Period" position="after">
+                    <filter string="Customer number" icon="terp-partner" domain="[]" context="{'group_by':'customer_no'}"/>
+                </filter>
             </field>
-            <field name="period_id" position="after">
-                <field name="customer_no"/>
-            </field>
-            <filter string="Period" position="after">
-                <filter string="Customer number" icon="terp-partner" domain="[]" context="{'group_by':'customer_no'}"/>
-            </filter>
-        </field>
-    </record>
+        </record>
 
-</data>
+        <!-- view for move line filter -->
+        <record id="customer_no_view_account_move_line_filter" model="ir.ui.view">
+            <field name="name">Journal Items</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">['|','|', ('name','ilike',self), ('ref','ilike',self), ('customer_no','ilike',self)]</attribute>
+                </field>
+                <field name="period_id" position="after">
+                    <field name="customer_no"/>
+                </field>
+                <filter string="Period" position="after">
+                    <filter string="Customer number" icon="terp-partner" domain="[]" context="{'group_by':'customer_no'}"/>
+                </filter>
+            </field>
+        </record>
+
+    <!-- account.voucher -->
+        <!-- view for account voucher tree -->
+        <record id="customer_no_view_voucher_tree" model="ir.ui.view">
+            <field name="name">account.voucher.tree</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_tree"/>
+            <field name="arch" type="xml">
+                <field name="date" position="before">
+                    <field name="customer_no"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- view for account voucher form -->
+        <record id="customer_no_view_vendor_receipt_form" model="ir.ui.view">
+            <field name="name">account.voucher.receipt.form</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="customer_no"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- view for account voucher filter -->
+        <record id="customer_no_view_voucher_filter_customer_pay" model="ir.ui.view">
+            <field name="name">account.voucher.customer.pay.select</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_filter_customer_pay"/>
+            <field name="arch" type="xml">
+                <field name="date" position="before">
+                    <field name="customer_no"/>
+                </field>
+                <filter string="Customer" position="before">
+                    <filter string="Customer/Supplier Number" icon="terp-personal" domain="[]" context="{'group_by':'customer_no'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <!-- view for vendor payment form -->
+        <record id="customer_no_view_vendor_payment_form" model="ir.ui.view">
+            <field name="name">account.voucher.payment.form</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="customer_no"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- view for voucher vendor pay filter -->
+        <record id="customer_no_view_voucher_filter_vendor_pay" model="ir.ui.view">
+            <field name="name">account.voucher.purchase.pay.select</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_filter_vendor_pay"/>
+            <field name="arch" type="xml">
+                <field name="date" position="before">
+                    <field name="customer_no"/>
+                </field>
+                <filter string="Supplier" position="before">
+                    <filter string="Customer/Supplier Number" icon="terp-personal" domain="[]" context="{'group_by':'customer_no'}"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
 </openerp>
