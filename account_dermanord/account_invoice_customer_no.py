@@ -42,7 +42,7 @@ class res_partner(models.Model):
             return self.name_get(cr, uid, self.pool.get('res.partner').search(cr, uid, [('ref', '=ilike', '%s%%' % name)])) + super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
         else:
             return super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
-
+z
 
 class account_invoice(models.Model):
     _inherit = 'account.invoice'
