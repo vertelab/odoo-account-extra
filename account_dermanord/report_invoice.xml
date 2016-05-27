@@ -9,7 +9,7 @@
                 </t>
                 <t t-if="',' in name">
                     <span itemprop="name"><t t-esc="', '.join(str(i) for i in name.split(',')[:-1])"/><br/>
-                    Ref: <t t-esc="name.split(',')[-1]"/>
+                    <!-- Ref: <t t-esc="name.split(',')[-1]"/> -->
                     </span>
                 </t>
             </xpath>
