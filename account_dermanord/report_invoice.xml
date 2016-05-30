@@ -8,7 +8,7 @@
                     <span itemprop="name" t-esc="name"/>
                 </t>
                 <t t-if="',' in name">
-                    <span itemprop="name"><t t-esc="', '.join(str(i) for i in name.split(',')[:-1])"/><br/>
+                    <span itemprop="name"><t t-esc="', '.join(i for i in name.split(',')[:-1])"/><br/>
                     <!-- Ref: <t t-esc="name.split(',')[-1]"/> -->
                     </span>
                 </t>
