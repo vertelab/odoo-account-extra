@@ -27,66 +27,6 @@ _logger = logging.getLogger(__name__)
 class account_analytic_account(models.Model):
     _inherit = "account.analytic.account"
 
+    market_pricelist_id = fields.Many2one(comodel_name='product.pricelist', string='Market Pricelist', help='Market Pricelist of the selected partner for bonus calculations.')
+    
 
-class project_issue(models.Model):
-    _inherit = 'project.issue'
-
-
-    @api.multi
-    def create_invoice_customer(self,):
-        for issue in self:
-            invoice = self.env['account.invoice'].create({
-            'origin': '%s (%d)' % (issue.name,issue.id),
-            'type': 'out_invoice',
-            'comment': issue.description,
-            'company_id': issue.company_id.id,
-            'user_id': issue.user_id.id,
-            'account_id': issue.partner_id.property_account_receivable.id,
-            'partner_id': issue.partner_id.id,
-            })
-            url = "<a href='/web?model=account.invoice&id=%d'>%s</a>" % (invoice.id,_('invoice'))
-            issue.message_post(body=_('Customer Invoice created %s' % invoice.id) )
-            for file in self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]):
-                file.write({'res_model': 'account.invoice','res_id': invoice })
-        return True
-
-    @api.multi
-    def create_invoice_supplier(self,):
-        for issue in self:
-            invoice = self.env['account.invoice'].create({
-            'origin': issue.name,
-            'type': 'in_invoice',
-            'comment': issue.description,
-            'company_id': issue.company_id.id,
-            'user_id': issue.user_id.id,
-            'account_id': issue.partner_id.property_account_payable.id,
-            'partner_id': issue.partner_id.id,
-            })
-            for file in self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]):
-                file.write({'res_model': 'account.invoice','res_id': invoice })
-        return True
-
-    @api.multi
-    def create_move(self,):
-        for issue in self:
-            invoice = self.env['account.move'].create({
-            'display_name': issue.name,
-            'narration': issue.description,
-            'company_id': issue.company_id.id,
-            'to_check': true,
-            })
-            for file in self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]):
-                file.write({'res_model': 'account.move','res_id': invoice })
-        return True
-
-
-    @api.multi
-    def create_bank(self,):
-        for issue in self:
-            invoice = self.env['account.bank.statement'].create({
-            'display_name': issue.name,
-            'company_id': issue.company_id.id,
-            })
-            for file in self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]):
-                file.write({'res_model': 'account.bank.statement','res_id': invoice })
-        return True
