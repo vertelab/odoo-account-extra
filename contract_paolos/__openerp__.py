@@ -29,7 +29,7 @@
     'description': """
 
     """,
-    'depends': ['account_analytic_account', ],
+    'depends': ['account_analytic_analysis', ],
     'data': ['account_analytic_account_view.xml',
         ],
     'installable': True,
