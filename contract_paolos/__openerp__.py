@@ -30,7 +30,9 @@
 
     """,
     'depends': ['account_analytic_analysis', ],
-    'data': ['account_analytic_account_view.xml',
+    'data': [
+        'account_analytic_account_view.xml',
+        'report.xml',
         ],
     'installable': True,
     'application': True,
