@@ -12,6 +12,28 @@
                 </field>
             </field>
         </record>
-
+        
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.price.digits.inherit.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="price_unit" position="attributes">
+                    <attribute name="digits">(16,4)</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="invoice_supplier_form" model="ir.ui.view">
+            <field name="name">ccount.invoice.supplier.price.digits.inherit.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="price_unit" position="attributes">
+                    <attribute name="digits">(16,4)</attribute>
+                </field>
+            </field>
+        </record>
+        
     </data>
 </openerp>
