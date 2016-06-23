@@ -57,6 +57,9 @@ class account_analytic_account(models.Model):
         import psycopg2
         import os
         
+        if not self.database_name:
+            return
+        
         try:
             common = xmlrpclib.ServerProxy('%s/xmlrpc/2/common' % 'http://localhost:8069')
             uid = common.authenticate(self.database_name, 'admin', get_config('admin_passwd','Master password is missing'),{})
