@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="account_analytic_account_form_form" model="ir.ui.view">
+      <field name="name">analytic.analytic.account.form.vertel</field>
+      <field name="model">account.analytic.account</field>
+      <field name="inherit_id" ref="account_analytic_analysis.account_analytic_account_form_form" />
+      <field name="arch" type="xml">
+        <field name="pricelist_id" position="after">
+          <field name="database_name"/>
+          <field name="database_size"/>
+          <field name="database_disk"/>
+          <field name="database_backup"/>
+          <field name="mailsize"/>
+          <field name="total_size"/>
+          <field name="nbr_users"/>
+          <field name="last_login"/>
+          <button name="check_database" string="Run" type="object" icon="gtk-ok" />
+        </field>
+      </field>
+    </record>
+  </data>
+</openerp>
