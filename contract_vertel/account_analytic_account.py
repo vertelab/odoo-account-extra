@@ -76,7 +76,7 @@ class account_analytic_account(models.Model):
                 last_login = l.get('login_date')
         self.last_login = last_login
         _logger.error('res.users %s' % res)
-        conn = psycopg2.connect(dbname=self.database_name, user='root', password='root', host='localhost')
+        conn = psycopg2.connect(dbname=self.database_name, user='root', password=get_config('admin_passwd','Master password is missing'), host='localhost')
         cur = conn.cursor()
         cur.execute("select pg_database_size('%s')" % self.database_name)
         self.database_size = float(cur.fetchone()[0]) / 1024 / 1014 
