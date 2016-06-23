@@ -68,7 +68,7 @@ class account_analytic_account(models.Model):
             raise Warning(_("%s (server %s, db %s)" % (err, 'localhost', self.database_name)))
 
         res = models.execute_kw(self.database_name,uid,get_config('admin_passwd','Master password is missing'),'res.users','search', [[['active','=',True],['share','=',False]]],{})
-        self.nbr_users = len(set(res)-set([1])) + 3
+        self.nbr_users = len(set(res)-set([1]))
         res = models.execute_kw(self.database_name,uid,get_config('admin_passwd','Master password is missing'),'res.users','read', [list(set(res)-set([1]))])
         last_login = None
         for l in res:
@@ -89,7 +89,7 @@ class account_analytic_account(models.Model):
         companies = models.execute_kw(self.database_name,uid,get_config('admin_passwd','Master password is missing'),'res.company','search', [[]],{})
         self.mailsize = sum([float(c.get('total_quota',0.0)) for c in models.execute_kw(self.database_name,uid,get_config('admin_passwd','Master password is missing'),'res.company','read', [companies])])
         self.database_backup = ((os.path.getsize('/var/backups/%s.sql.gz' % self.database_name) / 1024 / 1024) + self.database_size + self.database_disk + self.mailsize) * 2
-        self.total_size = round(self.mailsize + self.database_backup + self.database_disk + self.database_size) + 2048
+        self.total_size = round(self.mailsize + self.database_backup + self.database_disk + self.database_size)
         
         #raise Warning(len(self.recurring_invoice_line_ids.filtered(lambda r: r.product_id.id == self._product_extra_users())))
         invoice_lines = []
@@ -116,7 +116,7 @@ class account_analytic_account(models.Model):
 
     @api.v8
     def _product_extra_users(self):
-        res = self.pool['product.product'].search([('name','ilike','extra anv%')]) # Extra anv%
+        res = self.env['product.product'].search([('name','ilike','extra anv%')]) # Extra anv%
         if len(res)>0:
             return res[0].id
         else:
