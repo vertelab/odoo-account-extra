@@ -83,7 +83,7 @@ class account_analytic_account(models.Model):
         cur.close()
         conn.close()
 
-        _logger.error('size %s' % (float(os.popen('du -s /var/lib/odoo/.local/share/Odoo/filestore/%s' % self.database_name).read().split('\t')[0]) / 1024))
+        _logger.error('size %s' % (float(os.popen('du -s /var/lib/odoo/filestore/%s' % self.database_name).read().split('\t')[0]) / 1024))
         self.database_disk = (float(os.popen('du -s /var/lib/odoo/.local/share/Odoo/filestore/%s' % self.database_name).read().split('\t')[0]) / 1024)
         #self.database_disk = sum(os.path.getsize(f) for f in [os.listdir('/var/lib/odoo/.local/share/Odoo/filestore/%s/%s' % (self.database_name,d)) for d in os.listdir('/var/lib/odoo/.local/share/Odoo/filestore/%s' % self.database_name)])
         companies = models.execute_kw(self.database_name,uid,get_config('admin_passwd','Master password is missing'),'res.company','search', [[]],{})
