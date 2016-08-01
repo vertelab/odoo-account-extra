@@ -20,31 +20,25 @@
 ##############################################################################
 
 from openerp import api, models, fields, _
+import openerp.addons.decimal_precision as dp
 import logging
 _logger = logging.getLogger(__name__)
 
-class account_invoice(models.Model):
-    _inherit = 'account.invoice'
+class pricelist_partnerinfo(models.Model):
+    _inherit = 'pricelist.partnerinfo'
 
-    order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
-    partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
-    picking_id = fields.Many2one(comodel_name='stock.picking', string='Picking')
+    price = fields.Float(string='Unit Price', required=True, digits_compute=dp.get_precision('Purchase Price'), help="This price will be considered as a price for the supplier Unit of Measure if any or the default Unit of Measure of the product otherwise")
 
+class product_pricelist_item(models.Model):
+    _inherit = 'product.pricelist.item'
 
-class sale_order(models.Model):
-    _inherit = 'sale.order'
+    price_round = fields.Float(string='Price Roundings', required=True, digits_compute=dp.get_precision('Purchase Price'),
+        help="Sets the price so that it is a multiple of this value.\n" \
+        "Rounding is applied after the discount and before the surcharge.\n" \
+        "To have prices that end in 9.9999, set rounding 10, surcharge -0.0001" \
+        )
 
-    @api.model
-    def _make_invoice(self, order, lines):
-        inv_id = super(sale_order, self)._make_invoice(order, lines)
-        self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
-        return inv_id
+class purchase_order_line(models.Model):
+    _inherit = 'purchase.order.line'
 
-class stock_picking(models.Model):
-    _inherit = 'stock.picking'
-
-    @api.model
-    def _create_invoice_from_picking(self, picking, vals):
-        vals['picking_id'] = picking.id
-        invoice_id = super(stock_picking, self)._create_invoice_from_picking(picking, vals)
-        return invoice_id
+    price_unit = fields.Float(string='Unit Price', required=True, digits_compute=dp.get_precision('Purchase Price'))
