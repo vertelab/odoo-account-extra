@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="view_account_move_filter" model="ir.ui.view">
+            <field name="name">account.move.select.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_move_filter"/>
+            <field name="arch" type="xml">
+                <search string="Search Move">
+                    <filter string="Entries Month" position="after">
+                        <filter string="Hour" icon="terp-go-month" domain="[]" context="{'group_by':'date_hour'}" help="Journal Entries by Hour"/>
+                    </filter>
+                </search>
+            </field>
+        </record>
+    
+    
+  </data>
+</openerp>
