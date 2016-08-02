@@ -27,6 +27,9 @@
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
 'depends': ['account'],
+'external_dependencies': {
+        'python': ['openpyxl'],
+    },
 'data': [
         'account_financial_report_view.xml',
 ],

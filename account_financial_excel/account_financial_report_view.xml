@@ -6,29 +6,28 @@
       <field name="model">accounting.report</field>
       <field name="inherit_id" ref="account.accounting_report_view" />
       <field name="arch" type="xml">
-<!--
-          <footer position="inside">
-            <button name="check_excel" string="Excel" type="object" class="oe_highlight" />
-          </footer>
--->
         <xpath expr="//button[@name='check_report']" position="after">
           <button name="check_excel" string="Excel" type="object" class="oe_highlight" />
         </xpath>
       </field>
     </record>
-    
-<!--
-     <record id="action_account_export" model="ir.actions.act_window">
-             <field name="name">Financial Exports</field>
-             <field name="res_model">accounting.report</field>
-             <field name="type">ir.actions.act_window</field>
-             <field name="view_type">form</field>
-             <field name="view_mode">form</field>
-             <field name="view_id" ref="accounting_report_excel"/>
-             <field name="target">new</field>
-        </record>
-        <menuitem icon="STOCK_PRINT" name="Financial Export" action="action_account_export" id="menu_account_report_export" parent="account.final_accounting_reports" sequence="110"/>
--->
+
+    <record id="accounting_report_excel_result" model="ir.ui.view">
+      <field name="name">Accounting Export</field>
+      <field name="model">accounting.report</field>
+      <field name="arch" type="xml">
+            <form string="Excel Export">
+                <header><h2>Export Complete</h2></header>
+                <group col="2">
+                        <div> <p>Here is the exported excel-file: <field name="excel_file" readonly="1" filename="filename"/></p></div>
+                </group>
+                <footer>
+                    <button string="OK" class="oe_highlight" special="cancel" />
+                </footer>
+            </form>
+
+      </field>
+    </record>
     
   </data>
 </openerp>
