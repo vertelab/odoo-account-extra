@@ -32,7 +32,7 @@ class pricelist_partnerinfo(models.Model):
 class product_pricelist_item(models.Model):
     _inherit = 'product.pricelist.item'
 
-    price_round = fields.Float(string='Price Roundings', required=True, digits_compute=dp.get_precision('Purchase Price'),
+    price_round = fields.Float(string='Price Roundings', digits_compute=dp.get_precision('Payment Term'),
         help="Sets the price so that it is a multiple of this value.\n" \
         "Rounding is applied after the discount and before the surcharge.\n" \
         "To have prices that end in 9.9999, set rounding 10, surcharge -0.0001" \

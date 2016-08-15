@@ -10,9 +10,15 @@
                 <field name="move_id" position="after">
                     <field name="picking_id"/>
                 </field>
+                <field name="fiscal_position" position="before">
+                    <field name="partner_shipping_id"/>
+                </field>
+                <field name="origin" position="after">
+                    <field name="order_id"/>
+                </field>
             </field>
         </record>
-        
+
         <record id="purchase_order_form" model="ir.ui.view">
             <field name="name">purchase.order.price.digits.inherit.form</field>
             <field name="model">purchase.order</field>
@@ -23,7 +29,7 @@
                 </field>
             </field>
         </record>
-        
+
         <record id="invoice_supplier_form" model="ir.ui.view">
             <field name="name">ccount.invoice.supplier.price.digits.inherit.form</field>
             <field name="model">account.invoice</field>
@@ -34,6 +40,6 @@
                 </field>
             </field>
         </record>
-        
+
     </data>
 </openerp>
