@@ -19,26 +19,32 @@
 #
 ##############################################################################
 
-from openerp import api, models, fields, _
+
+import time
+from lxml import etree
+
+from openerp.osv import fields, osv
 import openerp.addons.decimal_precision as dp
+from openerp.tools.translate import _
+from openerp.tools import float_compare
+from openerp.report import report_sxw
+import openerp
+
 import logging
 _logger = logging.getLogger(__name__)
 
-#~ class pricelist_partnerinfo(models.Model):
-    #~ _inherit = 'pricelist.partnerinfo'
+class account_voucher(osv.osv):
 
-    #~ price = fields.Float(string='Unit Price', required=True, digits_compute=dp.get_precision('Purchase Price'), help="This price will be considered as a price for the supplier Unit of Measure if any or the default Unit of Measure of the product otherwise")
+    # This is a copy of account_voucher._compute_writeoff_amount
+    def _compute_writeoff_amount(self, cr, uid, line_dr_ids, line_cr_ids, amount, type):
+        debit = credit = 0.0
+        sign = type == 'payment' and -1 or 1
+        for l in line_dr_ids:
+            if isinstance(l, dict):
+                debit += l['amount_unreconciled']  # amount -> amount_unreconciled
+        for l in line_cr_ids:
+            if isinstance(l, dict):
+                credit += l['amount_unreconciled'] # amount -> amount_unreconciled
+        return amount - sign * (credit - debit)
 
-#~ class product_pricelist_item(models.Model):
-    #~ _inherit = 'product.pricelist.item'
 
-    #~ price_round = fields.Float(string='Price Roundings', digits_compute=dp.get_precision('Payment Term'),
-        #~ help="Sets the price so that it is a multiple of this value.\n" \
-        #~ "Rounding is applied after the discount and before the surcharge.\n" \
-        #~ "To have prices that end in 9.9999, set rounding 10, surcharge -0.0001" \
-        #~ )
-
-#~ class purchase_order_line(models.Model):
-    #~ _inherit = 'purchase.order.line'
-
-    #~ price_unit = fields.Float(string='Unit Price', required=True, digits_compute=dp.get_precision('Purchase Price'))

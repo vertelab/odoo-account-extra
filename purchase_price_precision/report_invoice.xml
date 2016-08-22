@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<!--
+      <template id="report_invoice_document" inherit_id="account.report_invoice_document">
+            <xpath expr="//span[@t-field='l.price_unit']" position="attributes">
+                <attribute name="t-field-options">'{
+                                      &quot;widget&quot;: &quot;monetary&quot;,
+                                      &quot;from_currency&quot;: &quot;product.company_id.currency_id&quot;,
+                                      &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;
+                                   }'</attribute>
+            </xpath>
+        </template>
+-->
+
+</data>
+</openerp>

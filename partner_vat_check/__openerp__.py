@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2016  Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -19,18 +19,23 @@
 #
 ##############################################################################
 {
-'name': 'Purchase Price Precision',
-'version': '0.2',
+'name': 'Partner VAT-check',
+'version': '0.1',
 'summary': '',
-'category': 'purchase',
-'description': """""",
+'category': 'sale',
+'description': """Check VAT for partner and sale.order
+    
+    https://bugs.launchpad.net/openobject-addons/+bug/940870
+    
+""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['decimal_precision', 'product', 'purchase'],
+'depends': ['sale','base_vat'],
+#'external_dependencies': {
+#        'python': ['openpyxl'],
+#    },
 'data': [
-    'product_view.xml',
-    'purchase_price_precision_data.xml',
-    'report_invoice.xml',
+        'partner_view.xml',
 ],
 'installable': True,
 }

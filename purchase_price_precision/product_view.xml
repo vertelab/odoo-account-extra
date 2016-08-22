@@ -2,6 +2,7 @@
 <openerp>
     <data>
 
+<!--
         <record id="product_supplierinfo_form_view_inherit" model="ir.ui.view">
             <field name="name">product.supplierinfo.form.view.inherit</field>
             <field name="model">product.supplierinfo</field>
@@ -34,6 +35,7 @@
                 </field>
             </field>
         </record>
+-->
 
     </data>
 </openerp>

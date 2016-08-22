@@ -9,5 +9,11 @@
         </record>
     <!-- end of purchase price -->
 
+        <record id="product.decimal_sale" model="decimal.precision">
+            <field name="digits">4</field>
+        </record>
+        <record id="product.decimal_price" model="decimal.precision">
+            <field name="digits">4</field>
+        </record>
     </data>
 </openerp>

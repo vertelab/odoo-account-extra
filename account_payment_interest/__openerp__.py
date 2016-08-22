@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -19,18 +19,14 @@
 #
 ##############################################################################
 {
-'name': 'Purchase Price Precision',
-'version': '0.2',
+'name': 'Account Payment Interest',
+'version': '0.1',
 'summary': '',
-'category': 'purchase',
-'description': """""",
+'category': 'account',
+'description': """Creates interest notes, implemented as invoices.""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['decimal_precision', 'product', 'purchase'],
-'data': [
-    'product_view.xml',
-    'purchase_price_precision_data.xml',
-    'report_invoice.xml',
-],
+'depends': ['account_voucher', ],
+'data': [],
 'installable': True,
 }
