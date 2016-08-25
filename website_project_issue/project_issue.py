@@ -73,7 +73,7 @@ class website_project_issue(http.Controller):
             issue.write({'partner_id': user.partner_id.id, 'name': post.get('name'), 'description': post.get('description')})
         
         if issue and request.httprequest.method == 'POST' and post.get('ufile'):
-            _logger.debug("This is attachement post %s /issue/nn" % (post))
+            _logger.debug("This is attachement post %s /issue/nn" % (post))  
             request.env['ir.attachment'].create({
                     'name': post['ufile'].filename,
                     'res_name': issue.name,
