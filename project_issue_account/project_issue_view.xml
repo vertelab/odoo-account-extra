@@ -11,10 +11,12 @@
             <field name="priority" eval="10"/>
             <field name="arch" type="xml">
                 <xpath expr="//header/field[@name='stage_id']" position="before">
-                        <button name="create_invoice_customer" string="Customer Invoice" type="object" groups="base.group_user"/>
+                        <button name="create_entry" string="Create Entry" type="object" groups="base.group_user"/>
+<!--
                         <button name="create_invoice_supplier" string="Supplier Invoice" type="object" groups="base.group_user"/>
                         <button name="create_move" string="Move" type="object" groups="base.group_user"/>
                         <button name="create_bank" string="Bank Statement" type="object" groups="base.group_user"/>
+-->
                 </xpath>
                 <field name="task_id" position="after">
                     <field name="voucher_type"/>

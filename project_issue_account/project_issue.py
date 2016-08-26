@@ -61,7 +61,7 @@ class project_issue(models.Model):
     _inherit = 'project.issue'
 
     voucher_project = fields.Boolean(related="project_id.voucher_project")
-    voucher_type = fields.Selection(selection=[('invoice_in','Supplier Invoice'),('invoice_out','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('move','Journal Entry')])
+    voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('invoice_out','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('move','Journal Entry')])
     image = fields.Binary(compute='_image')
     @api.one
     @api.depends('project_id','email_from')
@@ -70,10 +70,47 @@ class project_issue(models.Model):
         if image:
             self.image = image[0].datas
 
+    @api.multi
+    def create_entry(self):
+        for issue in self:
+            res = getattr(issue,issue.voucher_type)()
+        return res
+
+    def _do_message_post(self,object,text):
+        self.message_post(body=_('%s <a href="http:/web#model=%s&id=%s">%s</a>' % (text,object._name,object.id,object.name)))   #   #model=<model>&id=<id>
+        self.state = 'done'
+    def _do_move_attachment(self,object):
+        for file in self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)]):
+            file.write({'res_model': object._name,'res_id': object.id })
+        
+    @api.multi
+    def in_invoice(self,):
+        invoices = []
+        for issue in self:
+            invoice = self.env['account.invoice'].create({
+                'origin': '%s (%d)' % (issue.name,issue.id),
+                'type': 'in_invoice',
+                'comment': issue.description,
+                'company_id': issue.company_id.id,
+                'user_id': issue.user_id.id,
+                'account_id': issue.partner_id.property_account_receivable.id,
+                'partner_id': issue.partner_id.id,
+            })
+            issue._do_message_post(invoice,_('Supplier invoice created'))
+            issue._do_move_attachment(invoice)
+            invoices.append(invoice)
+        result = self.env.ref('account.action_invoice_tree2').read()[0]
+        result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
+        result['res_id'] = invoice.id # self.id
+        result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
+      
+        return result
+
 
     @api.multi
     def create_invoice_customer(self,):
         for issue in self:
+            
             invoice = self.env['account.invoice'].create({
             'origin': '%s (%d)' % (issue.name,issue.id),
             'type': 'out_invoice',

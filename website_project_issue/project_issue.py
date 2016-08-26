@@ -57,20 +57,24 @@ class website_project_issue(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         message = {}
         user = request.env['res.users'].browse(uid)
+        voucher_name = [txt[1] for txt in request.env['project.issue'].fields_get(['voucher_type'])['voucher_type']['selection'] if txt[0] == 'in_invoice'][0]
         
         if not issue and request.httprequest.method == 'POST':
             try: 
                 if len(post.get('name'))<1:
-                    post['name'] = 'Voucher %s %s' % (user.name,time.strftime("%x")) # Why?
+                    post['name'] = '%s %s' % (user.name,time.strftime("%x")) # Why?
+                
                 issue = request.env['project.issue'].create({'partner_id': user.partner_id.id, 
-                                                             'name': post.get('name'), 
+                                                             'name': '%s %s' % (voucher_name,post.get('name','')), 
                                                              'description': post.get('description'), 
-                                                             'project_id': request.env['project.project'].search(['|',('partner_id','=',user.partner_id.id),(1,'=',1)])[0].id })
-            except:
-                message['danger'] = 'Could not create an issue'               
+                                                             'project_id': request.env['project.project'].search(['|',('partner_id','=',user.partner_id.id),(1,'=',1)])[0].id,
+                                                             'voucher_type': post.get('voucher_type'),
+                                                             })
+            except Exception as e:
+                message['danger'] = 'Could not create an issue %s' % e               
             
         if issue and request.httprequest.method == 'POST':
-            issue.write({'partner_id': user.partner_id.id, 'name': post.get('name'), 'description': post.get('description')})
+            issue.write({'partner_id': user.partner_id.id, 'name':  '%s %s' % (voucher_name,post.get('name','')), 'description': post.get('description')})
         
         if issue and request.httprequest.method == 'POST' and post.get('ufile'):
             _logger.debug("This is attachement post %s /issue/nn" % (post))  
