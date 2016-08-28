@@ -36,5 +36,22 @@
         </xpath>
       </field>
     </record>
+<!-- Journal Entry -->
+    <record model="ir.ui.view" id="view_move_form">
+      <field name="name">account.move.form.voucher.inherit</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form" />
+      <field name="priority" eval="10" />
+      <field name="arch" type="xml">
+        <page string="Journal Items" position="after">
+          <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('image','=',None)]}">
+            <group rows="20">
+              <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
+            </group>
+          </page>
+        </page>
+      </field>
+    </record>
+
   </data>
 </openerp>

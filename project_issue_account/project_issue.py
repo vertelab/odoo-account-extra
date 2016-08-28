@@ -125,20 +125,37 @@ class project_issue(models.Model):
     def bankstatement(self,):
         statements = []
         for issue in self:
-            statement = self.env['account.bank.statement'].create({
-            'display_name': issue.name,
-            'company_id': issue.company_id.id,
+            record = self.env['account.bank.statement'].with_context({'journal_type':'bank'}).default_get(['journal_id','date','period_id'])
+            #~ raise Warning(record)
+            record.update(
+            {
+                'display_name': issue.name,
+                'company_id': issue.company_id.id,
             })
-            issue._do_message_post(move,_('Bank statement created'))
-            issue._do_move_attachment(move)
-            moves.append(move)
-        result = self.env.ref('account.view_move_line_tree').read()[0]
-        result['views'] = [(self.env.ref('account.view_move_line_form').id,'form'),(self.env.ref('account.view_move_line_tree').id,'tree')]
-        result['res_id'] = invoice.id # self.id
-        result['search_view_id'] = self.env.ref("account.view_move_line_tree_filter").id
+            statement = self.env['account.bank.statement'].create(record)
+            issue._do_message_post(statement,_('Bank statement created'))
+            issue._do_move_attachment(statement)
+            statements.append(statement)
+        result = self.env.ref('account.view_bank_statement_tree').read()[0]  # Should be import wizard
+        result['views'] = [(self.env.ref('account.view_bank_statement_form').id,'form'),(self.env.ref('account.view_bank_statement_tree').id,'tree')]
+        result['res_id'] = statement.id # self.id
+        result['search_view_id'] = self.env.ref("account.view_bank_statement_search").id
         return result
 
 class project_project(models.Model):
     _inherit = 'project.project'
 
     use_voucher = fields.Boolean(string="Use Voucher")      
+
+
+class account_move(models.Model):
+    _inherit = 'account.move'
+    image = fields.Binary(compute='_image')
+    @api.one
+    @api.depends('period_id')
+    def _image(self):
+        image = self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)])
+        if image:
+            self.image = image[0].datas
+        else:
+            self.image = None
