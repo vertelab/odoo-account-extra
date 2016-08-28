@@ -1,86 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
-
-
-
+  <data>
     <record model="ir.ui.view" id="project_issue_form_view">
-            <field name="name">project.issue.form.inheritII</field>
-            <field name="model">project.issue</field>
-            <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
-            <field name="priority" eval="10"/>
-            <field name="arch" type="xml">
-                <xpath expr="//header/field[@name='stage_id']" position="before">
-                        <button name="create_entry" string="Create Entry" type="object" groups="base.group_user"/>
-<!--
-                        <button name="create_invoice_supplier" string="Supplier Invoice" type="object" groups="base.group_user"/>
-                        <button name="create_move" string="Move" type="object" groups="base.group_user"/>
-                        <button name="create_bank" string="Bank Statement" type="object" groups="base.group_user"/>
--->
-                </xpath>
-                <field name="task_id" position="after">
-                    <field name="voucher_type"/>
-                    <field name="voucher_project"/>
-                </field>
-                <page string="Extra Info" position="after">
-<!--
-                    <page string="Voucher" invisible="voucher_project==False">
--->
-                    <page string="Voucher" >
-                        <group rows="20">
-                            <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1"/>
-                        </group>
-                    </page>
-                </page>
-            </field>
+      <field name="name">project.issue.form.inheritII</field>
+      <field name="model">project.issue</field>
+      <field name="inherit_id" ref="project_issue.project_issue_form_view" />
+      <field name="priority" eval="10" />
+      <field name="arch" type="xml">
+        <field name="priority" position="before">
+          <label for="voucher_type" />
+          <div>
+            <field name="voucher_type" class="oe_inline" attrs="{'invisible':[('voucher_project','=',False)]}" />
+            <button name="create_entry" string="⇒ Create" type="object" class="oe_link" groups="base.group_user" attrs="{'invisible':[('voucher_project','=',False)]}" />
+            <field name="voucher_project" invisible="1" />
+          </div>
+        </field>
+        <page string="Extra Info" position="after">
+          <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('voucher_project','=',False)]}">
+            <group rows="20">
+              <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
+            </group>
+          </page>
+        </page>
+      </field>
     </record>
-
-
-    <record model="ir.ui.view" id="edit_project">
-            <field name="name">project.form.voucher.inherit</field>
-            <field name="model">project.project</field>
-            <field name="inherit_id" ref="project.edit_project"/>
-            <field name="priority" eval="10"/>
-            <field name="arch" type="xml">
-                <field name="partner_id" position="after">
-                    <field name="voucher_project"/>
-                </field>
-            </field>
-    </record>              
-              
-
-    <record model="ir.ui.view" id="res_partner_note_wizard_form">
-            <field name="name">project.issue.voucher.wizard.form</field>
-            <field name="model">project.issue.voucher.wizard</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Create Note">
-<!--
-                    <span style="color: #f00;">OBS: din första rad blir en titel</span>
--->
-                    <group>
-                        <field name="memo"/>
-                        <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image_medium&quot;, &quot;size&quot;: [600, 1200]}"/>
-<!--
-                        <field name="stage_id"/>
--->
-                        <field name="voucher_type"/>
-                    </group>
-                    <footer>
-                        <button name="create_voucher" string="Create" type="object" class="oe_highlight"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <act_window id="launch_project_issue_voucher_wizard_form"
-            name="Create Voucher"
-            src_model="project.issue"
-            res_model="project.issue.voucher.wizard"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"/>
-        
-
-    </data>
+    <!-- Project -->
+    <record id="view_project_form_inherited" model="ir.ui.view">
+      <field name="name">project.project.form.voucher.inherited</field>
+      <field name="model">project.project</field>
+      <field name="inherit_id" ref="project.edit_project" />
+      <field name="arch" type="xml">
+        <xpath expr='//div[@name="options_active"]' position='inside'>
+          <field name="use_voucher" class="oe_inline" />
+          <label for="use_voucher" />
+        </xpath>
+      </field>
+    </record>
+  </data>
 </openerp>
