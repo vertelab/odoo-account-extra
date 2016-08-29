@@ -19,7 +19,7 @@
 #
 ##############################################################################
 {
-'name': 'Account Invoice Dermanord',
+'name': 'Account Dermanord',
 'version': '0.1',
 'summary': '',
 'category': 'account,account_customer_no',
@@ -30,6 +30,7 @@
 'data': [
     'views/account_invoice_view.xml',
     'report_invoice.xml',
+    'res_partner_view.xml',
 ],
 'installable': True,
 }

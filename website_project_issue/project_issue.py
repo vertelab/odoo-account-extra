@@ -33,9 +33,9 @@ import re
 import time
 
 
+
 import logging
 _logger = logging.getLogger(__name__)
-
 
 
 def content_disposition(filename):
@@ -49,6 +49,7 @@ def content_disposition(filename):
         return u"attachment; filename=%s" % filename
     else:
         return "attachment; filename*=UTF-8''%s" % escaped
+
 
 class website_project_issue(http.Controller):
         
@@ -78,7 +79,7 @@ class website_project_issue(http.Controller):
         
         if issue and request.httprequest.method == 'POST' and post.get('ufile'):
             _logger.debug("This is attachement post %s /issue/nn" % (post))  
-            request.env['ir.attachment'].create({
+            attachment = request.env['ir.attachment'].create({
                     'name': post['ufile'].filename,
                     'res_name': issue.name,
                     'res_model': 'project.issue',
