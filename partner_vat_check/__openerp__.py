@@ -25,6 +25,11 @@
 'category': 'sale',
 'description': """Check VAT for partner and sale.order
     
+    * check_vat if vat_subjected is checked
+    * updates vat_date after successful check_vat
+    * vat_check field that does a check_vat and return error
+    * sale: action_button_confirm does a check_vat, logges error
+    
     https://bugs.launchpad.net/openobject-addons/+bug/940870
     
 """,

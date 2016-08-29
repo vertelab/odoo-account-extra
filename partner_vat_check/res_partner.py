@@ -31,6 +31,8 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
+    vat_date = fields.Datetime(string="VIES-kontroll")
+
     @api.one
     @api.depends('vat')
     def _vat_check(self):
@@ -44,5 +46,39 @@ class res_partner(models.Model):
                 #raise Warning('Exception %s' % e)
             
     vat_check = fields.Char(string='VAT-check', compute='_vat_check',)  # store=True
+
+
+    @api.one
+    def check_vat(self):
+        if not self.vat_subjected:
+            return True
+        res = super(res_partner,self).check_vat()
+        if res:
+           self.vat_date = fields.Datetime.now()
+    
+           
+    def vat_change(self, cr, uid, ids, value, context=None):
+        return {'value': {'vat_subjected': bool(value)}}
+        
+    @api.one
+    def _construct_constraint_msg(self, cr, uid, ids, context=None):
+        if not self.vat_subjected:
+            return True
+        return super(res_partner,self)._construct_constraint_msg()
+
+class sale_order(models.Model):
+    _inherit = 'sale.order'
+
+    @api.one
+    def action_button_confirm(self):
+        if not self.partner_id.check_vat():
+           self.env['mail.message'].create({
+                    'body': _("VIES-check error %s" % self.vat_check),
+                    'subject': "Exception",
+                    'author_id': self.env['res.users'].browse(self.env.uid).partner_id.id,
+                    'res_id': self.id,
+                    'model': self._name,
+                    'type': 'notification',}) 
+        return super(sale_order,self).action_button_confirm()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

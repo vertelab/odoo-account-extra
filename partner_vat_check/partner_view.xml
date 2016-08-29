@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <openerp>
   <data>
+    <record id="view_partner_form" model="ir.ui.view">
+      <field name="name">res.partner.vat.inherit2</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base_vat.view_partner_form" />
+      <field name="arch" type="xml">
+        
+        <field name="last_reconciliation_date" position="after">
+            <field name="vat_date" class="oe_inline" />
+        </field>
+      </field>
+    </record>
     <!-- Partner tree View -->
     <record model="ir.ui.view" id="view_partner_tree">
       <field name="name">Parter Tree VAT</field>
@@ -8,15 +19,15 @@
       <field name="arch" type="xml">
         <tree string="Partner Tree VAT">
           <field name="name" />
-                    <field name="display_name"/>
-                    <field name="function" invisible="1"/>
-                    <field name="phone"/>
-                    <field name="vat"/>
-                    <field name="vat_check"/>
-                    <field name="user_id" invisible="1"/>
-                    <field name="is_company" invisible="1"/>
-                    <field name="country_id" invisible="1"/>
-                    <field name="parent_id" invisible="1"/>
+          <field name="display_name" />
+          <field name="function" invisible="1" />
+          <field name="phone" />
+          <field name="vat" />
+          <field name="vat_date" />
+          <field name="user_id" invisible="1" />
+          <field name="is_company" invisible="1" />
+          <field name="country_id" invisible="1" />
+          <field name="parent_id" invisible="1" />
         </tree>
       </field>
     </record>
@@ -24,7 +35,7 @@
       <field name="name">Partner Tree VAT</field>
       <field name="res_model">res.partner</field>
       <field name="view_mode">tree,form</field>
-       <field name="domain">[('is_company','=',True)]</field>
+      <field name="domain">[('is_company','=',True)]</field>
       <field name="view_id" ref="view_partner_tree" />
     </record>
     <record model="ir.actions.act_window.view" id="action_res_partner_vat_view">
