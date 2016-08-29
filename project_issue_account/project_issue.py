@@ -22,9 +22,6 @@ from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 
 import base64
-from wand.image import Image
-from wand.display import display
-from wand.color import Color
 
 
 
@@ -42,9 +39,11 @@ class project_issue(models.Model):
     def _image(self):
         image = self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',self.id)])
         if image and image[0].mimetype == 'application/pdf':
-            self.image = image[0].pdf2jpg(800,1200).encode('base64')
+            self.image = image[0].image
         elif image and image[0].mimetype in ['image/jpeg','image/png','image/gif']:
             self.image = image[0].datas
+        else:
+            self.image = None
 
     @api.multi
     def create_entry(self):
@@ -109,6 +108,31 @@ class project_issue(models.Model):
         return result
 
     @api.multi
+    def voucher_in(self,):
+        invoices = []
+        for issue in self:
+            invoice = self.env['account.voucher'].create({
+                'origin': '%s (%d)' % (issue.name,issue.id),
+                'type': 'purchase',
+                'comment': issue.description,
+                'company_id': issue.company_id.id,
+                'user_id': issue.user_id.id,
+                'account_id': issue.partner_id.property_account_receivable.id,
+                'partner_id': issue.partner_id.id,
+            })
+            issue._do_message_post(invoice,_('Supplier voucher created'))
+            issue._do_move_attachment(invoice)
+            invoices.append(invoice)
+        result = self.env.ref('account.action_invoice_tree2').read()[0]
+        result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
+        result['res_id'] = invoice.id # self.id
+        result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
+      
+        return result
+
+
+
+    @api.multi
     def journal_entry(self,):
         moves = []
         journal = self.env['account.journal'].search([('type','=','purchase')])[0]
@@ -162,51 +186,28 @@ class account_move(models.Model):
     @api.one
     @api.depends('period_id')
     def _image(self):
-        image = self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)])
-        if image:
+        image = self.env['ir.attachment'].search([('res_model','=','account.move'),('res_id','=',self.id)])
+        if image and image[0].mimetype == 'application/pdf':
+            self.image = image[0].image
+        elif image and image[0].mimetype in ['image/jpeg','image/png','image/gif']:
+            self.image = image[0].datas
+        else:
+            self.image = None
+
+class account_invoice(models.Model):
+    _inherit = 'account.invoice'
+    image = fields.Binary(compute='_image')
+    @api.one
+    @api.depends('period_id')
+    def _image(self):
+        image = self.env['ir.attachment'].search([('res_model','=','account.invoice'),('res_id','=',self.id)])
+        if image and image[0].mimetype == 'application/pdf':
+            self.image = image[0].image
+        elif image and image[0].mimetype in ['image/jpeg','image/png','image/gif']:
             self.image = image[0].datas
         else:
             self.image = None
 
 
+
         
-class ir_attachement(models.Model):
-    _inherit='ir.attachment'
-    
-    def pdf2jpg(self,dest_width, dest_height):
-        RESOLUTION    = 300
-        #blob = self.datas.decode('base64')
-        #raise Warning(self.base64_decode(self.datas))
-        #str = self.datas + '=' *(-len(self.datas)%4)
-        
-        _logger.warn(self.with_context({'bin_size': self.file_size}).datas)
-        #raise Warning(self.datas.decode('base64'))
-        
-        return Image(blob=self.with_context({'bin_size': self.file_size}).datas.decode('base64')).make_blob(format='jpg')
-        
-        try:
-            with Image(blob=self.datas.decode('base64'), resolution=(RESOLUTION,RESOLUTION)) as img:
-                img.background_color = Color('white')
-                img_width = img.width
-                ratio     = dest_width / img_width
-                img.resize(dest_width, int(ratio * img.height))
-    #            img.format = 'jpeg'
-                blob = img.make_blob(format='jpeg')
-        except Exception as e:
-            return None
-            
-            
-    def base64_decode(self,s):
-        """Add missing padding to string and return the decoded base64 string."""
-        s = str(s).strip()
-        try:
-            return base64.b64decode(s)
-        except TypeError:
-            padding = len(s) % 4
-            if padding == 1:
-                return ''
-            elif padding == 2:
-                s += b'=='
-            elif padding == 3:
-                s += b'='
-            return base64.b64decode(s)

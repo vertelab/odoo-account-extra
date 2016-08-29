@@ -32,6 +32,10 @@ import urllib2
 import re
 import time
 
+from wand.image import Image
+from wand.display import display
+from wand.color import Color
+import subprocess
 
 
 import logging
@@ -50,6 +54,35 @@ def content_disposition(filename):
     else:
         return "attachment; filename*=UTF-8''%s" % escaped
 
+
+class ir_attachement(models.Model):
+    _inherit='ir.attachment'
+    
+    image = fields.Binary()
+    
+    @api.multi
+    def pdf2image(self,dest_width, dest_height):
+        RESOLUTION    = 300
+        #blob = self.datas.decode('base64')
+        #raise Warning(self.base64_decode(self.datas))
+        #str = self.datas + '=' *(-len(self.datas)%4)
+        #img = Image(blob=self[0].datas.decode('base64'))
+        #img.resize(dest_width,dest_height)        
+        #~ self[0].image = img.make_blob(format='jpg').encode('base64')
+        self[0].image = Image(blob=self[0].datas.decode('base64'),resolution=(RESOLUTION,RESOLUTION)).make_blob(format='jpg').encode('base64')
+        #~ return 
+        #~ try:
+            #~ with Image(blob=self[0].datas.decode('base64'), resolution=(RESOLUTION,RESOLUTION)) as img:
+                #~ img.background_color = Color('white')
+                #~ img_width = img.width
+                #~ ratio     = dest_width / img_width
+                #~ img.resize(dest_width, dest_height)
+    #~ #            img.format = 'jpeg'
+                #~ self[0].image = img.make_blob(format='jpeg').encode('base64')
+        #~ except Exception as e:
+            #~ return None
+        #    return None
+            
 
 class website_project_issue(http.Controller):
         
@@ -79,14 +112,17 @@ class website_project_issue(http.Controller):
         
         if issue and request.httprequest.method == 'POST' and post.get('ufile'):
             _logger.debug("This is attachement post %s /issue/nn" % (post))  
+            blob = post['ufile'].read()
             attachment = request.env['ir.attachment'].create({
                     'name': post['ufile'].filename,
                     'res_name': issue.name,
                     'res_model': 'project.issue',
                     'res_id': issue.id,
-                    'datas': base64.encodestring(post['ufile'].read()),
+                    'datas': base64.encodestring(blob),
                     'datas_fname': post['ufile'].filename,
                 })
+            if attachment.mimetype == 'application/pdf':
+                attachment.pdf2image(800,1200)
             message['success'] = _('Voucher uploaded %s (%s)' % (issue.name,issue.id))
         
         _logger.error("This is a %s and %s and %s, %s" % (type(issue),isinstance(issue,models.Model),issue,request.httprequest.url))
