@@ -32,7 +32,8 @@ class project_issue(models.Model):
     _inherit = 'project.issue'
 
     voucher_project = fields.Boolean(related="project_id.use_voucher")
-    voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('journal_entry','Journal Entry')])
+    #~ voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('journal_entry','Journal Entry')])
+    voucher_type = fields.Selection(selection=[('voucher_in','Supplier Voucher'),('in_invoice','Supplier Invoice'),('voucher_out','Customer Voucher'),('out_invoice','Customer Invoice')],) #('journal_entry','Journal Entry')])
     image = fields.Binary(compute='_image')
     @api.one
     @api.depends('project_id','email_from')
@@ -50,18 +51,43 @@ class project_issue(models.Model):
         for issue in self:
             res = getattr(issue,issue.voucher_type)()
         return res
-
-    def _do_message_post(self,object,text):
+    @api.one
+    def _finnish(self,object,text):
         self.message_post(body=_('%s <a href="http:/web#model=%s&id=%s">%s</a>' % (text,object._name,object.id,object.name)))   #   #model=<model>&id=<id>
         stages = self.env['project.task.type'].search([('project_ids','in',self.project_id.id)],order="sequence")
         if stages.filtered(lambda s: s.name == 'Done'):
             self.stage_id = stages.filtered(lambda s: s.name == 'Done').id
         else:
             self.stage_id = stages[-1].id
-    def _do_move_attachment(self,object):
         for file in self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)]):
             file.write({'res_model': object._name,'res_id': object.id })
-        
+    @api.model
+    def _get_views(self,object,action,form=None,tree=None,kanban=None,graph=None,target='current'):
+        result = self.env.ref(action).read({'res_model','view_type','view_mode','view_id','search_view_id','domain','context','type'})[0]
+        #result = self.env.ref(action).read()[0]
+        views = []
+        view_mode = []
+        if form:
+            view_mode.append('form')
+            views.append(((self.env.ref(form).id,'form')))
+        if tree:
+            view_mode.append('tree')
+            views.append(((self.env.ref(tree).id,'tree')))
+        if kanban:
+            view_mode.append('kanban')
+            views.append(((self.env.ref(kanban).id,'kanban')))
+        if graph:
+            view_mode.append('graph')
+            views.append(((self.env.ref(graph).id,'graph')))            
+        result.update({
+            'target': target,
+            'res_id': object.id,
+            'views': views,
+            'view_mode': ','.join(view_mode)
+        })
+#        result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
+        #~ _logger.info('result %s' % result)
+        return result
     @api.multi
     def in_invoice(self,):
         invoices = []
@@ -75,14 +101,14 @@ class project_issue(models.Model):
                 'account_id': issue.partner_id.property_account_receivable.id,
                 'partner_id': issue.partner_id.id,
             })
-            issue._do_message_post(invoice,_('Supplier invoice created'))
-            issue._do_move_attachment(invoice)
+            issue._finnish(invoice,_('Supplier invoice created'))
             invoices.append(invoice)
+        return self._get_views(invoice,'account.action_invoice_tree2',form='account.invoice_form') #,tree='account.action_invoice_tree2')
         result = self.env.ref('account.action_invoice_tree2').read()[0]
         result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
         result['res_id'] = invoice.id # self.id
         result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
-      
+        _logger.info('result %s' % result)
         return result
 
     @api.multi
@@ -98,10 +124,9 @@ class project_issue(models.Model):
                 'account_id': issue.partner_id.property_account_receivable.id,
                 'partner_id': issue.partner_id.id,
             })
-            issue._do_message_post(invoice,_('Customer invoice created'))
-            issue._do_move_attachment(invoice)
+            issue._finnish(invoice,_('Customer invoice created'))
             invoices.append(invoice)
-        result = self.env.ref('account.action_invoice_tree1').read()[0]
+        return self._get_views(invoice,'account.action_invoice_tree1')
         result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
         result['res_id'] = invoice.id # self.id
         result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
@@ -120,14 +145,14 @@ class project_issue(models.Model):
                 'account_id': issue.partner_id.property_account_receivable.id,
                 'partner_id': issue.partner_id.id,
             })
-            issue._do_message_post(invoice,_('Supplier voucher created'))
-            issue._do_move_attachment(invoice)
+            issue._finnish(invoice,_('Supplier voucher created'))
             invoices.append(invoice)
-        result = self.env.ref('account.action_invoice_tree2').read()[0]
-        result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
+        return self._get_views(invoice,'account_voucher.view_voucher_tree')
+        result = self.env.ref('account_voucher.view_voucher_tree').read()[0]
+        result['views'] = [(self.env.ref('account_voucher.view_purchase_receipt_form').id,'form'),(self.env.ref('account_voucher.view_voucher_tree').id,'tree')]
         result['res_id'] = invoice.id # self.id
-        result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
-      
+        result['search_view_id'] = self.env.ref("account_voucher.view_voucher_filter_vendor").id
+        _logger.info('result %s' % result)
         return result
 
 
@@ -144,35 +169,16 @@ class project_issue(models.Model):
             'journal_id': journal.id,
             'to_check': True,
             })
-            issue._do_message_post(move,_('Journal Entry created'))
-            issue._do_move_attachment(move)
+            issue._finnish(move,_('Journal Entry created'))
             moves.append(move)
+        return self._get_views(move,'account.view_move_line_tree')
         result = self.env.ref('account.view_move_line_tree').read()[0]
         result['views'] = [(self.env.ref('account.view_move_line_form').id,'form'),(self.env.ref('account.view_move_line_tree').id,'tree')]
         result['res_id'] = move.id # self.id
         #~ result['search_view_id'] = self.env.ref("account.view_move_line_tree_filter").id
         return result
 
-    @api.multi
-    def bankstatement(self,):
-        statements = []
-        for issue in self:
-            record = self.env['account.bank.statement'].with_context({'journal_type':'bank'}).default_get(['journal_id','date','period_id'])
-            #~ raise Warning(record)
-            record.update(
-            {
-                'display_name': issue.name,
-                'company_id': issue.company_id.id,
-            })
-            statement = self.env['account.bank.statement'].create(record)
-            issue._do_message_post(statement,_('Bank statement created'))
-            issue._do_move_attachment(statement)
-            statements.append(statement)
-        result = self.env.ref('account.view_bank_statement_tree').read()[0]  # Should be import wizard
-        result['views'] = [(self.env.ref('account.view_bank_statement_form').id,'form'),(self.env.ref('account.view_bank_statement_tree').id,'tree')]
-        result['res_id'] = statement.id # self.id
-        result['search_view_id'] = self.env.ref("account.view_bank_statement_search").id
-        return result
+
 
 class project_project(models.Model):
     _inherit = 'project.project'
