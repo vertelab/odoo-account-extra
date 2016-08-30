@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -21,10 +21,6 @@
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 
-import base64
-
-
-
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -33,7 +29,7 @@ class project_issue(models.Model):
 
     voucher_project = fields.Boolean(related="project_id.use_voucher")
     #~ voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('journal_entry','Journal Entry')])
-    voucher_type = fields.Selection(selection=[('voucher_in','Supplier Voucher'),('in_invoice','Supplier Invoice'),('voucher_out','Customer Voucher'),('out_invoice','Customer Invoice')],) #('journal_entry','Journal Entry')])
+    voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice')],) #('journal_entry','Journal Entry')])
     image = fields.Binary(compute='_image')
     @api.one
     @api.depends('project_id','email_from')
@@ -88,6 +84,7 @@ class project_issue(models.Model):
 #        result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
         #~ _logger.info('result %s' % result)
         return result
+
     @api.multi
     def in_invoice(self,):
         invoices = []
@@ -132,30 +129,6 @@ class project_issue(models.Model):
         result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
         return result
 
-    @api.multi
-    def voucher_in(self,):
-        invoices = []
-        for issue in self:
-            invoice = self.env['account.voucher'].create({
-                'origin': '%s (%d)' % (issue.name,issue.id),
-                'type': 'purchase',
-                'comment': issue.description,
-                'company_id': issue.company_id.id,
-                'user_id': issue.user_id.id,
-                'account_id': issue.partner_id.property_account_receivable.id,
-                'partner_id': issue.partner_id.id,
-            })
-            issue._finnish(invoice,_('Supplier voucher created'))
-            invoices.append(invoice)
-        return self._get_views(invoice,'account_voucher.view_voucher_tree')
-        result = self.env.ref('account_voucher.view_voucher_tree').read()[0]
-        result['views'] = [(self.env.ref('account_voucher.view_purchase_receipt_form').id,'form'),(self.env.ref('account_voucher.view_voucher_tree').id,'tree')]
-        result['res_id'] = invoice.id # self.id
-        result['search_view_id'] = self.env.ref("account_voucher.view_voucher_filter_vendor").id
-        _logger.info('result %s' % result)
-        return result
-
-
 
     @api.multi
     def journal_entry(self,):
@@ -178,13 +151,10 @@ class project_issue(models.Model):
         #~ result['search_view_id'] = self.env.ref("account.view_move_line_tree_filter").id
         return result
 
-
-
 class project_project(models.Model):
     _inherit = 'project.project'
 
     use_voucher = fields.Boolean(string="Use Voucher")      
-
 
 class account_move(models.Model):
     _inherit = 'account.move'

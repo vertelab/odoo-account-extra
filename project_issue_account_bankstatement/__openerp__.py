@@ -35,8 +35,7 @@ this module upload bank statements
 
     """,
     'depends': ['project_issue_account','account_bank_statement_import' ],
-    'data': ['project_issue_view.xml',
-        ],
+    'data': [],
     'installable': True,
     'application': True,
     'auto_install': False,

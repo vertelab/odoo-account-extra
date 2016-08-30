@@ -30,11 +30,8 @@
 Create accounting objects from an issue
 =======================================
 
-* account.invoice (domain=[('supplier','=',true)], domain=[('customer'.'=', true)], 
-* account.voucher (domain=[('supplier','=',true)], domain=[('customer'.'=', true)])
-* account.bank.statement domain=[('type','=','bank')],domain=[('type','=','cash')],
-* account.move
-
+* account.invoice (supplier / customer)
+* pdf-files are converted to image
 
     """,
     'depends': ['project_issue','account' ],

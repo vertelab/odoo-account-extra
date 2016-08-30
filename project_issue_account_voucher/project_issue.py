@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,55 +20,45 @@
 ##############################################################################
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
-from openerp import http
-from openerp.http import request
-from openerp import SUPERUSER_ID
-from datetime import datetime
-import werkzeug
-import pytz
-
-
-
 
 import logging
 _logger = logging.getLogger(__name__)
 
-
 class project_issue(models.Model):
     _inherit = 'project.issue'
 
+    voucher_type = fields.Selection(selection_add=[('voucher_in','Supplier Voucher'),('voucher_out','Customer Voucher')],)
 
     @api.multi
-    def create_voucher_customer(self,):
+    def voucher_in(self,):
+        vouchers = []
         for issue in self:
-            invoice = self.env['account.voucher'].create({
-            'origin': '%s (%d)' % (issue.name,issue.id),
-            'type': 'out_invoice',
-            'comment': issue.description,
-            'company_id': issue.company_id.id,
-            'user_id': issue.user_id.id,
-            'account_id': issue.partner_id.property_account_receivable.id,
-            'partner_id': issue.partner_id.id,
+            voucher = self.env['account.voucher'].create({
+                'origin': '%s (%d)' % (issue.name,issue.id),
+                'type': 'purchase',
+                'comment': issue.description,
+                'company_id': issue.company_id.id,
+                'user_id': issue.user_id.id,
+                'account_id': issue.partner_id.property_account_receivable.id,
+                'partner_id': issue.partner_id.id,
             })
-            url = "<a href='/web?model=account.invoice&id=%d'>%s</a>" % (invoice.id,_('invoice'))
-            issue.message_post(body=_('Customer Voucher created %s' % invoice.id) )
-            for file in self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]):
-                file.write({'res_model': 'account.invoice','res_id': invoice })
-        return True
+            issue._finnish(voucher,_('Supplier voucher created'))
+            vouchers.append(voucher)
+        return self._get_views(voucher,'account_voucher.view_voucher_tree')
 
     @api.multi
-    def create_voucher_supplier(self,):
+    def voucher_out(self,):
+        vouchers = []
         for issue in self:
-            invoice = self.env['account.invoice'].create({
-            'origin': issue.name,
-            'type': 'in_invoice',
-            'comment': issue.description,
-            'company_id': issue.company_id.id,
-            'user_id': issue.user_id.id,
-            'account_id': issue.partner_id.property_account_payable.id,
-            'partner_id': issue.partner_id.id,
+            voucher = self.env['account.voucher'].create({
+                'origin': '%s (%d)' % (issue.name,issue.id),
+                'type': 'sale',
+                'comment': issue.description,
+                'company_id': issue.company_id.id,
+                'user_id': issue.user_id.id,
+                'account_id': issue.partner_id.property_account_receivable.id,
+                'partner_id': issue.partner_id.id,
             })
-            issue.message_post(body=_('Customer Voucher created %s' % invoice.id) )
-            for file in self.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]):
-                file.write({'res_model': 'account.invoice','res_id': invoice })
-        return True
+            issue._finnish(voucher,_('Customer voucher created'))
+            vouchers.append(voucher)
+        return self._get_views(voucher,'account_voucher.view_voucher_tree')

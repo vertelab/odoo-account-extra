@@ -20,23 +20,20 @@
 ##############################################################################
 
 {
-    'name': 'Project issue create account voucher',
+    'name': 'Project issue create voucher',
     'version': '0.1',
     'author': 'Vertel AB',
     'category': 'base',
     'website': 'http://www.vertel.se',
-    'summary': 'Add buttons to create accounting voucher objects from an issue',
+    'summary': 'Add buttons to create voucher from an issue',
     'description': """
 Create accounting objects from an issue
 =======================================
 
-* account.voucher (domain=[('supplier','=',true)], domain=[('customer'.'=', true)])
-
 
     """,
-    'depends': ['project_issue_account','account_voucher' ],
-    'data': ['project_issue_view.xml',
-        ],
+    'depends': ['project_issue_account','account_voucher'],
+    'data': [],
     'installable': True,
     'application': True,
     'auto_install': True,
