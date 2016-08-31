@@ -27,7 +27,7 @@ _logger = logging.getLogger(__name__)
 class project_issue(models.Model):
     _inherit = 'project.issue'
 
-    voucher_type = fields.Selection(selection_add=[('voucher_in','Supplier Voucher'),('voucher_out','Customer Voucher')],)
+    voucher_type = fields.Selection(selection_add=[('voucher_in','Supplier Voucher'),('voucher_out','Customer Voucher')], string='Voucher Type')
 
     @api.multi
     def voucher_in(self,):
