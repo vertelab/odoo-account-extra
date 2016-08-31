@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0-20160830\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-31 10:12+0000\n"
-"PO-Revision-Date: 2016-08-31 13:09+0200\n"
+"PO-Revision-Date: 2016-08-31 15:02+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: code:addons/project_issue_account_voucher/project_issue.py:62
 #, python-format
 msgid "Customer voucher created"
-msgstr "Kundkvitto skapade"
+msgstr "Kundkvitto skapat"
 
 #. module: project_issue_account_voucher
 #: model:ir.model,name:project_issue_account_voucher.model_project_issue
@@ -32,4 +32,4 @@ msgstr "Ärende"
 #: code:addons/project_issue_account_voucher/project_issue.py:45
 #, python-format
 msgid "Supplier voucher created"
-msgstr "Leverantörskvitto skapade"
+msgstr "Leverantörskvitto skapat"
