@@ -29,7 +29,7 @@ class project_issue(models.Model):
 
     voucher_project = fields.Boolean(related="project_id.use_voucher")
     #~ voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('journal_entry','Journal Entry')])
-    voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice')],) #('journal_entry','Journal Entry')])
+    voucher_type = fields.Selection(selection=[('in_invoice', 'Supplier Invoice'),('out_invoice','Customer Invoice')], string='Voucher Type') #('journal_entry','Journal Entry')])
     image = fields.Binary(compute='_image')
     @api.one
     @api.depends('project_id','email_from')
@@ -74,7 +74,7 @@ class project_issue(models.Model):
             views.append(((self.env.ref(kanban).id,'kanban')))
         if graph:
             view_mode.append('graph')
-            views.append(((self.env.ref(graph).id,'graph')))            
+            views.append(((self.env.ref(graph).id,'graph')))
         result.update({
             'target': target,
             'res_id': object.id,
@@ -154,7 +154,7 @@ class project_issue(models.Model):
 class project_project(models.Model):
     _inherit = 'project.project'
 
-    use_voucher = fields.Boolean(string="Use Voucher")      
+    use_voucher = fields.Boolean(string="Use Voucher")
 
 class account_move(models.Model):
     _inherit = 'account.move'
@@ -186,4 +186,4 @@ class account_invoice(models.Model):
 
 
 
-        
+

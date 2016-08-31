@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0-20151117\n"
+"Project-Id-Version: Odoo Server 8.0-20160830\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 11:58+0000\n"
-"PO-Revision-Date: 2015-11-25 11:58+0000\n"
+"POT-Creation-Date: 2016-08-31 10:11+0000\n"
+"PO-Revision-Date: 2016-08-31 10:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,24 +16,69 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: project_issue_account
-#: view:project.issue:project_issue_account.project_issue_form_view
-msgid "Bank Statement"
+#: code:addons/project_issue_account/project_issue.py:52
+#, python-format
+msgid "%s <a href=\"http:/web#model=%s&id=%s\">%s</a>"
 msgstr ""
 
 #. module: project_issue_account
-#: view:project.issue:project_issue_account.project_issue_form_view
+#: model:ir.model,name:project_issue_account.model_account_move
+msgid "Account Entry"
+msgstr ""
+
+#. module: project_issue_account
+#: selection:project.issue,voucher_type:0
 msgid "Customer Invoice"
 msgstr ""
 
 #. module: project_issue_account
-#: code:addons/project_issue_account/project_issue.py:54
+#: selection:project.issue,voucher_type:0
+msgid "Customer Voucher"
+msgstr ""
+
+#. module: project_issue_account
+#: code:addons/project_issue_account/project_issue.py:124
 #, python-format
-msgid "Customer Invoice created %s"
+msgid "Customer invoice created"
 msgstr ""
 
 #. module: project_issue_account
 #: view:project.issue:project_issue_account.project_issue_form_view
-msgid "Move"
+msgid "Extra Info"
+msgstr ""
+
+#. module: project_issue_account
+#: field:account.invoice,image:0
+#: field:account.move,image:0
+#: field:project.issue,image:0
+msgid "Image"
+msgstr ""
+
+#. module: project_issue_account
+#: model:ir.model,name:project_issue_account.model_account_invoice
+msgid "Invoice"
+msgstr ""
+
+#. module: project_issue_account
+#: code:addons/project_issue_account/project_issue.py:145
+#, python-format
+msgid "Journal Entry created"
+msgstr ""
+
+#. module: project_issue_account
+#: view:account.move:project_issue_account.view_move_form
+msgid "Journal Items"
+msgstr ""
+
+#. module: project_issue_account
+#: view:account.invoice:project_issue_account.invoice_form
+#: view:account.invoice:project_issue_account.invoice_supplier_form
+msgid "Other Info"
+msgstr ""
+
+#. module: project_issue_account
+#: model:ir.model,name:project_issue_account.model_project_project
+msgid "Project"
 msgstr ""
 
 #. module: project_issue_account
@@ -42,13 +87,42 @@ msgid "Project Issue"
 msgstr ""
 
 #. module: project_issue_account
-#: view:project.issue:project_issue_account.project_issue_form_view
+#: selection:project.issue,voucher_type:0
 msgid "Supplier Invoice"
 msgstr ""
 
 #. module: project_issue_account
-#: code:addons/project_issue_account/project_issue.py:53
+#: selection:project.issue,voucher_type:0
+msgid "Supplier Voucher"
+msgstr ""
+
+#. module: project_issue_account
+#: code:addons/project_issue_account/project_issue.py:101
 #, python-format
-msgid "invoice"
+msgid "Supplier invoice created"
+msgstr ""
+
+#. module: project_issue_account
+#: field:project.issue,voucher_project:0
+#: field:project.project,use_voucher:0
+msgid "Use Voucher"
+msgstr ""
+
+#. module: project_issue_account
+#: view:account.invoice:project_issue_account.invoice_form
+#: view:account.invoice:project_issue_account.invoice_supplier_form
+#: view:account.move:project_issue_account.view_move_form
+#: view:project.issue:project_issue_account.project_issue_form_view
+msgid "Voucher"
+msgstr ""
+
+#. module: project_issue_account
+#: field:project.issue,voucher_type:0
+msgid "Voucher Type"
+msgstr ""
+
+#. module: project_issue_account
+#: view:project.issue:project_issue_account.project_issue_form_view
+msgid "⇒ Create"
 msgstr ""
 
