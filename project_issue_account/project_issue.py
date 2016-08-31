@@ -50,11 +50,7 @@ class project_issue(models.Model):
     @api.one
     def _finnish(self,object,text):
         self.message_post(body=_('%s <a href="http:/web#model=%s&id=%s">%s</a>' % (text,object._name,object.id,object.name)))   #   #model=<model>&id=<id>
-        stages = self.env['project.task.type'].search([('project_ids','in',self.project_id.id)],order="sequence")
-        if stages.filtered(lambda s: s.name == 'Done'):
-            self.stage_id = stages.filtered(lambda s: s.name == 'Done').id
-        else:
-            self.stage_id = stages[-1].id
+        self.stage_id = self.env.ref('project.project_tt_deployment').id
         for file in self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)]):
             file.write({'res_model': object._name,'res_id': object.id })
     @api.model
