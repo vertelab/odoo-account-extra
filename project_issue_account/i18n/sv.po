@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0-20160830\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-31 10:13+0000\n"
-"PO-Revision-Date: 2016-08-31 15:02+0200\n"
+"PO-Revision-Date: 2016-09-01 10:37+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -95,7 +95,7 @@ msgstr "Leverantörsfaktura"
 #. module: project_issue_account
 #: selection:project.issue,voucher_type:0
 msgid "Supplier Voucher"
-msgstr "Leverantörskvitto"
+msgstr "Inköpskvitto"
 
 #. module: project_issue_account
 #: code:addons/project_issue_account/project_issue.py:101
