@@ -93,10 +93,11 @@ class website_project_issue(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         message = {}
         user = request.env['res.users'].browse(uid)
-        voucher_name = [txt[1] for txt in request.env['project.issue'].fields_get(['voucher_type'])['voucher_type']['selection'] if txt[0] == post.get('voucher_type')][0]
+        voucher_name = None
 
         if not issue and request.httprequest.method == 'POST':
             try:
+                voucher_name = [txt[1] for txt in request.env['project.issue'].fields_get(['voucher_type'])['voucher_type']['selection'] if txt[0] == post.get('voucher_type')][0]
                 if len(post.get('name'))<1:
                     post['name'] = '%s %s' % (user.name,time.strftime("%x")) # Why?
                 project = request.env['project.project'].search(['&',('partner_id','=',user.partner_id.id),('use_voucher','=',True)])
