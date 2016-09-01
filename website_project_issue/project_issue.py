@@ -93,7 +93,7 @@ class website_project_issue(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         message = {}
         user = request.env['res.users'].browse(uid)
-        voucher_name = [txt[1] for txt in request.env['project.issue'].fields_get(['voucher_type'])['voucher_type']['selection'] if txt[0] == 'in_invoice'][0]
+        voucher_name = [txt[1] for txt in request.env['project.issue'].fields_get(['voucher_type'])['voucher_type']['selection'] if txt[0] == post.get('voucher_type')][0]
 
         if not issue and request.httprequest.method == 'POST':
             try:
@@ -107,7 +107,7 @@ class website_project_issue(http.Controller):
                                                              'voucher_type': post.get('voucher_type'),
                                                              })
             except Exception as e:
-                message['danger'] = 'Could not create an issue %s' % e
+                message['danger'] = _('Could not create an issue %s') % e
 
         if issue and request.httprequest.method == 'POST':
             issue.write({'partner_id': user.partner_id.id, 'name':  '%s %s' % (voucher_name,post.get('name','')), 'description': post.get('description')})
@@ -125,7 +125,7 @@ class website_project_issue(http.Controller):
                 })
             if attachment.mimetype == 'application/pdf':
                 attachment.pdf2image(800,1200)
-            message['success'] = _('Voucher uploaded %s (%s)' % (issue.name,issue.id))
+            message['success'] = _('Voucher uploaded %s (%s)') % (issue.name,issue.id)
 
         _logger.error("This is a %s and %s and %s, %s" % (type(issue),isinstance(issue,models.Model),issue,request.httprequest.url))
         return request.website.render("website_project_issue.upload_attachement", {
