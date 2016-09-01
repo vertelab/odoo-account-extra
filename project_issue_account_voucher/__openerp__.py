@@ -33,7 +33,7 @@ Create accounting objects from an issue
 
     """,
     'depends': ['project_issue_account','account_voucher'],
-    'data': [],
+    'data': ['account_voucher_view.xml'],
     'installable': True,
     'application': True,
     'auto_install': True,

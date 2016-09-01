@@ -29,7 +29,7 @@ class project_issue(models.Model):
 
     voucher_project = fields.Boolean(related="project_id.use_voucher")
     #~ voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('journal_entry','Journal Entry')])
-    voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice')],) #('journal_entry','Journal Entry')])
+    voucher_type = fields.Selection(selection=[('in_invoice', 'Supplier Invoice'),('out_invoice','Customer Invoice')], string='Voucher Type') #('journal_entry','Journal Entry')])
     image = fields.Binary(compute='_image')
     @api.one
     @api.depends('project_id','email_from')
@@ -50,11 +50,7 @@ class project_issue(models.Model):
     @api.one
     def _finnish(self,object,text):
         self.message_post(body=_('%s <a href="http:/web#model=%s&id=%s">%s</a>' % (text,object._name,object.id,object.name)))   #   #model=<model>&id=<id>
-        stages = self.env['project.task.type'].search([('project_ids','in',self.project_id.id)],order="sequence")
-        if stages.filtered(lambda s: s.name == 'Done'):
-            self.stage_id = stages.filtered(lambda s: s.name == 'Done').id
-        else:
-            self.stage_id = stages[-1].id
+        self.stage_id = self.env.ref('project.project_tt_deployment').id
         for file in self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)]):
             file.write({'res_model': object._name,'res_id': object.id })
     @api.model
@@ -74,7 +70,7 @@ class project_issue(models.Model):
             views.append(((self.env.ref(kanban).id,'kanban')))
         if graph:
             view_mode.append('graph')
-            views.append(((self.env.ref(graph).id,'graph')))            
+            views.append(((self.env.ref(graph).id,'graph')))
         result.update({
             'target': target,
             'res_id': object.id,
@@ -154,7 +150,7 @@ class project_issue(models.Model):
 class project_project(models.Model):
     _inherit = 'project.project'
 
-    use_voucher = fields.Boolean(string="Use Voucher")      
+    use_voucher = fields.Boolean(string="Use Voucher")
 
 class account_move(models.Model):
     _inherit = 'account.move'
@@ -186,4 +182,4 @@ class account_invoice(models.Model):
 
 
 
-        
+

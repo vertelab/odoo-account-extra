@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0-20151117\n"
+"Project-Id-Version: Odoo Server 8.0-20160830\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 09:36+0000\n"
-"PO-Revision-Date: 2015-11-25 09:36+0000\n"
+"POT-Creation-Date: 2016-08-31 10:11+0000\n"
+"PO-Revision-Date: 2016-08-31 10:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,9 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: project_issue_account_voucher
-#: view:project.issue:project_issue_account_voucher.project_issue_form_view
-msgid "Customer Voucher"
-msgstr ""
-
-#. module: project_issue_account_voucher
-#: code:addons/project_issue_account_voucher/project_issue.py:54
-#: code:addons/project_issue_account_voucher/project_issue.py:71
+#: code:addons/project_issue_account_voucher/project_issue.py:62
 #, python-format
-msgid "Customer Voucher created %s"
+msgid "Customer voucher created"
 msgstr ""
 
 #. module: project_issue_account_voucher
@@ -33,13 +27,8 @@ msgid "Project Issue"
 msgstr ""
 
 #. module: project_issue_account_voucher
-#: view:project.issue:project_issue_account_voucher.project_issue_form_view
-msgid "Supplier Voucher"
-msgstr ""
-
-#. module: project_issue_account_voucher
-#: code:addons/project_issue_account_voucher/project_issue.py:53
+#: code:addons/project_issue_account_voucher/project_issue.py:45
 #, python-format
-msgid "invoice"
+msgid "Supplier voucher created"
 msgstr ""
 

@@ -4,51 +4,124 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0-20151117\n"
+"Project-Id-Version: Odoo Server 8.0-20160830\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 11:58+0000\n"
-"PO-Revision-Date: 2015-11-25 13:01+0100\n"
+"POT-Creation-Date: 2016-08-31 10:13+0000\n"
+"PO-Revision-Date: 2016-08-31 15:02+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: \n"
+"Language: sv\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #. module: project_issue_account
-#: view:project.issue:project_issue_account.project_issue_form_view
-msgid "Bank Statement"
-msgstr "Kontoutdrag"
+#: code:addons/project_issue_account/project_issue.py:52
+#, python-format
+msgid "%s <a href=\"http:/web#model=%s&id=%s\">%s</a>"
+msgstr "%s <a href=\"http:/web#model=%s&id=%s\">%s</a>"
 
 #. module: project_issue_account
-#: view:project.issue:project_issue_account.project_issue_form_view
+#: model:ir.model,name:project_issue_account.model_account_move
+msgid "Account Entry"
+msgstr "Verifikat"
+
+#. module: project_issue_account
+#: selection:project.issue,voucher_type:0
 msgid "Customer Invoice"
 msgstr "Kundfaktura"
 
 #. module: project_issue_account
-#: code:addons/project_issue_account/project_issue.py:54
+#: selection:project.issue,voucher_type:0
+msgid "Customer Voucher"
+msgstr "Kundkvitto"
+
+#. module: project_issue_account
+#: code:addons/project_issue_account/project_issue.py:124
 #, python-format
-msgid "Customer Invoice created %s"
-msgstr "Kundfaktura skapad %s"
+msgid "Customer invoice created"
+msgstr "Kundkvitto skapat"
 
 #. module: project_issue_account
 #: view:project.issue:project_issue_account.project_issue_form_view
-msgid "Move"
-msgstr "Flytta"
+msgid "Extra Info"
+msgstr "Extra Info"
+
+#. module: project_issue_account
+#: field:account.invoice,image:0 field:account.move,image:0
+#: field:project.issue,image:0
+msgid "Image"
+msgstr "Bild"
+
+#. module: project_issue_account
+#: model:ir.model,name:project_issue_account.model_account_invoice
+msgid "Invoice"
+msgstr "Faktura"
+
+#. module: project_issue_account
+#: code:addons/project_issue_account/project_issue.py:145
+#, python-format
+msgid "Journal Entry created"
+msgstr "Verifikat skapat"
+
+#. module: project_issue_account
+#: view:account.move:project_issue_account.view_move_form
+msgid "Journal Items"
+msgstr "Transaktioner"
+
+#. module: project_issue_account
+#: view:account.invoice:project_issue_account.invoice_form
+#: view:account.invoice:project_issue_account.invoice_supplier_form
+msgid "Other Info"
+msgstr "Övriga Info"
+
+#. module: project_issue_account
+#: model:ir.model,name:project_issue_account.model_project_project
+msgid "Project"
+msgstr "Projekt"
 
 #. module: project_issue_account
 #: model:ir.model,name:project_issue_account.model_project_issue
 msgid "Project Issue"
-msgstr "Projektärende"
+msgstr "Ärende"
 
 #. module: project_issue_account
-#: view:project.issue:project_issue_account.project_issue_form_view
+#: selection:project.issue,voucher_type:0
 msgid "Supplier Invoice"
 msgstr "Leverantörsfaktura"
 
 #. module: project_issue_account
-#: code:addons/project_issue_account/project_issue.py:53
+#: selection:project.issue,voucher_type:0
+msgid "Supplier Voucher"
+msgstr "Leverantörskvitto"
+
+#. module: project_issue_account
+#: code:addons/project_issue_account/project_issue.py:101
 #, python-format
-msgid "invoice"
-msgstr "faktura"
+msgid "Supplier invoice created"
+msgstr "Leverantörsfaktura skapad"
+
+#. module: project_issue_account
+#: field:project.issue,voucher_project:0 field:project.project,use_voucher:0
+msgid "Use Voucher"
+msgstr "Använda kvitto"
+
+#. module: project_issue_account
+#: view:account.invoice:project_issue_account.invoice_form
+#: view:account.invoice:project_issue_account.invoice_supplier_form
+#: view:account.move:project_issue_account.view_move_form
+#: view:project.issue:project_issue_account.project_issue_form_view
+msgid "Voucher"
+msgstr "Kvitto"
+
+#. module: project_issue_account
+#: field:project.issue,voucher_type:0
+msgid "Voucher Type"
+msgstr "Kvittotyp"
+
+#. module: project_issue_account
+#: view:project.issue:project_issue_account.project_issue_form_view
+msgid "⇒ Create"
+msgstr "⇒ Skapa"
