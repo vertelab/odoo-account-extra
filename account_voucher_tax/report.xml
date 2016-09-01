@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <template id="report_account_analytic_account_document">
+        <t t-call="report.external_layout">
+            <div class="page">
+                <div class="row">
+                    <div class="col-xs-5 col-xs-offset-7">
+                        <address t-field="o.partner_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-if="o.partner_id.vat">TIN: <span t-field="o.partner_id.vat"/></span>
+                    </div>
+                </div>
+
+                <h2>
+                    <span>Pricelist</span>
+
+                </h2>
+
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Product</th>
+                            <th>Supplier</th>
+                            <th>KFP</th>
+                            <th>DFP</th>
+                            <th>Pallet</th>
+                            <th>Customer Code</th>
+                            <th>Listprice/KFP</th>
+                            <th>Listprice/DFP</th>
+                            <th>Net Price</th>
+                        </tr>
+                    </thead>
+                    <tbody class="contract_tbody">
+                        <tr t-foreach="o.partner_id.product_ids" t-as="product">
+                            <td><span t-field="product.default_code"/></td>
+                            <td>
+                                <span t-field="product.name"/>
+                            </td>
+                            <td>
+                                <span t-esc="product.seller_ids[0].name.name if len(product.seller_ids) > 0 else ''"/>
+                            </td>
+                            <td><span t-field="product.weight_net"/></td>
+                            <td>
+                                <span t-esc="product.uos_id and product.uos_id.factor_inv or ''"/>
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_account_analytic_account">
+        <t t-call="report.html_container">
+            <t t-foreach="doc_ids" t-as="doc_id">
+                <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'contract_paolos.report_account_analytic_account_document')"/>
+            </t>
+        </t>
+    </template>
+
+    <report 
+        id="account_analytic_account"
+        model="account.analytic.account"
+        string="Contract"
+        report_type="qweb-pdf"
+        name="contract_paolos.report_account_analytic_account"
+        file="Contract"
+        attachment_use="True"
+        attachment="(object.name + '.pdf')"
+    />
+
+</data>
+</openerp>

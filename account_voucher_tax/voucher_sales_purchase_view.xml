@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+   
+      <record model="ir.ui.view" id="project_issue_form_view">
+      <field name="name">project.issue.form.inheritII</field>
+      <field name="model">project.issue</field>
+      <field name="inherit_id" ref="project_issue.project_issue_form_view" />
+      <field name="priority" eval="10" />
+      <field name="arch" type="xml">
+   
+        <record model="ir.ui.view" id="view_purchase_receipt_form">
+            <field name="name">account.voucher.purchase.form</field>
+            <field name="model">account.voucher</field>
+             <field name="inherit_id" ref="project_issue.project_issue_form_view" />
+            <field name="arch" type="xml">
+
+<!--
+
+                            <field domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view')]" name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)" groups="account.group_account_user"/>
+                            <field name="invoice_line_tax_id" context="{'type':parent.get('type')}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags"/>
+                            <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id), ('state','not in',('close','cancelled'))]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                        
+                        
+                            <div style="width: 50%%">
+                                <field name="tax_line">
+                                    <tree editable="bottom" string="Taxes">
+                                        <field name="name"/>
+                                        <field name="account_id" groups="account.group_account_invoice"/>
+                                        <field name="account_analytic_id" domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting"/>
+                                        <field name="base" on_change="base_change(base,parent.currency_id,parent.company_id,parent.date_invoice)" readonly="1"/>
+                                        <field name="amount" on_change="amount_change(amount,parent.currency_id,parent.company_id,parent.date_invoice)"/>
+
+                                        <field invisible="True" name="base_amount"/>
+                                        <field invisible="True" name="tax_amount"/>
+                                        <field name="factor_base" invisible="True"/>
+                                        <field name="factor_tax" invisible="True"/>
+                                    </tree>
+                                </field>
+                            </div>
+
+
+             
+                                    <field name="tax_id" 
+                                        on_change="onchange_price(line_dr_ids, tax_id, partner_id)"
+                                        widget="selection" nolabel="1"
+					placeholder="Tax"
+
+                                        domain="[('type_tax_use','in',('purchase','all')), ('parent_id', '=', False)]"
+                                        />
+                                    <field name="tax_amount" nolabel="1"/>
+                                    <div class="oe_subtotal_footer_separator">
+                                        
+-->
+            </field>
+        </record>
+     
+    </data>
+</openerp>
