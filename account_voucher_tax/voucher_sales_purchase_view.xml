@@ -6,7 +6,13 @@
       <field name="model">account.voucher</field>
       <field name="inherit_id" ref="account_voucher.view_purchase_receipt_form" />
       <field name="arch" type="xml">
-        <field name="tax_id" position="before">
+<!--
+        <field name="tax_id" postion="replace">
+            <field name="tax_id" invisible="1" />
+        </field>
+-->
+        <field name="narration" position="before">
+            <!--
           <div style="width: 50%%">
             <field name="tax_line">
               <tree editable="bottom" string="Taxes">
@@ -22,7 +28,16 @@
               </tree>
             </field>
           </div>
+          -->
         </field>
+ <field name="tax_id" position="attributes">
+    <attribute name="invisible">True</attribute>
+</field>
+
+
+        <xpath expr='//tree[@string="Expense Lines"]' position='inside'>
+          <field name="voucher_line_tax_id" widget="many2many_tags"/>
+        </xpath>
         <!--
              
              <field domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view')]" name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)" groups="account.group_account_user"/>
