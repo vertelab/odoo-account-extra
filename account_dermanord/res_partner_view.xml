@@ -12,7 +12,7 @@
             <a type="open">
               <field name="name" />
             </a>
-            <a t-att-href="'http:/web#id='+record.id.value+'&amp;view_type=form&amp;model=res.partner'">(form)</a>
+            <a t-att-href="'/web#id='+record.id.value+'&amp;view_type=form&amp;model=res.partner'">(form)</a>
           </h4>
         </h4>
       </field>
