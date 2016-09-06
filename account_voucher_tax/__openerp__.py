@@ -23,7 +23,7 @@
     'name': 'Account Voucher Tax',
     'version': '0.1',
     'author': 'Vertel AB',
-    'category': 'base',
+    'category': 'account',
     'website': 'http://www.vertel.se',
     'summary': 'Vouchers with more than one tax',
     'description': """
@@ -33,6 +33,7 @@
     'data': [
         #'account_voucher_view.xml',
         'voucher_sales_purchase_view.xml',
+        'security/ir.model.access.csv',
         ],
     'installable': True,
     'application': True,

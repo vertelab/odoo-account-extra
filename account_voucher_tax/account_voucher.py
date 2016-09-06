@@ -30,10 +30,10 @@ _logger = logging.getLogger(__name__)
 
 class account_voucher(models.Model):
     _inherit = 'account.voucher'
-    
+
     tax_line = fields.One2many('account.voucher.tax', 'voucher_id', string='Tax Lines',
         readonly=True, states={'draft': [('readonly', False)]}, copy=True)
-    
+
     @api.multi
     def compute_tax(self):
         ctx = dict(self._context)
@@ -41,7 +41,7 @@ class account_voucher(models.Model):
             self._cr.execute("DELETE FROM account_voucher_tax WHERE voucher_id=%s AND manual is False", (voucher.id,))
             self.invalidate_cache()
             if voucher.partner_id.lang:
-                ctx['lang'] = partner.lang
+                ctx['lang'] = voucher.partner_id.lang
             tax_amount = 0.0
             amount = 0.0
             for taxe in self.env['account.voucher.tax'].compute(voucher.with_context(ctx)).values():
@@ -51,71 +51,15 @@ class account_voucher(models.Model):
             voucher.tax_amount = tax_amount
             voucher.amount = amount
         # dummy write on self to trigger recomputations
-        
-        return self.with_context(ctx).write({'voucher_line': []})
-    
-        
-      
-    def action_move_line_create(self, cr, uid, ids, context=None):
-        '''
-        Confirm the vouchers given in ids and create the journal entries for each of them
-        '''
-        if context is None:
-            context = {}
-        move_pool = self.pool.get('account.move')
-        move_line_pool = self.pool.get('account.move.line')
-        for voucher in self.browse(cr, uid, ids, context=context):
-            local_context = dict(context, force_company=voucher.journal_id.company_id.id)
-            if voucher.move_id:
-                continue
-            company_currency = self._get_company_currency(cr, uid, voucher.id, context)
-            current_currency = self._get_current_currency(cr, uid, voucher.id, context)
-            # we select the context to use accordingly if it's a multicurrency case or not
-            context = self._sel_context(cr, uid, voucher.id, context)
-            # But for the operations made by _convert_amount, we always need to give the date in the context
-            ctx = context.copy()
-            ctx.update({'date': voucher.date})
-            
-            voucher.compute_tax()  # Change in account_voucher_tax
-            
-            
-            # Create the account move record.
-            move_id = move_pool.create(cr, uid, self.account_move_get(cr, uid, voucher.id, context=context), context=context)
-            # Get the name of the account_move just created
-            name = move_pool.browse(cr, uid, move_id, context=context).name
-            # Create the first line of the voucher
-            move_line_id = move_line_pool.create(cr, uid, self.first_move_line_get(cr,uid,voucher.id, move_id, company_currency, current_currency, local_context), local_context)
-            move_line_brw = move_line_pool.browse(cr, uid, move_line_id, context=context)
-            line_total = move_line_brw.debit - move_line_brw.credit
-            rec_list_ids = []
-            if voucher.type == 'sale':
-                line_total = line_total - self._convert_amount(cr, uid, voucher.tax_amount, voucher.id, context=ctx)
-            elif voucher.type == 'purchase':
-                line_total = line_total + self._convert_amount(cr, uid, voucher.tax_amount, voucher.id, context=ctx)
-                
-            # Create one move line per voucher line where amount is not 0.0
-            line_total, rec_list_ids = self.voucher_move_line_create(cr, uid, voucher.id, line_total, move_id, company_currency, current_currency, context)
 
-            # Create the writeoff line if needed
-            ml_writeoff = self.writeoff_move_line_get(cr, uid, voucher.id, line_total, move_id, name, company_currency, current_currency, local_context)
-            if ml_writeoff:
-                move_line_pool.create(cr, uid, ml_writeoff, local_context)
-            # We post the voucher.
-            self.write(cr, uid, [voucher.id], {
-                'move_id': move_id,
-                'state': 'posted',
-                'number': name,
-            })
-            if voucher.journal_id.entry_posted:
-                move_pool.post(cr, uid, [move_id], context={})
-            # We automatically reconcile the account move lines.
-            reconcile = False
-            for rec_ids in rec_list_ids:
-                if len(rec_ids) >= 2:
-                    reconcile = move_line_pool.reconcile_partial(cr, uid, rec_ids, writeoff_acc_id=voucher.writeoff_acc_id.id, writeoff_period_id=voucher.period_id.id, writeoff_journal_id=voucher.journal_id.id)
-        return True
-        
-        
+        return self.with_context(ctx).write({'voucher_line': []})
+
+    @api.multi
+    def proforma_voucher(self):
+        self.compute_tax()
+        return super (account_voucher, self).proforma_voucher()
+
+
     def voucher_move_line_create(self, cr, uid, voucher_id, line_total, move_id, company_currency, current_currency, context=None):
         '''
         Create one account move line, on the given account move, per voucher line where amount is not 0.0.
@@ -193,7 +137,6 @@ class account_voucher(models.Model):
                 tot_line -= line.voucher_line_tax_id.compute_all(amount, 1.0,partner=line.voucher_id.partner_id)['total']  # Change account_voucher_tax
                 move_line['credit'] = amount
                 _logger.error('credit amount %s tot_line %s' % (amount,tot_line))
-
             if line.voucher_line_tax_id and voucher.type in ('sale', 'purchase'):
                 move_line.update({
                     'account_tax_id': line.voucher_line_tax_id.id,
@@ -250,14 +193,14 @@ class account_voucher(models.Model):
                 rec_lst_ids.append(rec_ids)
         #raise Warning('%s %s' % (tot_line,rec_lst_ids))
         return (tot_line, rec_lst_ids)
- 
+
 
 class account_voucher_line(models.Model):
     _inherit = 'account.voucher.line'
-    
+
     voucher_line_tax_id = fields.Many2many('account.tax','account_voucher_line_tax', 'voucher_line_id', 'tax_id',
         string='Taxes', domain=[('parent_id', '=', False), '|', ('active', '=', False), ('active', '=', True)])
-    
+
     @api.one
     @api.depends('amount', 'voucher_line_tax_id',
         'voucher_id.partner_id', 'voucher_id.currency_id')
@@ -272,7 +215,7 @@ class account_voucher_line(models.Model):
     def _default_taxes(self):
         self.voucher_line_tax_id = self.account_id.tax_ids
 
-    
+
 class account_voucher_tax(models.Model):
     _name = "account.voucher.tax"
     _description = "Voucher Tax"
