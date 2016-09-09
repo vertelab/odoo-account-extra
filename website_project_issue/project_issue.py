@@ -126,6 +126,20 @@ class website_project_issue(http.Controller):
                 })
             if attachment.mimetype == 'application/pdf':
                 attachment.pdf2image(800,1200)
+            elif attachment.mimetype in ['image/jpeg','image/png','image/gif']:
+                orientation = {
+                    'top_left': 0,
+                    'left_top': 0,
+                    'right_top': 90,
+                    'top_right': 90,
+                    'right_bottom': 180,
+                    'bottom_right': 180,
+                    'left_bottom': 270,
+                    'bottom_left': 270,
+                }
+                img = Image(blob=blob)
+                img.rotate(orientation.get(img.orientation))
+                attachment.datas = base64.encodestring(img.make_blob(format='jpg'))
             message['success'] = _('Voucher uploaded %s (%s)') % (issue.name,issue.id)
 
         _logger.error("This is a %s and %s and %s, %s" % (type(issue),isinstance(issue,models.Model),issue,request.httprequest.url))
