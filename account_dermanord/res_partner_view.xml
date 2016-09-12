@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data>
-    <record id="view_partner_form" model="ir.ui.view">
-      <field name="name">res.partner.form.kanban.inherit</field>
-      <field name="model">res.partner</field>
-      <field name="inherit_id" ref="base.view_partner_form" />
-      <field eval="1" name="priority" />
-      <field name="arch" type="xml">
-        <h4 position="replace">
-          <h4>
-            <a type="open">
-              <field name="name" />
-            </a>
-            <a t-att-href="'/web#id='+record.id.value+'&amp;view_type=form&amp;model=res.partner'">(form)</a>
-          </h4>
-        </h4>
-      </field>
-    </record>
-  </data>
+    <data>
+        <template id="assets_backend" name="module_name assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <style>
+                    .partner_tag .oe_tag { background-color: #FFF282; }
+                </style>
+            </xpath>
+        </template>
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form.kanban.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field eval="1" name="priority" />
+            <field name="arch" type="xml">
+                <h4 position="replace">
+                    <h4>
+                        <a type="open">
+                            <field name="name" />
+                        </a>
+                        <a class="oe_m2o_cm_button oe_e" style="display: inline;" t-att-href="'/web#id='+record.id.value+'&amp;view_type=form&amp;model=res.partner'">/</a>
+                    </h4>
+                    <group>
+                        <field name="category_id" class="partner_tag" widget="many2many" />
+                    </group>
+                </h4>
+            </field>
+        </record>
+    </data>
 </openerp>
