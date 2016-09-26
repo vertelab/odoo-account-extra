@@ -137,9 +137,12 @@ class website_project_issue(http.Controller):
                     'left_bottom': 270,
                     'bottom_left': 270,
                 }
-                img = Image(blob=blob)
-                img.rotate(orientation.get(img.orientation))
-                attachment.datas = base64.encodestring(img.make_blob(format='jpg'))
+                try:
+                    img = Image(blob=blob)
+                    img.rotate(orientation.get(img.orientation))
+                    attachment.datas = base64.encodestring(img.make_blob(format='jpg'))
+                except:
+                    pass
             message['success'] = _('Voucher uploaded %s (%s)') % (issue.name,issue.id)
 
         _logger.error("This is a %s and %s and %s, %s" % (type(issue),isinstance(issue,models.Model),issue,request.httprequest.url))
