@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+<!--
         <template id="assets_backend" name="module_name assets" inherit_id="web.assets_backend">
-            <xpath expr="." position="inside">
+            <xpath expr="//link[last()]" position="after">
                 <style>
-                    .partner_tag .oe_tag { background-color: #FFF282; }
+                    .partner_tag > .oe_tag { background-color: #FFF282; }
                 </style>
             </xpath>
         </template>
+-->
         <record id="view_partner_form" model="ir.ui.view">
             <field name="name">res.partner.form.kanban.inherit</field>
             <field name="model">res.partner</field>
@@ -21,10 +23,10 @@
                         </a>
                         <a class="oe_m2o_cm_button oe_e" style="display: inline;" t-att-href="'/web#id='+record.id.value+'&amp;view_type=form&amp;model=res.partner'">/</a>
                     </h4>
-                    <group>
-                        <field name="category_id" class="partner_tag" widget="many2many" />
-                    </group>
                 </h4>
+                <i position="before">
+                    <div t-if="record.category_id.raw_value">Tags: <field name="category_id" widget="many2many_tags"/></div>
+                </i>
             </field>
         </record>
     </data>
