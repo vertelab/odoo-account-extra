@@ -23,7 +23,7 @@
 'version': '0.1',
 'summary': '',
 'category': 'account',
-'description': """Interset on late payments. Adds a server action to create an interest invoice for
+'description': """Invoice interest on late payments. Adds a server action to create an interest invoice for
     an overdue invoice at the time its payed. There are products for an interest row and 
     a row for fees.
     """,
