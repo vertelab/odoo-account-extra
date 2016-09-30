@@ -19,16 +19,16 @@
 #
 ##############################################################################
 {
-'name': 'Account Analytic BOM',
-'version': '0.1',
-'summary': '',
-'category': 'account',
-'description': """Extends account_analytic_default""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['account_analytic_default', 'mrp'],
-'data': [
-    'account_analytic_bom_view.xml',
-],
-'installable': True,
+    'name': 'Account Analytic BOM',
+    'version': '0.1',
+    'summary': 'Reports products in BOM',
+    'category': 'account',
+    'description': """Extends account_analytic_default for product reports""",
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['account_analytic_default', 'mrp'],
+    'data': [
+        'account_analytic_bom_view.xml',
+    ],
+    'installable': True,
 }
