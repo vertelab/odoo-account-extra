@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0-20160922\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-30 07:04+0000\n"
-"PO-Revision-Date: 2016-09-30 09:08+0200\n"
+"POT-Creation-Date: 2016-09-30 13:31+0000\n"
+"PO-Revision-Date: 2016-09-30 15:34+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,6 +23,11 @@ msgid "Create interest invoice"
 msgstr "Skapa räntefaktura"
 
 #. module: account_invoice_interest
+#: field:res.company,interest_rate:0
+msgid "Interest Rate"
+msgstr "Ränta"
+
+#. module: account_invoice_interest
 #: model:ir.model,name:account_invoice_interest.model_account_invoice
 msgid "Invoice"
 msgstr "Faktura"
@@ -30,7 +35,13 @@ msgstr "Faktura"
 #. module: account_invoice_interest
 #: model:product.template,name:account_invoice_interest.product_product_invoice_interest_product_template
 msgid "Invoice Intererst"
-msgstr "Fakturaränta"
+msgstr "Räntefaktura"
+
+#. module: account_invoice_interest
+#: code:addons/account_invoice_interest/account_invoice.py:118
+#, python-format
+msgid "Invoice Interest"
+msgstr "Räntefaktura"
 
 #. module: account_invoice_interest
 #: field:account.invoice,invoice_interest_id:0
@@ -43,24 +54,64 @@ msgid "Invoice interest ids"
 msgstr "Räntefakturor"
 
 #. module: account_invoice_interest
+#: view:account.invoice:account_invoice_interest.invoice_form
+msgid "Invoices"
+msgstr "Fakturor"
+
+#. module: account_invoice_interest
+#: view:account.invoice:account_invoice_interest.view_account_invoice_filter
+msgid "Overdue"
+msgstr "Förfallet"
+
+#. module: account_invoice_interest
 #: model:product.template,name:account_invoice_interest.product_product_invoice_fee_product_template
 msgid "Overdue Invoice Fee"
 msgstr "Förseningsavgift"
 
 #. module: account_invoice_interest
-#: code:addons/account_invoice_interest/account_invoice.py:117
-#, python-format
-msgid "Overdue invoice"
-msgstr "Föreningsfaktura"
+#: view:account.invoice:account_invoice_interest.view_account_invoice_filter
+msgid "Overdue Payed invoices"
+msgstr "Förfallna fakturor"
 
 #. module: account_invoice_interest
-#: code:addons/account_invoice_interest/account_invoice.py:115
+#: field:account.invoice,overdue_days:0
+msgid "Overdue days"
+msgstr "Förfallna dagar"
+
+#. module: account_invoice_interest
+#: code:addons/account_invoice_interest/account_invoice.py:155
+#, python-format
+msgid "Overdue invoice"
+msgstr "Förseningsfaktura"
+
+#. module: account_invoice_interest
+#: code:addons/account_invoice_interest/account_invoice.py:153
 #, python-format
 msgid "Please define an accounting sale journal for this company."
 msgstr "Vänligen definiera säljjournal för detta bolag."
 
 #. module: account_invoice_interest
-#: code:addons/account_invoice_interest/account_invoice.py:53
+#: view:account.invoice:account_invoice_interest.invoice_form
+msgid "Residual Amount"
+msgstr "Kvarvarande summa"
+
+#. module: account_invoice_interest
+#: view:account.invoice:account_invoice_interest.invoice_form
+msgid "Responsible"
+msgstr "Ansvarig"
+
+#. module: account_invoice_interest
+#: view:account.invoice:account_invoice_interest.invoice_form
+msgid "Total Amount"
+msgstr "Totalsumma"
+
+#. module: account_invoice_interest
+#: view:account.invoice:account_invoice_interest.invoice_form
+msgid "Untaxed Amount"
+msgstr "Summa före moms"
+
+#. module: account_invoice_interest
+#: code:addons/account_invoice_interest/account_invoice.py:67
 #, python-format
 msgid ""
 "You cant calculate interest before any payment are done.\n"
