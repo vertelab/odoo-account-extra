@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_account_analytic_default_form" model="ir.ui.view">
+            <field name="name">account_analytic_bom.inherit.account.analytic.default.form</field>
+            <field name="model">account.analytic.default</field>
+            <field name="inherit_id" ref="account_analytic_default.view_account_analytic_default_form" />
+            <field name="arch" type="xml">
+                <field name="sequence" position="after">
+                    <field name="bom_id" domain="[('product_id', '=', product_id)]" groups="analytic.group_analytic_accounting" />
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
