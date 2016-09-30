@@ -1,70 +1,66 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* account_invoice_interest
+#	* account_invoice_interest
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0-20160922\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-30 07:04+0000\n"
-"PO-Revision-Date: 2016-09-30 09:08+0200\n"
+"PO-Revision-Date: 2016-09-30 07:04+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: sv\n"
-"X-Generator: Poedit 1.8.7.1\n"
 
 #. module: account_invoice_interest
 #: model:ir.actions.server,name:account_invoice_interest.action_create_interest_invoice
 msgid "Create interest invoice"
-msgstr "Skapa räntefaktura"
+msgstr ""
 
 #. module: account_invoice_interest
 #: model:ir.model,name:account_invoice_interest.model_account_invoice
 msgid "Invoice"
-msgstr "Faktura"
+msgstr ""
 
 #. module: account_invoice_interest
 #: model:product.template,name:account_invoice_interest.product_product_invoice_interest_product_template
 msgid "Invoice Intererst"
-msgstr "Fakturaränta"
+msgstr ""
 
 #. module: account_invoice_interest
 #: field:account.invoice,invoice_interest_id:0
 msgid "Invoice interest id"
-msgstr "Räntefaktura"
+msgstr ""
 
 #. module: account_invoice_interest
 #: field:account.invoice,invoice_interest_ids:0
 msgid "Invoice interest ids"
-msgstr "Räntefakturor"
+msgstr ""
 
 #. module: account_invoice_interest
 #: model:product.template,name:account_invoice_interest.product_product_invoice_fee_product_template
 msgid "Overdue Invoice Fee"
-msgstr "Förseningsavgift"
+msgstr ""
 
 #. module: account_invoice_interest
 #: code:addons/account_invoice_interest/account_invoice.py:117
 #, python-format
 msgid "Overdue invoice"
-msgstr "Föreningsfaktura"
+msgstr ""
 
 #. module: account_invoice_interest
 #: code:addons/account_invoice_interest/account_invoice.py:115
 #, python-format
 msgid "Please define an accounting sale journal for this company."
-msgstr "Vänligen definiera säljjournal för detta bolag."
+msgstr ""
 
 #. module: account_invoice_interest
 #: code:addons/account_invoice_interest/account_invoice.py:53
 #, python-format
-msgid ""
-"You cant calculate interest before any payment are done.\n"
+msgid "You cant calculate interest before any payment are done.\n"
 "Wait until the invoice are fully paid before you calculate the interest."
 msgstr ""
-"Du kan inte beräkna räntekostnaden innan någon betalning är gjort.\n"
-"Vänta till fakturan är fullt betald innan du beräknar räntan."
+

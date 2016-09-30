@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import api, models, fields, _
-from openerp.exceptions import except_orm, Warning, RedirectWarning
+from openerp.exceptions import except_orm, Warning, RedirectWarning,MissingError
 import datetime
 #from dateutil.relativedelta import relativedelta
 import logging
@@ -31,15 +31,29 @@ class account_invoice(models.Model):
 
     invoice_interest_id = fields.Many2one(comodel_name='account.invoice')
     invoice_interest_ids = fields.One2many(comodel_name='account.invoice',inverse_name='invoice_interest_id')
+    @api.one
+    @api.depends(
+        'date_due',
+        'move_id.line_id.date',
+        'move_id.line_id.reconcile_id.line_id',
+        'move_id.line_id.reconcile_partial_id.line_partial_ids',
+        'comment'
+    )
+    def _overdue_days(self):
+         if len(self.payment_ids)>0:
+            self.overdue_days = (fields.Date.from_string(self.payment_ids.sorted(key=lambda p: p.date)[-1].date) - fields.Date.from_string(self.date_due) ).days
+            if self.overdue_days <= 0:
+                self.overdue_days = None
+    overdue_days = fields.Integer(compute="_overdue_days",store=True)
+    
+    def _get_interest(self): # use this method to override (eg fetch interest rate from other sources)
+        return self.company_id.interest_rate
     
     @api.multi
     def action_invoice_interest_create(self):
         """
-        Create the invoice associated to the invoice.
-        :param grouped: if True, invoices are grouped by SO id. If False, invoices are grouped by
-                        (partner_invoice_id, currency)
-        :param final: if True, refunds will be generated if necessary
-        :returns: list of created invoices
+        Create the interest invoice associated to the invoice.
+        :returns: action for invoice form
         """
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         product_interest = self.env.ref('account_invoice_interest.product_product_invoice_interest')
@@ -48,6 +62,10 @@ class account_invoice(models.Model):
         invoices = {}
 
         for oldinvoice in self:
+            interest_rate = self._get_interest() / 100.0
+            if len(oldinvoice.payment_ids) == 0:
+                raise WarningMessage(_('You cant calculate interest before any payment are done.\nWait until the invoice are fully paid before you calculate the interest.'))
+
             invoice = self.env['account.invoice'].create(oldinvoice._prepare_invoice())
             invoice.invoice_interest_id = oldinvoice.id
             amount_total = oldinvoice.amount_total
@@ -70,7 +88,7 @@ class account_invoice(models.Model):
                 amount_total += payment.result
                 date_due = payment.date
 
-                _logger.warn(payment.read())       
+                #_logger.warn(payment.read())       
             
 #            for followup in oldinvoice.proforma_followup_history_ids:
 #            _logger(followup.read())
@@ -89,10 +107,34 @@ class account_invoice(models.Model):
             })
 
             #invoice.compute_taxes()
-        (model,act_window_id) = self.env['ir.model.data'].get_object_reference('account', 'invoice_tree')
+        _logger.error('Here I am ------------------------------------------------------------------------------')
+        
+        invoice_form = self.env.ref('account.invoice_form', False)
+        ctx = dict(
+            default_model='account.invoice',
+            default_res_id=self.id,
+        )
+        return {
+            'name': _('Invoice Interest'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'account.invoice',
+            'views': [(invoice_form.id, 'form')],
+            'view_id': invoice_form.id,
+            'res_id': invoice.id if invoice else None,
+            #'target': 'new',
+            'context': ctx,
+        }
+        
+        
+        
+        (model,act_window_id) = self.env['ir.model.data'].get_object_reference('account', 'invoice_form')
+        _logger.error(model,act_window_id)
         act_window = self.env[model].browse(act_window_id)
         result = act_window.read()[0]
         result['domain'] = "[('id','in',[" + ','.join(map(str, [inv.id for inv in invoices.values()])) + "])]"
+        _logger.error('action',result,act_window.read())
         return result
 #        return [inv.id for inv in invoices.values()]
             #~ res = mod_obj.get_object_reference(cr, uid, 'purchase', 'purchase_order_form')

@@ -18,18 +18,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'Account Invoice Interest',
-    'version': '0.2',
-    'summary': '',
-    'category': 'account',
-    'description': """Invoice interest on late payments. Adds a server action to create an interest invoice for
-        an overdue invoice at the time its payed. There are products for an interest row and 
-        a row for fees.
-        """,
-    'author': 'Vertel AB',
-    'website': 'http://www.vertel.se',
-    'depends': ['account',],
-    'data': ['account_invoice_data.xml','account_invoice_view.xml','company_view.xml'],
-    'installable': True,
-}
+
+from openerp import api, models, fields, _
+from openerp.exceptions import except_orm, Warning, RedirectWarning,MissingError
+import datetime
+#from dateutil.relativedelta import relativedelta
+import logging
+_logger = logging.getLogger(__name__)
+
+
+class res_company(models.Model):
+    _inherit = 'res.company'
+
+    interest_rate = fields.Float(string="Interest Rate",)
+
