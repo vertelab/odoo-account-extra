@@ -27,6 +27,14 @@ class account_analytic_default(models.Model):
     _inherit = 'account.analytic.default'
 
     bom_id = fields.Many2one(comodel_name='mrp.bom', string='BOM')
+    
+    @api.model
+    def account_get(self,product_id=None, partner_id=None, user_id=None, date=None, company_id=None):
+        res = super(account_analytic_default,self).account_get(product_id, partner_id, user_id, date, company_id)
+        if res and res.bom_id:
+            for p in res.bom_id.product_ids:
+                r = super(account_analytic_default,self).account_get(product_id=p.id, partner_id, user_id, date, company_id)
+        return res
 
 #~ class account_invoice_line(Models.model):
     #~ _inherit = "account.invoice.line"
@@ -57,13 +65,15 @@ class sale_order_line(models.Model):
         create_ids = super(sale_order_line, self).invoice_line_create()
         for line in self.env['account.invoice.line'].browse(create_ids):
             rec = self.env['account.analytic.default'].account_get(line.product_id.id if line.product_id else None, self.order_id.partner_id.id, self.order_id.user_id.id, time.strftime('%Y-%m-%d'))
-            if rec.bom_id:
-                line.write({'account_analytic_ids': [(6,0,[self.env['account.analytic.default'].account_get(b.product_id.id, self.order_id.partner_id.id, self.order_id.user_id.id, time.strftime('%Y-%m-%d')) for rec.bom_id]})
+            if len(rec)>1:
+                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])
         return create_ids
 
 class account_invoice_line(models.Model):
     _inherit = "account.invoice.line"
 
+    account_analytic_ids = fields.Many2many(comodel_name='account.analytic.account')
+    
     @api.model
     def move_line_get_item(self, line):
         # super
@@ -80,3 +90,41 @@ class account_invoice_line(models.Model):
             'taxes': line.invoice_line_tax_id,
         }
 
+
+    @api.model
+    def move_line_get(self, invoice_id):
+        inv = self.env['account.invoice'].browse(invoice_id)
+        currency = inv.currency_id.with_context(date=inv.date_invoice)
+        company_currency = inv.company_id.currency_id
+
+        res = []
+        for line in inv.invoice_line:
+            mres = self.move_line_get_item(line)
+            mres['invl_id'] = line.id
+            res.append(mres)
+            tax_code_found = False
+            taxes = line.invoice_line_tax_id.compute_all(
+                (line.price_unit * (1.0 - (line.discount or 0.0) / 100.0)),
+                line.quantity, line.product_id, inv.partner_id)['taxes']
+            for tax in taxes:
+                if inv.type in ('out_invoice', 'in_invoice'):
+                    tax_code_id = tax['base_code_id']
+                    tax_amount = tax['price_unit'] * line.quantity * tax['base_sign']
+                else:
+                    tax_code_id = tax['ref_base_code_id']
+                    tax_amount = tax['price_unit'] * line.quantity * tax['ref_base_sign']
+
+                if tax_code_found:
+                    if not tax_code_id:
+                        continue
+                    res.append(dict(mres))
+                    res[-1]['price'] = 0.0
+                    res[-1]['account_analytic_id'] = False
+                elif not tax_code_id:
+                    continue
+                tax_code_found = True
+
+                res[-1]['tax_code_id'] = tax_code_id
+                res[-1]['tax_amount'] = currency.compute(tax_amount, company_currency)
+
+        return res
