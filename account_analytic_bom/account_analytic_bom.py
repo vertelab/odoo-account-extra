@@ -27,13 +27,14 @@ class account_analytic_default(models.Model):
     _inherit = 'account.analytic.default'
 
     bom_id = fields.Many2one(comodel_name='mrp.bom', string='BOM')
-    
+
     @api.model
-    def account_get(self,product_id=None, partner_id=None, user_id=None, date=None, company_id=None):
+    def Xaccount_get(self,product_id=None, partner_id=None, user_id=None, date=None, company_id=None):
         res = super(account_analytic_default,self).account_get(product_id, partner_id, user_id, date, company_id)
         if res and res.bom_id:
             for p in res.bom_id.product_ids:
-                r = super(account_analytic_default,self).account_get(product_id=p.id, partner_id, user_id, date, company_id)
+                pass
+                #~ r = super(account_analytic_default,self).account_get(product_id=p.id, partner_id, user_id, date, company_id)
         return res
 
 #~ class account_invoice_line(Models.model):
@@ -47,13 +48,13 @@ class account_analytic_default(models.Model):
         #~ res_prod = super(account_invoice_line, self).product_id_change(product, uom_id, qty, name, type, partner_id, fposition_id, price_unit, currency_id=currency_id, company_id=company_id, context=context)
         #~ rec = self.pool.get('account.analytic.default').account_get(product, partner_id, uid, time.strftime('%Y-%m-%d'), company_id=company_id, context=context)
         #~ raise Warning(rec)
-        
+
         #~ if rec:
             #~ res_prod['value'].update({'account_analytic_id': rec.analytic_id.id})
         #~ else:
             #~ res_prod['value'].update({'account_analytic_id': False})
         #~ return res_prod
-        
+
 class sale_order_line(models.Model):
     _inherit = "sale.order.line"
 
@@ -66,14 +67,14 @@ class sale_order_line(models.Model):
         for line in self.env['account.invoice.line'].browse(create_ids):
             rec = self.env['account.analytic.default'].account_get(line.product_id.id if line.product_id else None, self.order_id.partner_id.id, self.order_id.user_id.id, time.strftime('%Y-%m-%d'))
             if len(rec)>1:
-                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])])
+                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])]})
         return create_ids
 
 class account_invoice_line(models.Model):
     _inherit = "account.invoice.line"
 
     account_analytic_ids = fields.Many2many(comodel_name='account.analytic.account')
-    
+
     @api.model
     def move_line_get_item(self, line):
         # super
