@@ -66,7 +66,7 @@ class sale_order_line(models.Model):
         for line in self.env['account.invoice.line'].browse(create_ids):
             rec = self.env['account.analytic.default'].account_get(line.product_id.id if line.product_id else None, self.order_id.partner_id.id, self.order_id.user_id.id, time.strftime('%Y-%m-%d'))
             if len(rec)>1:
-                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])
+                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])])
         return create_ids
 
 class account_invoice_line(models.Model):
