@@ -33,7 +33,8 @@ class account_analytic_default(models.Model):
         res = super(account_analytic_default,self).account_get(product_id, partner_id, user_id, date, company_id)
         if res and res.bom_id:
             for p in res.bom_id.product_ids:
-                r = super(account_analytic_default,self).account_get(product_id=p.id, partner_id, user_id, date, company_id)
+                pass
+                #r = super(account_analytic_default,self).account_get(product_id=p.id, partner_id, user_id, date, company_id)
         return res
 
 #~ class account_invoice_line(Models.model):
@@ -66,7 +67,7 @@ class sale_order_line(models.Model):
         for line in self.env['account.invoice.line'].browse(create_ids):
             rec = self.env['account.analytic.default'].account_get(line.product_id.id if line.product_id else None, self.order_id.partner_id.id, self.order_id.user_id.id, time.strftime('%Y-%m-%d'))
             if len(rec)>1:
-                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])])
+                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])]})
         return create_ids
 
 class account_invoice_line(models.Model):
