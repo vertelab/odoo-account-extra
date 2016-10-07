@@ -40,7 +40,7 @@ class account_invoice(models.Model):
         'comment'
     )
     def _overdue_days(self):
-         if len(self.payment_ids)>0:
+         if self.payment_ids and self.date_due:
             self.overdue_days = (fields.Date.from_string(self.payment_ids.sorted(key=lambda p: p.date)[-1].date) - fields.Date.from_string(self.date_due) ).days
             if self.overdue_days <= 0:
                 self.overdue_days = None
