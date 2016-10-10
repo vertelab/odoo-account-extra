@@ -41,5 +41,17 @@
             </field>
         </record>
 
+        <record id="invoice_supplier_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='period_id']" position="replace"/>
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="period_id" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]" groups="account.group_account_user"/>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </openerp>
