@@ -26,7 +26,7 @@
     'description': """Extends account_analytic_default for product reports""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['account_analytic_default', 'mrp'],
+    'depends': ['account_analytic_default', 'mrp','sale'],
     'data': [
         'account_analytic_bom_view.xml',
     ],
