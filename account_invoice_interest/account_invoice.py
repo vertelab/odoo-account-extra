@@ -64,9 +64,9 @@ class account_invoice(models.Model):
         for oldinvoice in self:
             interest_rate = self._get_interest() / 100.0
             if len(oldinvoice.payment_ids) == 0:
-                raise WarningMessage(_('You cant calculate interest before any payment are done.\nWait until the invoice are fully paid before you calculate the interest.'))
+                raise Warning(_('You cant calculate interest before any payment are done.\nWait until the invoice are fully paid before you calculate the interest.'))
             if oldinvoice.overdue_days <= 0:
-                raise WarningMessage(_('The invoice is not overdue.'))
+                raise Warning(_('The invoice is not overdue.'))
             invoice = self.env['account.invoice'].create(oldinvoice._prepare_invoice())
             invoice.invoice_interest_id = oldinvoice.id
             amount_total = oldinvoice.amount_total
