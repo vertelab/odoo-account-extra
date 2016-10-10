@@ -26,6 +26,9 @@
     'description': """Invoice interest on late payments. Adds a server action to create an interest invoice for
         an overdue invoice at the time its payed. There are products for an interest row and 
         a row for fees.
+        
+        Formats in the products name: {amount_total} {date_due} {payment_date} {days} {origin} {number}
+        
         """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',

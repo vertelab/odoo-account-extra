@@ -65,7 +65,8 @@ class account_invoice(models.Model):
             interest_rate = self._get_interest() / 100.0
             if len(oldinvoice.payment_ids) == 0:
                 raise WarningMessage(_('You cant calculate interest before any payment are done.\nWait until the invoice are fully paid before you calculate the interest.'))
-
+            if oldinvoice.overdue_days <= 0:
+                raise WarningMessage(_('The invoice is not overdue.'))
             invoice = self.env['account.invoice'].create(oldinvoice._prepare_invoice())
             invoice.invoice_interest_id = oldinvoice.id
             amount_total = oldinvoice.amount_total
@@ -74,7 +75,7 @@ class account_invoice(models.Model):
                 days =  fields.Date.from_string(payment.date) - fields.Date.from_string(date_due) 
                 self.env['account.invoice.line'].create({
                     'invoice_id': invoice.id,
-                    'name': product_interest.name + 'amount %5.2f %s - %s %d days' % (amount_total,date_due,payment.date,days.days),
+                    'name': product_interest.name.format(amount_total=amount_total,date_due=date_due,payment_date=payment.date,days=days.days,origin=oldinvoice.origin,number=oldinvoice.number),
                     'sequence': 10,
                     'origin': oldinvoice.name,
                     'account_id': product_interest.property_account_income.id,
@@ -94,7 +95,7 @@ class account_invoice(models.Model):
 #            _logger(followup.read())
             self.env['account.invoice.line'].create({
                 'invoice_id': invoice.id,
-                'name': product_fee.name,
+                'name': product_fee.name.format(amount_total=amount_total,date_due=date_due,payment_date=payment.date,days=days.days,origin=oldinvoice.origin,number=oldinvoice.number),
                 'sequence': 20,
                 'origin': oldinvoice.name,
                 'account_id': product_fee.property_account_income.id,

@@ -6,7 +6,7 @@
             <field name="standard_price">0.0</field>
             <field name="uom_id" ref="product.product_uom_unit"/>
             <field name="uom_po_id" ref="product.product_uom_unit"/>
-            <field name="name">Invoice Intererst</field>
+            <field name="name">Invoice Intererst for {number}</field>
             <field name="categ_id" ref="product.product_category_all"/>
             <field name="type">service</field>
             <field name="sale_ok" eval="False"/>
@@ -16,7 +16,7 @@
             <field name="standard_price">50.0</field>
             <field name="uom_id" ref="product.product_uom_unit"/>
             <field name="uom_po_id" ref="product.product_uom_unit"/>
-            <field name="name">Overdue Invoice Fee</field>
+            <field name="name">Overdue Invoice Fee  for {number}</field>
             <field name="categ_id" ref="product.product_category_all"/>
             <field name="type">service</field>
             <field name="sale_ok" eval="False"/>
