@@ -30,104 +30,57 @@ class account_analytic_default(models.Model):
     bom_id = fields.Many2one(comodel_name='mrp.bom', string='BOM')
 
     @api.model
-    def Xaccount_get(self,product_id=None, partner_id=None, user_id=None, date=None, company_id=None):
-        res = super(account_analytic_default,self).account_get(product_id, partner_id, user_id, date, company_id)
-        if res and res.bom_id:
-            for p in res.bom_id.product_ids:
-                pass
-                #~ r = super(account_analytic_default,self).account_get(product_id=p.id, partner_id, user_id, date, company_id)
-
-        return res
-
-#~ class account_invoice_line(Models.model):
-    #~ _inherit = "account.invoice.line"
-    #~ _description = "Invoice Line"
-
-    #~ account_analytic_ids = fields.Many2many(comodel_name='account.analytic.account')
-
-    #~ @api.one
-    #~ def product_id_change(product, uom_id, qty=0, name='', type='out_invoice', partner_id=False, fposition_id=False, price_unit=False, currency_id=False, company_id=None):
-        #~ res_prod = super(account_invoice_line, self).product_id_change(product, uom_id, qty, name, type, partner_id, fposition_id, price_unit, currency_id=currency_id, company_id=company_id, context=context)
-        #~ rec = self.pool.get('account.analytic.default').account_get(product, partner_id, uid, time.strftime('%Y-%m-%d'), company_id=company_id, context=context)
-        #~ raise Warning(rec)
-
-        #~ if rec:
-            #~ res_prod['value'].update({'account_analytic_id': rec.analytic_id.id})
-        #~ else:
-            #~ res_prod['value'].update({'account_analytic_id': False})
-        #~ return res_prod
-
-class sale_order_line(models.Model):
-    _inherit = "sale.order.line"
-
-    account_analytic_ids = fields.Many2many(comodel_name='account.analytic.account')
-
-    # Method overridden to set the analytic account by default on criterion match
-    @api.one
-    def invoice_line_create(self):
-        create_ids = super(sale_order_line, self).invoice_line_create()
-        for line in self.env['account.invoice.line'].browse(create_ids):
-            rec = self.env['account.analytic.default'].account_get(line.product_id.id if line.product_id else None, self.order_id.partner_id.id, self.order_id.user_id.id, time.strftime('%Y-%m-%d'))
-            if len(rec)>1:
-                line.write({'account_analytic_ids': [(6,0,[a.id for a in rec])]})
-        return create_ids
+    def bom_account_create(self,line):        
+        account = self.env['account.analytic.default'].account_get(line.product_id.id if line.product_id else None, line.invoice_id.partner_id.id, line.invoice_id.user_id.id, time.strftime('%Y-%m-%d'))
+        _logger.warn(account)
+        if account and account.bom_id:
+            move_line = line.invoice_id.move_id.line_id.filtered(lambda l: len(l.analytic_lines) > 0)
+            if move_line:
+                move_line = move_line[0]
+            for b in account.bom_id.bom_line_ids:
+                account_standard = self.env['account.analytic.default'].account_get(b.product_id.id if b.product_id else None, line.invoice_id.partner_id.id, line.invoice_id.user_id.id, time.strftime('%Y-%m-%d'))
+                _logger.warn('account_standard',account_standard)
+                if account_standard:
+                    if account_standard.analytics_id and account_standard.analytics_id.account_ids:
+                        for account in account_standard.analytics_id.account_ids:
+                            currency = line.invoice_id.currency_id.with_context(date=line.invoice_id.date_invoice)
+                            self.env['account.analytic.line'].create({
+                                'move_id': move_line.id if move_line else None,
+                                'name': line.name,
+                                'date': line.invoice_id.date_invoice,
+                                'account_id': account.analytic_account_id.id,
+                                'unit_amount': line.quantity * b.product_uos_qty,  
+                                'amount': currency.compute(line.price_subtotal, line.invoice_id.company_id.currency_id) * 1 if line.invoice_id.type in ('out_invoice', 'in_refund') else -1 * account.rate / 100.0,
+                                'product_id': b.product_id.id,
+                                'product_uom_id': b.product_uos.id,
+                                'general_account_id': line.account_id.id,
+                                'journal_id': line.invoice_id.journal_id.analytic_journal_id.id,
+                                'ref': line.invoice_id.reference if line.invoice_id.type in ('in_invoice', 'in_refund') else line.invoice_id.number,
+                            })
+                    else:
+                        currency = line.invoice_id.currency_id.with_context(date=line.invoice_id.date_invoice)
+                        self.env['account.analytic.line'].create({
+                            'move_id': move_line.id if move_line else None,
+                            'name': line.name,
+                            'date': line.invoice_id.date_invoice,
+                            'account_id': line.analytic_account_id.id,
+                            'unit_amount': line.quantity * b.product_uos_qty,  
+                            'amount': currency.compute(line.price_subtotal, line.invoice_id.company_id.currency_id) * 1 if line.invoice_id.type in ('out_invoice', 'in_refund') else -1,
+                            'product_id': b.product_id.id,
+                            'product_uom_id': b.product_uos.id,
+                            'general_account_id': line.account_id.id,
+                            'journal_id': line.invoice_id.journal_id.analytic_journal_id.id,
+                            'ref': line.invoice_id.reference if line.invoice_id.type in ('in_invoice', 'in_refund') else line.invoice_id.number,
+                        })
 
 class account_invoice_line(models.Model):
-    _inherit = "account.invoice.line"
+    _inherit = "account.invoice"
 
-    account_analytic_ids = fields.Many2many(comodel_name='account.analytic.account')
-
-    @api.model
-    def move_line_get_item(self, line):
-        # super
-        return {
-            'type': 'src',
-            'name': line.name.split('\n')[0][:64],
-            'price_unit': line.price_unit,
-            'quantity': line.quantity,
-            'price': line.price_subtotal,
-            'account_id': line.account_id.id,
-            'product_id': line.product_id.id,
-            'uos_id': line.uos_id.id,
-            'account_analytic_id': line.account_analytic_id.id,
-            'taxes': line.invoice_line_tax_id,
-        }
-
-
-    @api.model
-    def move_line_get(self, invoice_id):
-        inv = self.env['account.invoice'].browse(invoice_id)
-        currency = inv.currency_id.with_context(date=inv.date_invoice)
-        company_currency = inv.company_id.currency_id
-
-        res = []
-        for line in inv.invoice_line:
-            mres = self.move_line_get_item(line)
-            mres['invl_id'] = line.id
-            res.append(mres)
-            tax_code_found = False
-            taxes = line.invoice_line_tax_id.compute_all(
-                (line.price_unit * (1.0 - (line.discount or 0.0) / 100.0)),
-                line.quantity, line.product_id, inv.partner_id)['taxes']
-            for tax in taxes:
-                if inv.type in ('out_invoice', 'in_invoice'):
-                    tax_code_id = tax['base_code_id']
-                    tax_amount = tax['price_unit'] * line.quantity * tax['base_sign']
-                else:
-                    tax_code_id = tax['ref_base_code_id']
-                    tax_amount = tax['price_unit'] * line.quantity * tax['ref_base_sign']
-
-                if tax_code_found:
-                    if not tax_code_id:
-                        continue
-                    res.append(dict(mres))
-                    res[-1]['price'] = 0.0
-                    res[-1]['account_analytic_id'] = False
-                elif not tax_code_id:
-                    continue
-                tax_code_found = True
-
-                res[-1]['tax_code_id'] = tax_code_id
-                res[-1]['tax_amount'] = currency.compute(tax_amount, company_currency)
-
-        return res
+    @api.one
+    def action_move_create(self):
+        res = super(account_invoice_line, self).action_move_create()
+        _logger.warn('invoice',self,'lines',self.invoice_line)
+        #raise Warning('kalle')
+        for l in self.invoice_line:
+            self.env['account.analytic.default'].bom_account_create(l)
+             
