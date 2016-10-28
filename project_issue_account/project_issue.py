@@ -29,7 +29,7 @@ class project_issue(models.Model):
 
     voucher_project = fields.Boolean(related="project_id.use_voucher")
     #~ voucher_type = fields.Selection(selection=[('in_invoice','Supplier Invoice'),('out_invoice','Customer Invoice'),('voucher_out','Customer Voucher'),('voucher_in','Supplier Voucher'),('bankstatement','Bank Statement'),('journal_entry','Journal Entry')])
-    voucher_type = fields.Selection(selection=[('in_invoice', 'Supplier Invoice'),('out_invoice','Customer Invoice')], string='Voucher Type') #('journal_entry','Journal Entry')])
+    voucher_type = fields.Selection(selection=[('in_invoice', 'Supplier Invoice'),('out_invoice','Customer Invoice')], string='Voucher Type', default='in_invoice') #('journal_entry','Journal Entry')])
     image = fields.Binary(compute='_image')
     @api.one
     @api.depends('project_id','email_from')
@@ -45,6 +45,8 @@ class project_issue(models.Model):
     @api.multi
     def create_entry(self):
         for issue in self:
+            if not issue.voucher_type:
+                issue.voucher_type = 'in_invoice'
             res = getattr(issue,issue.voucher_type)()
         return res
     @api.one
