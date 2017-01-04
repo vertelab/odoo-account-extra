@@ -20,6 +20,8 @@
 ##############################################################################
 
 from openerp import api, models, fields, _
+import openerp.addons.decimal_precision as dp
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -29,7 +31,10 @@ class account_invoice(models.Model):
     order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
     partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
     picking_id = fields.Many2one(comodel_name='stock.picking', string='Picking')
-
+    
+    weight =     fields.Float(string='Gross Weight', digits_compute=dp.get_precision('Stock Weight'), help="The weight in Kg.")
+    weight_net = fields.Float(string='Net Weight', digits_compute=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
+    volume = fields.Float(string='Volume', digits_compute=dp.get_precision('Stock Weight'), help="The Volume in m3.")
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
@@ -47,4 +52,8 @@ class stock_picking(models.Model):
     def _create_invoice_from_picking(self, picking, vals):
         vals['picking_id'] = picking.id
         invoice_id = super(stock_picking, self)._create_invoice_from_picking(picking, vals)
+        
+        #~ invoice.write({'weight': picking.weight,
+                       #~ 'weight_net': picking.weight_net,
+                       #~ 'volume': picking.volume})
         return invoice_id
