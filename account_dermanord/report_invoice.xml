@@ -86,11 +86,30 @@
                 <td class="text-right"><span t-field="l.tariff"/></td>
             </xpath>
 
-            <xpath expr="//p[@t-if='o.comment']" position="after">
+            <xpath expr="//p[@t-if='o.fiscal_position']" position="after">
+                <p>All products manufactured by Dermanord Svensk Hudvård AB</p>
                 <p t-if="o.incoterm">
-                    <strong>Incoterm:</strong>
+                    <strong>Delivery terms:</strong>
                     <span t-field="o.incoterm"/>
                 </p>
+                <p t-if="o.weight">
+                    <strong>Weight</strong>
+                    <span t-field="o.weight"/>
+                </p>
+                <p t-if="o.volume">
+                    <strong>Cbm</strong>
+                    <span t-field="o.volume"/>
+                </p>
+                <p t-if="o.carrier_tracking_ref">
+                    <strong>Tracking Nbr:</strong>
+                    <span t-field="o.carrier_tracking_ref"/>
+                </p>
+<!--
+                <p t-if="o.">
+                    <strong>Colli Nbr:</strong>
+                    <span t-field="o."/>
+                </p>
+-->
             </xpath>
 
         </template>
