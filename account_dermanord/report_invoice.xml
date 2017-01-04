@@ -88,22 +88,14 @@
 
             <xpath expr="//p[@t-if='o.fiscal_position']" position="after">
                 <p><strong>All products manufactured by Dermanord Svensk Hudvård AB</strong></p>
-                <p t-if="o.incoterm">
-                    <strong>Delivery terms:</strong>
-                    <span t-field="o.incoterm"/>
-                </p>
-                <p t-if="o.weight">
-                    <strong>Weight</strong>
-                    <span t-field="o.weight"/>
-                </p>
-                <p t-if="o.volume">
-                    <strong>Cbm</strong>
-                    <span t-field="o.volume"/>
-                </p>
-                <p t-if="o.picking_id.carrier_tracking_ref">
-                    <strong>Tracking Nbr:</strong>
-                    <span t-field="o.picking_id.carrier_tracking_ref"/>
-                </p>
+                <strong>Delivery terms: </strong>
+                <span t-esc="o.incoterm.name if o.incoterm else ''"/><br/>
+                <strong>Weight </strong>
+                <span t-esc="o.weight if o.weight else ''"/> <span t-esc="o.weight_uom_id.name"/><br/>
+                <strong>Cbm </strong>
+                <span t-esc="o.volume if o.volume else ''"/><br/>
+                <strong>Tracking Nbr: </strong>
+                <span t-esc="o.picking_id.carrier_tracking_ref if o.picking_id.carrier_tracking_ref else ''"/><br/>
             </xpath>
 
         </template>
