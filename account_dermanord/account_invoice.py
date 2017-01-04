@@ -29,6 +29,7 @@ class account_invoice(models.Model):
     order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
     partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
     picking_id = fields.Many2one(comodel_name='stock.picking', string='Picking')
+    incoterm = fields.Many2one(comodel_name='stock.incoterms', string='Incoterm', help='International Commercial Terms are a series of predefined commercial terms used in international transactions.')
 
 
 class sale_order(models.Model):
@@ -40,6 +41,13 @@ class sale_order(models.Model):
         self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
         return inv_id
 
+    def onchange_partner_id(self, cr, uid, ids, part, context=None):
+        res = super(sale_order, self).onchange_partner_id(cr, uid, ids, part, context)
+        partner = self.pool.get('res.partner').browse(cr, uid, part, context=context)
+        res['value']['incoterm'] = partner.incoterm
+        return res
+    incoterm = fields.Many2one(comodel_name='stock.incoterms', string='Incoterm', help='International Commercial Terms are a series of predefined commercial terms used in international transactions.')
+
 class stock_picking(models.Model):
     _inherit = 'stock.picking'
 
@@ -47,4 +55,6 @@ class stock_picking(models.Model):
     def _create_invoice_from_picking(self, picking, vals):
         vals['picking_id'] = picking.id
         invoice_id = super(stock_picking, self)._create_invoice_from_picking(picking, vals)
+        invoice = self.env['account.invoice'].browse(invoice_id)
+        invoice.incoterm = picking.sale_id.incoterm
         return invoice_id

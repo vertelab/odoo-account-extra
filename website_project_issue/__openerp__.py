@@ -32,9 +32,9 @@ A new form for upload attachements to project_issue
 
 
     """,
-    'depends': ['document','project_issue','website','project_issue_account' ],
+    'depends': ['document','project_issue','website','project_issue_account', 'attachment_pdf2image'],
     'external_dependencies': {
-        'python': ['wand', ],
+        'python': ['wand',],
     },
     'data': ['project_issue_view.xml',
         ],

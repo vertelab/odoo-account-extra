@@ -27,6 +27,9 @@
                         <field name="category_id" class="partner_tag"/>
                     </div>
                 </i>
+                <field name="title" position="after">
+                    <field name="incoterm"/>
+                </field>
             </field>
         </record>
     </data>

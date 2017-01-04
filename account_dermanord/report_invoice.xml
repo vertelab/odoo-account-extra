@@ -85,6 +85,14 @@
             <xpath expr="//tr[@t-foreach='o.invoice_line']/td[3]" position="replace">
                 <td class="text-right"><span t-field="l.tariff"/></td>
             </xpath>
+
+            <xpath expr="//p[@t-if='o.comment']" position="after">
+                <p t-if="o.incoterm">
+                    <strong>Incoterm:</strong>
+                    <span t-field="o.incoterm"/>
+                </p>
+            </xpath>
+
         </template>
     </data>
 </openerp>

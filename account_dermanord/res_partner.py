@@ -33,3 +33,5 @@ class res_partner(models.Model):
         result['res_id'] = self.id # self.id
         result['search_view_id'] = self.env.ref("base.view_res_partner_filter").id
         return result
+
+    incoterm = fields.Many2one(comodel_name='stock.incoterms', string='Incoterm', help='International Commercial Terms are a series of predefined commercial terms used in international transactions.')

@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <field name="move_id" position="after">
                     <field name="picking_id"/>
+                    <field name="incoterm"/>
                 </field>
                 <field name="fiscal_position" position="before">
                     <field name="partner_shipping_id"/>
@@ -52,6 +53,5 @@
                 </xpath>
             </field>
         </record>
-
     </data>
 </openerp>

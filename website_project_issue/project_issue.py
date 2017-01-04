@@ -54,38 +54,6 @@ def content_disposition(filename):
     else:
         return "attachment; filename*=UTF-8''%s" % escaped
 
-
-class ir_attachement(models.Model):
-    _inherit='ir.attachment'
-
-    image = fields.Binary()
-
-    @api.multi
-    def pdf2image(self,dest_width, dest_height):
-        RESOLUTION    = 300
-        #blob = self.datas.decode('base64')
-        #raise Warning(self.base64_decode(self.datas))
-        #str = self.datas + '=' *(-len(self.datas)%4)
-        #img = Image(blob=self[0].datas.decode('base64'))
-        #img.resize(dest_width,dest_height)
-        #~ self[0].image = img.make_blob(format='jpg').encode('base64')
-        img = Image(blob=self[0].datas.decode('base64'),resolution=(RESOLUTION,RESOLUTION))
-        img.background_color = Color('white')
-        self[0].image = img.make_blob(format='jpg').encode('base64')
-        #~ return
-        #~ try:
-            #~ with Image(blob=self[0].datas.decode('base64'), resolution=(RESOLUTION,RESOLUTION)) as img:
-                #~ img.background_color = Color('white')
-                #~ img_width = img.width
-                #~ ratio     = dest_width / img_width
-                #~ img.resize(dest_width, dest_height)
-    #~ #            img.format = 'jpeg'
-                #~ self[0].image = img.make_blob(format='jpeg').encode('base64')
-        #~ except Exception as e:
-            #~ return None
-        #    return None
-
-
 class website_project_issue(http.Controller):
 
     @http.route(['/project/issue/<model("project.issue"):issue>/attachment','/project/issue/new/attachment', '/upload_voucher'], type='http', auth="user", website=True)
