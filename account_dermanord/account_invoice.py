@@ -57,3 +57,8 @@ class stock_picking(models.Model):
                        #~ 'weight_net': picking.weight_net,
                        #~ 'volume': picking.volume})
         return invoice_id
+
+    @api.one
+    def _package_ids(self):
+        return self.package_ids = [(6,0,set(self.pack_operation_ids.mapped['package_id.id']))]
+    package_ids = field.Many2many(comodel_name="stock.quant.package",compute='_package_ids')
