@@ -104,12 +104,6 @@
                     <strong>Tracking Nbr:</strong>
                     <span t-field="o.carrier_tracking_ref"/>
                 </p>
-<!--
-                <p t-if="o.">
-                    <strong>Colli Nbr:</strong>
-                    <span t-field="o."/>
-                </p>
--->
             </xpath>
 
         </template>
