@@ -31,9 +31,10 @@ class account_invoice(models.Model):
     order_id = fields.Many2one(string='Sale order', comodel_name='sale.order')
     partner_shipping_id = fields.Many2one(comodel_name='res.partner', related='order_id.partner_shipping_id')
     picking_id = fields.Many2one(comodel_name='stock.picking', string='Picking')
-    
-    weight =     fields.Float(string='Gross Weight', digits_compute=dp.get_precision('Stock Weight'), help="The weight in Kg.")
+    incoterm = fields.Many2one(comodel_name='stock.incoterms', string='Incoterm', help='International Commercial Terms are a series of predefined commercial terms used in international transactions.')
+    weight = fields.Float(string='Gross Weight', digits_compute=dp.get_precision('Stock Weight'), help="The weight in Kg.")
     weight_net = fields.Float(string='Net Weight', digits_compute=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
+    weight_uom_id = fields.Many2one(string='Unit of Measure', comodel_name='product.uom')
     volume = fields.Float(string='Volume', digits_compute=dp.get_precision('Stock Weight'), help="The Volume in m3.")
 
 class sale_order(models.Model):
@@ -45,6 +46,13 @@ class sale_order(models.Model):
         self.env['account.invoice'].browse(inv_id).write({'order_id' : order.id})
         return inv_id
 
+    def onchange_partner_id(self, cr, uid, ids, part, context=None):
+        res = super(sale_order, self).onchange_partner_id(cr, uid, ids, part, context)
+        partner = self.pool.get('res.partner').browse(cr, uid, part, context=context)
+        res['value']['incoterm'] = partner.incoterm
+        return res
+    incoterm = fields.Many2one(comodel_name='stock.incoterms', string='Incoterm', help='International Commercial Terms are a series of predefined commercial terms used in international transactions.')
+
 class stock_picking(models.Model):
     _inherit = 'stock.picking'
 
@@ -52,10 +60,11 @@ class stock_picking(models.Model):
     def _create_invoice_from_picking(self, picking, vals):
         vals['picking_id'] = picking.id
         invoice_id = super(stock_picking, self)._create_invoice_from_picking(picking, vals)
-        
-        #~ invoice.write({'weight': picking.weight,
-                       #~ 'weight_net': picking.weight_net,
-                       #~ 'volume': picking.volume})
+        self.env['account.invoice'].browse(invoice_id).write({'incoterm': picking.sale_id.incoterm.id,
+                       'weight': picking.weight,
+                       'weight_net': picking.weight_net,
+                       'weight_uom_id': picking.weight_uom_id.id,
+                       'volume': picking.volume})
         return invoice_id
         
         

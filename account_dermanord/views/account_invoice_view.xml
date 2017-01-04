@@ -9,6 +9,17 @@
             <field name="arch" type="xml">
                 <field name="move_id" position="after">
                     <field name="picking_id"/>
+                    <field name="incoterm"/>
+                    <label for="weight">Gross Weight</label>
+                    <div>
+                        <field name="weight" class="oe_inline"/>
+                        <field name="weight_uom_id" nolabel="1" class="oe_inline"/>
+                    </div>
+                    <label for="weight_net">Net Weight</label>
+                    <div>
+                        <field name="weight_net"/>
+                    </div>
+                    <field name="volume"/>
                 </field>
                 <field name="fiscal_position" position="before">
                     <field name="partner_shipping_id"/>
@@ -52,6 +63,5 @@
                 </xpath>
             </field>
         </record>
-
     </data>
 </openerp>
