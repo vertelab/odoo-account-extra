@@ -87,19 +87,26 @@
             </xpath>
 
             <xpath expr="//p[@t-if='o.fiscal_position']" position="after">
-                <p><strong>All products manufactured by Dermanord Svensk Hudvård AB</strong></p>
-                <strong>Delivery terms: </strong>
-                <span t-esc="o.incoterm.name if o.incoterm else ''"/><br/>
-                <strong>Weight: </strong>
-                <span t-esc="o.weight if o.weight else ''"/> <span t-esc="o.weight_uom_id.name"/><br/>
-                <strong>Cbm: </strong>
-                <span t-esc="o.volume if o.volume else ''"/><br/>
-                <strong>Tracking Nbr: </strong>
-                <span t-esc="o.picking_id.carrier_tracking_ref if o.picking_id.carrier_tracking_ref else ''"/><br/>
-                <strong>Colli Nbr: </strong><span t-esc="len(o.picking_id.package_ids)"/><br/>
-                <t t-if="len(o.picking_id.package_ids) &gt; 0">
-                    <t t-foreach="o.picking_id.package_ids" t-as="p">
-                        <h5><t t-esc="p_index + 1"/>: <t t-esc="p.name"/></h5>
+                <t t-if="o.incoterm or o.weight or o.volume or o.picking_id.carrier_tracking_ref or len(o.picking_id.package_ids) &gt; 0">
+                    <p><strong>All products manufactured by Dermanord Svensk Hudvård AB</strong></p>
+                    <t t-if="o.incoterm">
+                        <strong>Delivery terms: </strong><span t-esc="o.incoterm.name"/><br/>
+                    </t>
+                    <t t-if="o.weight">
+                        <strong>Weight: </strong><span t-esc="o.weight"/> <span t-esc="o.weight_uom_id.name"/><br/>
+                    </t>
+                    <t t-if="o.volume">
+                        <strong>Cbm: </strong><span t-esc="o.volume"/><br/>
+                    </t>
+                    <t t-if="o.picking_id.carrier_tracking_ref">
+                        <strong>Tracking Nbr: </strong>
+                        <span t-esc="o.picking_id.carrier_tracking_ref"/><br/>
+                    </t>
+                    <t t-if="len(o.picking_id.package_ids) &gt; 0">
+                        <strong>Colli Nbr: </strong><span t-esc="len(o.picking_id.package_ids)"/><br/>
+                        <t t-foreach="o.picking_id.package_ids" t-as="p">
+                            <h5><t t-esc="p_index + 1"/>: <t t-esc="p.name"/></h5>
+                        </t>
                     </t>
                 </t>
             </xpath>
