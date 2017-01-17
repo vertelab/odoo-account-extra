@@ -1,0 +1,35 @@
+<openerp>
+    <data>
+        
+        <!-- form view for customer -->
+        <record id="view_invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <h1 position="after">
+                    <button type="object" class="oe_right oe_stat_button" name="action_view_parcels" icon="fa-list">
+                        <field name="parcel_count" widget="statinfo"/>                        
+                    </button>
+                </h1>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_quant_package_tree">
+            <field name="name">stock.quant.package.tree</field>
+            <field name="model">stock.quant.package</field>
+            <field eval="100" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Package" editable="top">
+                    <field name="complete_name"/>
+                    <field name="shipping_ref"/>
+                    <field name="ul_id"/>
+                    <field name="packaging_id"/>
+                    <field name="location_id"/>
+                    <button string="Open Form" type="object" name="action_button_open_form" icon="gtk-index"/>
+                </tree>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
