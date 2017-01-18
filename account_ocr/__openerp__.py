@@ -24,7 +24,7 @@
 'summary': '',
 'category': 'account',
 'description': """
-OCR number
+OCR number in invoice
 """,
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
@@ -32,6 +32,7 @@ OCR number
 'data': [
     'account_view.xml',
     'account_data.xml',
+    'report_invoice.xml',
 ],
 'installable': True,
 }
