@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="invoice_tree" model="ir.ui.view">
+            <field name="name">account.invoice.tree.inherit.ocr</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="number" position="after">
+                    <field name="ocr"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form.inherit.ocr</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="account_id" position="after">
+                    <field name="ocr"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_invoice_filter" model="ir.ui.view">
+            <field name="name">account.invoice.select.inherit.ocr</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="number" position="replace">
+                    <field name="number" string="Invoice" filter_domain="['|','|','|','|', ('number','ilike',self), ('origin','ilike',self), ('supplier_invoice_number', 'ilike', self), ('partner_id', 'child_of', self), ('ocr', 'ilike', self)]"/>
+                </field>
+                <field name="period_id" position="after">
+                    <field name="ocr"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

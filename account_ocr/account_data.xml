@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="account_invoice_ocr_sequence" model="ir.sequence">
+            <field name="name">Account Inovice OCR Sequence</field>
+            <field name="active" eval="True"/>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="number_next_actual">1</field>
+            <field name="implementation">standard</field>
+        </record>
+
+    </data>
+</openerp>
