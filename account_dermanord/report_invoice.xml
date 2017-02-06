@@ -112,5 +112,17 @@
             </xpath>
 
         </template>
+
+        <report
+            id="report_intrastat.account_intrastatinvoices"
+            model="account.invoice"
+            string="Intrastat Invoices"
+            report_type="qweb-pdf"
+            name="report_intrastat.report_intrastatinvoice"
+            file="report_intrastat.report_intrastatinvoice"
+            attachment_use="True"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        />
+
     </data>
 </openerp>
