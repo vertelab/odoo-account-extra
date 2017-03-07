@@ -34,7 +34,7 @@ Create accounting objects from an issue
 * pdf-files are converted to image
 
     """,
-    'depends': ['project_issue','account' ],
+    'depends': ['project_issue','account', 'attachment_image'],
     'data': ['project_issue_view.xml',
         ],
     'installable': True,
