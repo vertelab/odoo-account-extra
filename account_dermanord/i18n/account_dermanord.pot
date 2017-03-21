@@ -145,6 +145,17 @@ msgid "Sale order"
 msgstr ""
 
 #. module: account_dermanord
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Shipping Ref.:"
+msgstr ""
+
+#. module: account_dermanord
+#: field:account.invoice,shipping_ref:0
+#: field:stock.quant.package,shipping_ref:0
+msgid "Shipping Reference"
+msgstr ""
+
+#. module: account_dermanord
 #: view:website:account.report_invoice_document
 msgid "Summa att betala"
 msgstr ""
