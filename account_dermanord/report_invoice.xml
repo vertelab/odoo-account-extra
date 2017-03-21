@@ -73,12 +73,6 @@
                         t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
                 </div>
             </xpath>
-            <xpath expr="//div[@t-if='o.partner_id.ref']" position="after">
-                <div class="col-xs-3" t-if="o.shipping_ref">
-                    <strong>Shipping Ref.:</strong>
-                    <p t-field="o.shipping_ref"/>
-                </div>
-            </xpath>
             <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="attributes">
                 <attribute name="class">col-xs-5 col-xs-offset-2</attribute>
             </xpath>
@@ -111,7 +105,7 @@
                     <t t-if="len(o.picking_id.package_ids) &gt; 0">
                         <strong>Colli Nbr: </strong><span t-esc="len(o.picking_id.package_ids)"/><br/>
                         <t t-foreach="o.picking_id.package_ids" t-as="p">
-                            <h5><t t-esc="p_index + 1"/>: <t t-esc="p.name"/></h5>
+                            <h5><t t-esc="p_index + 1"/>: <t t-esc="p.shipping_ref or p.name"/></h5>
                         </t>
                     </t>
                 </t>

@@ -36,15 +36,6 @@ class account_invoice(models.Model):
     weight_net = fields.Float(string='Net Weight', digits_compute=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
     weight_uom_id = fields.Many2one(string='Unit of Measure', comodel_name='product.uom')
     volume = fields.Float(string='Volume', digits_compute=dp.get_precision('Stock Weight'), help="The Volume in m3.")
-    shipping_ref = fields.Char(string='Shipping Reference', compute='_get_shipping_ref')
-    
-    @api.one
-    def _get_shipping_ref(self):
-        if self.picking_id:
-            if self.picking_id.carrier_tracking_ref:
-                self.shipping_ref = self.picking_id.carrier_tracking_ref
-            else:
-                self.shipping_ref = ', '.join(self.picking_id.package_ids.mapped('name'))
 
 class sale_order(models.Model):
     _inherit = 'sale.order'

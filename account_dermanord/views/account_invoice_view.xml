@@ -9,7 +9,6 @@
             <field name="arch" type="xml">
                 <field name="move_id" position="after">
                     <field name="picking_id"/>
-                    <field name="shipping_ref"/>
                     <field name="incoterm"/>
                     <label for="weight">Gross Weight</label>
                     <div>
