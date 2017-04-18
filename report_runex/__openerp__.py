@@ -30,6 +30,7 @@
     'depends': ['report_intrastat'],
     'data': [
              "report_view.xml",
+             "report_data.xml",
              ],
     "license" : "AGPL-3",
     'installable': True,

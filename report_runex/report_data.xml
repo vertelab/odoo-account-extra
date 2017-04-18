@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        
+        <record id="runex_nuf" model="res.partner">
+            <field name="name">Runex AB NUF</field>
+            <field name="street">Strandveien 39-41</field>
+            <field name="zip">3050</field>
+            <field name="city">Mjøndalen</field>
+            <field name="country_id" ref="base.no" />
+        </record>
+        
+        <record id="runex_nuf_dummy" model="res.partner">
+            <field name="name">Runex AB NUF</field>
+            <field name="street">Strandveien 39-41</field>
+            <field name="zip">3050</field>
+            <field name="city">Mjøndalen</field>
+            <field name="country_id" ref="base.no" />
+            <field name="parent_id" ref="runex_nuf"/>
+        </record>
+        
+    </data>
+</openerp>
