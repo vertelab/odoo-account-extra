@@ -2,6 +2,16 @@
 <openerp>
     <data>
         
+        <record id="invoice_form" model="ir.ui.view">
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="model">account.invoice</field>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="partner_shipping_id" />
+                </field>
+            </field>
+        </record>
+        
         <template id="external_layout" inherit_id="report.external_layout">
             <xpath expr="//t[@t-call='report.external_layout_footer']" position="replace">
                 <t t-if="o and o._context.get('lang') == 'nb_NO'">
@@ -18,6 +28,61 @@
                 <t t-if="not o or o._context.get('lang') not in ('nb_NO')">
                     <t t-call="report.external_layout_header" />
                 </t>
+            </xpath>
+        </template>
+        
+        <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[@t-field='o.partner_invoice_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            <xpath expr="//div[@t-field='o.partner_shipping_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+        </template>
+        
+        <template id="report_picking" inherit_id="stock.report_picking">
+            <xpath expr="//div[@t-field='o.partner_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            <xpath expr="//div[@t-field='o.move_lines[0].partner_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            <xpath expr="//div[@t-field='o.picking_type_id.warehouse_id.partner_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+        </template>
+        
+        <template id="report_invoice_document" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="before">
+                <strong>Invoice Address:</strong>
+            </xpath>
+            <xpath expr="//div[@class='row']" position="after">
+                <br/>
+                <div class="row">
+                    <strong>Delivery Address:</strong>
+                    <div class="col-xs-5 col-xs-offset-7">
+                        <address t-field="o.partner_shipping_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-if="o.partner_shipping_id.vat">TIN: <span t-field="o.partner_shipping_id.vat"/></span>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+        
+        <template id="report_intrastatinvoice_documents" inherit_id="report_intrastat.report_intrastatinvoice_document">
+            <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="before">
+                <strong>Invoice Address:</strong>
+            </xpath>
+            <xpath expr="//div[@class='row']" position="after">
+                <br/>
+                <div class="row">
+                    <strong>Delivery Address:</strong>
+                    <div class="col-xs-5 col-xs-offset-7">
+                        <address t-field="o.partner_shipping_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-if="o.partner_shipping_id.vat">TIN: <span t-field="o.partner_shipping_id.vat"/></span>
+                    </div>
+                </div>
             </xpath>
         </template>
         

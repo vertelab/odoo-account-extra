@@ -27,7 +27,7 @@
     'description': """""",
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['report_intrastat'],
+    'depends': ['report_intrastat', 'sale', 'stock'],
     'data': [
              "report_view.xml",
              "report_data.xml",
