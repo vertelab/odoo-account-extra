@@ -17,7 +17,7 @@
                 <t t-if="o and o._context.get('lang') == 'nb_NO'">
                     <t t-call="report_runex.external_layout_footer_no" />
                 </t>
-                <t t-if="not o or o._context.get('lang') not in ('nb_NO')">
+                <t t-if="not o or o._context.get('lang') not in ['nb_NO']">
                     <t t-call="report.external_layout_footer" />
                 </t>
             </xpath>
