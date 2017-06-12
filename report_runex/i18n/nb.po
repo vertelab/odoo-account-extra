@@ -1,0 +1,131 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* report_runex
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20161208\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-19 05:24+0000\n"
+"PO-Revision-Date: 2017-04-19 05:24+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "&bull;"
+msgstr "&bull;"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "+47 62 81 33 55"
+msgstr "+47 62 81 33 55"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "6164.05.55121"
+msgstr "6164.05.55121"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "998 374 804"
+msgstr "998 374 804"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "Bankkonto:"
+msgstr "Bankkonto:"
+
+#. module: report_runex
+#: field:account.invoice,partner_shipping_id:0
+msgid "Delivery Address"
+msgstr "Leveringsadresse"
+
+#. module: report_runex
+#: view:website:account.report_invoice_document
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Delivery Address:"
+msgstr "Leveringsadresse:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "IBAN:"
+msgstr "IBAN:"
+
+#. module: report_runex
+#: model:ir.model,name:report_runex.model_account_invoice
+msgid "Invoice"
+msgstr "Faktura"
+
+#. module: report_runex
+#: view:website:account.report_invoice_document
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Invoice Address:"
+msgstr "Faktura-adresse:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "NDEANOKK"
+msgstr "NDEANOKK"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "NO7061640555121"
+msgstr "NO7061640555121"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "NO998374804MVA"
+msgstr "NO998374804MVA"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "Page:"
+msgstr "Side:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "Phone:"
+msgstr "Telefon:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "Reg:"
+msgstr "Reg:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "SWIFT/BIC:"
+msgstr "SWIFT/BIC:"
+
+#. module: report_runex
+#: view:website:account.report_invoice_document
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "TIN:"
+msgstr "TIN:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "VAT:"
+msgstr "VAT:"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "info@runex.com"
+msgstr "info@runex.com"
+
+#. module: report_runex
+#: view:website:report_runex.external_layout_footer_no
+msgid "www.runex.com"
+msgstr "www.runex.com"
+
+#. module: report_runex
+#: view:website:sale.report_saleorder_document
+#: view:website:stock.report_picking
+msgid "{\"widget\": \"contact\", \"fields\": [\"address\", \"name\", \"phone\"], \"no_marker\": true}"
+msgstr "{\"widget\": \"contact\", \"fields\": [\"address\", \"name\", \"phone\"], \"no_marker\": true}"
+

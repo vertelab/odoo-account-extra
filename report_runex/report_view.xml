@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="invoice_form" model="ir.ui.view">
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="model">account.invoice</field>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="partner_shipping_id" />
+                </field>
+            </field>
+        </record>
+        
+        <template id="external_layout" inherit_id="report.external_layout">
+            <xpath expr="//t[@t-call='report.external_layout_footer']" position="replace">
+                <t t-if="o and o._context.get('lang') == 'nb_NO'">
+                    <t t-call="report_runex.external_layout_footer_no" />
+                </t>
+                <t t-if="not o or o._context.get('lang') not in ['nb_NO']">
+                    <t t-call="report.external_layout_footer" />
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-call='report.external_layout_header']" position="replace">
+                <t t-if="o and o._context.get('lang') == 'nb_NO'">
+                    <t t-call="report_runex.external_layout_header_no" />
+                </t>
+                <t t-if="not o or o._context.get('lang') not in ['nb_NO']">
+                    <t t-call="report.external_layout_header" />
+                </t>
+            </xpath>
+        </template>
+        
+        <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[@class='row']" position="replace">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <strong t-if="o.partner_shipping_id == o.partner_invoice_id">Invoice and shipping address:</strong>
+                        <strong t-if="o.partner_shipping_id != o.partner_invoice_id">Invoice address:</strong>
+                        <div t-field="o.partner_invoice_id" 
+                            t-field-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}'/>
+                        <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                    </div>
+                    <div t-if="o.partner_shipping_id != o.partner_invoice_id" class="col-xs-6">
+                        <strong>Shipping address:</strong>
+                        <div t-field="o.partner_shipping_id" 
+                            t-field-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}'/>
+                        <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                    </div>
+<!--
+                    <div t-if="o.partner_shipping_id != o.partner_id and o.partner_invoice_id != o.partner_id" class="col-xs-6">
+                        <strong>Customer address:</strong>
+                        <div t-field="o.partner_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                    </div>
+-->
+                </div>
+            </xpath>
+<!--
+            <xpath expr="//div[@t-field='o.partner_invoice_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            <xpath expr="//div[@t-field='o.partner_shipping_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            partner_id!!!!
+-->
+        </template>
+        
+        <template id="report_picking" inherit_id="stock.report_picking">
+            <xpath expr="//div[@t-field='o.partner_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            <xpath expr="//div[@t-field='o.move_lines[0].partner_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+            <xpath expr="//div[@t-field='o.picking_type_id.warehouse_id.partner_id']" position="attributes">
+                <attribute name="t-field-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": true}</attribute>
+            </xpath>
+        </template>
+        
+        <template id="report_invoice_document" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@class='row']" position="replace">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <strong>Invoice Address:</strong>
+                        <address t-field="o.partner_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-if="o.partner_id.vat">TIN: <span t-field="o.partner_id.vat"/></span>
+                    </div>
+                    <div class="col-xs-6" t-if="o.partner_shipping_id">
+                        <strong>Delivery Address:</strong>
+                        <address t-field="o.partner_shipping_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-if="o.partner_shipping_id.vat">TIN: <span t-field="o.partner_shipping_id.vat"/></span>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+        
+        <template id="report_intrastatinvoice_documents" inherit_id="report_intrastat.report_intrastatinvoice_document">
+            <xpath expr="//div[@class='row']" position="replace">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <strong>Invoice Address:</strong>
+                        <address t-field="o.partner_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-field="o.partner_id.vat"/>
+                    </div>
+                    <div class="col-xs-6" t-if="o.partner_shipping_id">
+                        <strong>Delivery Address:</strong>
+                        <address t-field="o.partner_shipping_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                        <span t-if="o.partner_shipping_id.vat">TIN: <span t-field="o.partner_shipping_id.vat"/></span>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+        
+    </data>
+    <data noupdate="1">
+        <template id="external_layout_footer_no">
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <ul class="list-inline">
+                        <li>Phone: <span>+47 62 81 33 55</span></li>
+                        <li>&amp;bull;</li>
+                        <li><span>info@runex.com</span></li>
+                        <li>&amp;bull;</li>
+                        <li><span>www.runex.com</span></li>
+                        <li>&amp;bull;</li>
+                        <li>VAT: <span>NO998374804MVA</span></li>
+                        <li>&amp;bull;</li>
+                        <li>Reg: <span>998 374 804</span></li>
+                        <li>&amp;bull;</li>
+                        <li>Bankkonto: <span>6164.05.55121</span></li>
+                        <li>&amp;bull;</li>
+                        <li>IBAN: <span>NO7061640555121</span></li>
+                        <li>&amp;bull;</li>
+                        <li>SWIFT/BIC: <span>NDEANOKK</span></li>
+                    </ul>
+
+                    <ul class="list-inline">
+                        <li>Page:</li>
+                        <li><span class="page"/></li>
+                        <li>/</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                </div>
+            </div>      
+        </template>
+        
+        <template id="external_layout_header_no">
+            <div class="header">
+                <t t-set="runex_nuf" t-value="o.env.ref('report_runex.runex_nuf_dummy')"/>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                    </div>
+                    <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div t-field="runex_nuf.parent_id" 
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+                            style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+    </data>
+</openerp>
