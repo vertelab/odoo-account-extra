@@ -26,13 +26,15 @@
 'description': """Extends invoice with more text .""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['report_intrastat', 'account_customer_no','stock'],
+'sequence': 99,
+'depends': ['report_intrastat', 'account_customer_no', 'stock', 'child_catagory_tags'],
 'data': [
     'views/account_invoice_view.xml',
     'report_invoice.xml',
     'res_partner_view.xml',
     'stock_view.xml',
     'account_invoice_parcels_view.xml',
+    'security/ir.model.access.csv',
 ],
 'installable': True,
 }

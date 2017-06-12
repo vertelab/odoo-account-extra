@@ -35,3 +35,25 @@ class res_partner(models.Model):
         return result
 
     incoterm = fields.Many2one(comodel_name='stock.incoterms', string='Incoterm', help='International Commercial Terms are a series of predefined commercial terms used in international transactions.')
+    partner_ids = fields.Many2many(comodel_name='res.partner', relation='multi_partner', column1='partner_id', column2='parent_id', string='Multi Clients')
+
+    @api.one
+    @api.depends('category_id', 'child_ids', 'child_ids.category_id', 'partner_ids', 'partner_ids.category_id')
+    def _get_childs_categs(self):
+        if self.is_company:
+            categories = self.env['res.partner.category'].browse([])
+            for c in self.child_ids:
+                for categ in c.category_id:
+                    categories |= categ
+            for p in self.partner_ids:
+                for categ in p.category_id:
+                    categories |= categ
+            _logger.warn('here -------------------')
+            self.child_category_ids = categories
+
+
+class multi_partner(models.Model):
+    _name = 'multi.partner'
+
+    parent_id = fields.Many2one(comodel_name='res.partner')
+    partner_id = fields.Many2one(comodel_name='res.partner')
