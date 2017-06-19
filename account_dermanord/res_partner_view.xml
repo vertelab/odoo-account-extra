@@ -32,7 +32,7 @@
                 </field>
                 <xpath expr="//page[@string='Contacts']/field[@name='child_ids']" position="after">
                     <label for="partner_ids"/>
-                    <field name="partner_ids" widget="many2many_tags"/>
+                    <field name="partner_ids"/>
                 </xpath>
             </field>
         </record>
