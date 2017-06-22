@@ -121,7 +121,7 @@ class project_issue(models.Model):
             })
             issue._finnish(invoice,_('Customer invoice created'))
             invoices.append(invoice)
-        return self._get_views(invoice,'account.action_invoice_tree1')
+        return self._get_views(invoice,'account.action_invoice_tree1',form='account.invoice_form')
         result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
         result['res_id'] = invoice.id # self.id
         result['search_view_id'] = self.env.ref("account.view_account_invoice_filter").id
@@ -142,7 +142,7 @@ class project_issue(models.Model):
             })
             issue._finnish(move,_('Journal Entry created'))
             moves.append(move)
-        return self._get_views(move,'account.view_move_line_tree')
+        return self._get_views(move,'account.view_move_line_tree',form='account.view_move_line_form')
         result = self.env.ref('account.view_move_line_tree').read()[0]
         result['views'] = [(self.env.ref('account.view_move_line_form').id,'form'),(self.env.ref('account.view_move_line_tree').id,'tree')]
         result['res_id'] = move.id # self.id
