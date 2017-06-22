@@ -84,7 +84,7 @@ class website_project_issue(http.Controller):
         if issue and request.httprequest.method == 'POST' and post.get('ufile'):
             _logger.debug("This is attachement post %s /issue/nn" % (post))
             blob = post['ufile'].read()
-            attachment = request.env['ir.attachment'].create({
+            attachment = request.env['ir.attachment'].with_context({'convert': 'pdf2image'}).create({
                     'name': post['ufile'].filename,
                     'res_name': issue.name,
                     'res_model': 'project.issue',
