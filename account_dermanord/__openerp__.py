@@ -34,6 +34,7 @@
     'res_partner_view.xml',
     'stock_view.xml',
     'account_invoice_parcels_view.xml',
+    'purchase_import_view.xml',
     'security/ir.model.access.csv',
 ],
 'installable': True,
