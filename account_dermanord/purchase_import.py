@@ -109,11 +109,13 @@ class DermanordPurchaseImport(models.TransientModel):
                 data = tree.xpath('//tr/td/text()')
 
                 supplier = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type)),('supplier','=',True)])
+                customer = self.env['res.partner'].search([('name','=',u'Dermanord - Svensk Hudvård AB')])
                 order = self.env['purchase.order'].create({
                     'partner_id': supplier.id,
                     'partner_ref': data[63],
                     'location_id': supplier.property_stock_customer.id,
                     'pricelist_id': supplier.property_product_pricelist_purchase.id,
+                    'dest_address_id': customer.id,
                 })
                 i = 79
                 while i < len(data):
