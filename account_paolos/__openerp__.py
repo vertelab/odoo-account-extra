@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2017 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2017- Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -19,23 +19,19 @@
 #
 ##############################################################################
 {
-'name': 'Account Dermanord',
+'name': 'Account Paolos',
 'version': '0.1',
 'summary': '',
-'category': 'account,account_customer_no',
-'description': """Extends invoice with more text .""",
+'category': 'account',
+'description': """
+Invoice report configuration for Paolos
+=======================================
+""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'sequence': 99,
-'depends': ['report_intrastat', 'account_customer_no', 'stock', 'child_catagory_tags'],
+'depends': ['account', 'paolos_sale', 'edi_route_sale_stock'],
 'data': [
-    'views/account_invoice_view.xml',
     'report_invoice.xml',
-    'res_partner_view.xml',
-    'stock_view.xml',
-    'account_invoice_parcels_view.xml',
-    'purchase_import_view.xml',
-    'security/ir.model.access.csv',
 ],
 'installable': True,
 }

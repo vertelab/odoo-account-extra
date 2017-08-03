@@ -24,6 +24,9 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+#~ https://www.bankgirot.se/tjanster/inbetalningar/bankgiro-inbetalningar/handbocker/
+#~ https://www.bankgirot.se/globalassets/dokument/exempelfiler/bankgiroinbetalningar/bankgiroinbetalningar_exempelfil_avtal-om-ocr-kontroll_sv.txt
+
 class account_invoice(models.Model):
     _inherit = "account.invoice"
 
