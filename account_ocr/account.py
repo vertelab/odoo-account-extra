@@ -39,4 +39,8 @@ class account_invoice(models.Model):
             ocr_check = str(int(ocr))
             inv.ocr = ocr + str((10 - (sum(map(lambda x: x%10 + int(x/10), map(lambda x,y: x*y, map(int, ocr_check), ([2,1]*len(ocr_check))[:len(ocr_check)]))) % 10)) % 10)
 
+
+# https://www.bankgirot.se/tjanster/inbetalningar/bankgiro-inbetalningar/ocr-referenskontroll/
+# https://www.bankgirot.se/globalassets/dokument/exempelfiler/bankgiroinbetalningar/bankgiroinbetalningar_avtal-ocr-kontroll_utokad-blankettregistrering-ocr-kontroll_exempelfil.txt
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
