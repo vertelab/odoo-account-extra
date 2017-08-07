@@ -120,7 +120,7 @@ class DermanordPurchaseImport(models.TransientModel):
                 i = 79
                 while i < len(data):
                     prod = data[i]
-                    ben  = data[i+1].strip()
+                    ben  = data[i+1].strip().encode('iso-8859-1').decode('utf-8')
                     qty  = int(data[i+2].strip())
                     price_unit = float(data[i+3].strip().replace(' ','').replace('k','').replace('r',''))
                     #~ price_net = float(data[i+4].strip())
