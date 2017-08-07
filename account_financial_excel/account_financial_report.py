@@ -22,6 +22,7 @@
 from openerp import api, models, fields, _
 
 from openpyxl import Workbook
+from openpyxl.styles import Font, Color, colors
 import cStringIO
 import base64
 
@@ -38,37 +39,119 @@ class accounting_report(models.TransientModel):
 
     @api.multi
     def check_excel(self):
-        for s in self:
-            wb = Workbook()
-            ws = wb.active
-            #raise Warning(data['form']['account_report_id'][0])
-            ws.title = s.account_report_id.name
-            ws.merge_cells(start_row=1,end_row=1,start_column=1,end_column=6)
-            ws.cell(row = 1, column = 1).value = ws.title
-            r = 2
-            for line in s.excel_get_lines():
-                if line['type'] == 'report' and line['account_type'] == 'view':
-                    c = 6
-                    n = 1
-                elif line['type'] == 'report':
-                    c = 5
-                    n = 2
-                else:
-                    c = 4
-                    n = 3
-                ws.merge_cells(start_row=r,end_row=r,start_column=n,end_column=3)
-                ws.cell(row = r, column = n).value = line['name']
-                ws.cell(row = r, column = c).value = line['balance']
-                #~ ws.cell(row = r, column = 7).value = line['account_type']
-                #~ ws.cell(row = r, column = 8).value = line['type']
+            
+        data = {}
+        data['form'] = self.read(['date_from',  'date_to',  'fiscalyear_id', 'journal_ids', 'period_from', 'period_to',  'filter',  'chart_account_id', 'target_move','account_report_id', 'date_from_cmp',  'date_to_cmp',  'fiscalyear_id_cmp', 'journal_ids', 'period_from_cmp', 'period_to_cmp',  'filter_cmp',  'chart_account_id', 'target_move'])[0]
+        data['form'] = self.read()[0]
+        for field in ['fiscalyear_id_cmp', 'chart_account_id', 'period_from_cmp', 'period_to_cmp', 'account_report_id']:
+            if isinstance(data['form'][field], tuple):
+                data['form'][field] = data['form'][field][0]
+        comparison_context = self._build_comparison_context(data)
+        data['form']['comparison_context'] = comparison_context
+        used_context = self._build_contexts(data)
+        data['form']['periods'] = used_context.get('periods', False) and used_context['periods'] or []
+        data['form']['used_context'] = dict(used_context, lang=self._context.get('lang', 'en_US'))
+        
+        wb = Workbook()
+        ws = wb.active
+        
+        level = [Font(bold=False,size=12),  # 0
+               Font(bold=True,underline='singleAccounting',size=16),  # 1
+               Font(bold=True,size=14), # 2
+               Font(bold=True,size=12), # 3
+               Font(bold=False,size=12), # 4
+               Font(italic=True,size=10), # 5
+               Font(size=10), # 6
+               ]
+        
+        #raise Warning(data['form']['account_report_id'][0])
+        ws.title = self.account_report_id.name
+        ws.merge_cells(start_row=1,end_row=1,start_column=1,end_column=6)
+        ws.cell(row = 1, column = 1).value = ws.title
+        r = 2
+
+        ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=3)
+        ws.cell(row = r, column = 1).value = _('Chart of Accounts:')
+        ws.cell(row = r, column = 4).value = self.chart_account_id.name
+        r += 1
+        ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=3)
+        ws.cell(row = r, column = 1).value = _('Fiscal Year:')
+        ws.cell(row = r, column = 4).value = self.fiscalyear_id.name
+        r += 1        
+        ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=3)
+        ws.cell(row = r, column = 1).value = _('Filter by:')
+        ws.cell(row = r, column = 4).value = self.get_selection_value('filter',self.filter)
+        if self.filter == 'filter_period':
+            ws.cell(row = r, column = 4).value = self.period_from.name
+            ws.cell(row = r, column = 5).value = self.period_to.name
+        if self.filter == 'filter_date':
+            ws.cell(row = r, column = 4).value = self.date_from
+            ws.cell(row = r, column = 5).value = self.date_to
+        r += 1
+        ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=3)
+        ws.cell(row = r, column = 1).value = _('Target Moves:')
+        ws.cell(row = r, column = 4).value = self.get_selection_value('target_move',self.target_move)
+        r += 1
+
+
+        if self.debit_credit:
+            ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=5)
+            ws.cell(row = r, column = 1).value = _('Names')
+            ws.cell(row = r, column = 6).value = _('Debit')
+            ws.cell(row = r, column = 7).value = _('Credit')
+            ws.cell(row = r, column = 8).value = _('Balance')
+            r += 1
+
+            for line in self.get_lines(data):
+                ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=5)
+                ws.cell(row = r, column = 1).value = line['name']
+                ws.cell(row = r, column = 1).font = level[line['level']]
+                ws.cell(row = r, column = 6).value = line['debit']
+                ws.cell(row = r, column = 6).font = level[line['level']]
+                ws.cell(row = r, column = 7).value = line['credit']
+                ws.cell(row = r, column = 7).font = level[line['level']]
+                ws.cell(row = r, column = 8).value = line['balance']
+                ws.cell(row = r, column = 8).font = level[line['level']]
                 #~ ws.cell(row = r, column = 9).value = line['level']
-                #{'account_type': False, 'balance': 0.0, 'type': 'report', 'name': u'2.2 F\xf6rskott avseende immateriella anl\xe4ggningstillg\xe5ngar', 'level': 4}, {'account_type': 'view', 'balance': 0.0, 'type': 'report', 'name': u'Materiella anl\xe4ggningstillg\xe5ngar', 'level': 3}
                 r += 1
-            out = cStringIO.StringIO()
-            wb.save(out)
-            s.excel_file=base64.b64encode(out.getvalue())
-            s.state = 'get'
-            out.close()
+
+        elif not self.enable_filter:
+            ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=5)
+            ws.cell(row = r, column = 1).value = _('Names')
+            ws.cell(row = r, column = 6).value = _('Balance')
+            r += 1
+            for line in self.get_lines(data):
+                ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=5)
+                ws.cell(row = r, column = 1).value = line['name']
+                ws.cell(row = r, column = 1).font = level[line['level']]
+                ws.cell(row = r, column = 6).value = line['balance']
+                ws.cell(row = r, column = 6).font = level[line['level']]
+                #~ ws.cell(row = r, column = 9).value = line['level']
+
+                r += 1
+        else:
+            ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=5)
+            ws.cell(row = r, column = 1).value = _('Names')
+            ws.cell(row = r, column = 6).value = _('Balance')
+            ws.cell(row = r, column = 7).value = self.label_filter
+            r += 1
+
+            for line in self.get_lines(data):
+                ws.merge_cells(start_row=r,end_row=r,start_column=1,end_column=5)
+                ws.cell(row = r, column = 1).value = line['name']
+                ws.cell(row = r, column = 1).font = level[line['level']]
+                ws.cell(row = r, column = 6).value = line['balance']
+                ws.cell(row = r, column = 6).font = level[line['level']]
+                ws.cell(row = r, column = 7).value = line['balance_cmp']
+                ws.cell(row = r, column = 7).font = level[line['level']]
+                #~ ws.cell(row = r, column = 9).value = line['level']
+                r += 1
+        
+        out = cStringIO.StringIO()
+        wb.save(out)
+        self.excel_file=base64.b64encode(out.getvalue())
+        self.state = 'get'
+        out.close()
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'accounting.report',
@@ -81,12 +164,15 @@ class accounting_report(models.TransientModel):
         }
 
         return res
-
-    def excel_get_lines(self):        
+    
+    # from account/report/account_financial_report.py    
+    def get_lines(self, data):
         lines = []
-        report = self.account_report_id.id
-        ids2 = self.pool.get('account.financial.report')._get_children_by_order(self._cr,self._uid,[report])
-        for report in self.env['account.financial.report'].browse(ids2):
+        account_obj = self.pool.get('account.account')
+        currency_obj = self.pool.get('res.currency')
+        #~ ids2 = self.env['account.financial.report']._get_children_by_order([data['form']['account_report_id'][0]])
+        ids2 = self.pool.get('account.financial.report')._get_children_by_order(self._cr, self._uid, [data['form']['account_report_id']], context=data['form']['used_context'])
+        for report in self.pool.get('account.financial.report').browse(self._cr, self._uid, ids2, context=data['form']['used_context']):
             vals = {
                 'name': report.name,
                 'balance': report.balance * report.sign or 0.0,
@@ -94,20 +180,22 @@ class accounting_report(models.TransientModel):
                 'level': bool(report.style_overwrite) and report.style_overwrite or report.level,
                 'account_type': report.type =='sum' and 'view' or False, #used to underline the financial report balances
             }
-            if self.debit_credit:
+            if data['form']['debit_credit']:
                 vals['debit'] = report.debit
                 vals['credit'] = report.credit
+            if data['form']['enable_filter']:
+                vals['balance_cmp'] = self.pool.get('account.financial.report').browse(self._cr, self._uid, report.id, context=data['form']['comparison_context']).balance * report.sign or 0.0
             lines.append(vals)
             account_ids = []
             if report.display_detail == 'no_detail':
                 #the rest of the loop is used to display the details of the financial report, so it's not needed here.
                 continue
             if report.type == 'accounts' and report.account_ids:
-                account_ids = self.pool.get('account.account')._get_children_and_consol(self._cr,self._uid,[x.id for x in report.account_ids])
+                account_ids = account_obj._get_children_and_consol(self._cr, self._uid, [x.id for x in report.account_ids])
             elif report.type == 'account_type' and report.account_type_ids:
-                account_ids = [a.id for a in self.env['account.account'].search([('user_type','in', [x.id for x in report.account_type_ids])])]
+                account_ids = account_obj.search(self._cr, self._uid, [('user_type','in', [x.id for x in report.account_type_ids])])
             if account_ids:
-                for account in self.env['account.account'].browse(account_ids):
+                for account in account_obj.browse(self._cr, self._uid, account_ids, context=data['form']['used_context']):
                     #if there are accounts to display, we add them to the lines with a level equals to their level in
                     #the COA + 1 (to avoid having them with a too low level that would conflicts with the level of data
                     #financial reports for Assets, liabilities...)
@@ -115,21 +203,36 @@ class accounting_report(models.TransientModel):
                         continue
                     flag = False
                     vals = {
-                        'name': '%s %s' % (account.code,account.name),
+                        'name': account.code + ' ' + account.name,
                         'balance':  account.balance != 0 and account.balance * report.sign or account.balance,
                         'type': 'account',
                         'level': report.display_detail == 'detail_with_hierarchy' and min(account.level + 1,6) or 6, #account.level + 1
                         'account_type': account.type,
                     }
 
-                    if self.debit_credit:
+                    if data['form']['debit_credit']:
                         vals['debit'] = account.debit
                         vals['credit'] = account.credit
-                    if not self.pool.get('res.currency').is_zero(self._cr, self._uid, account.company_id.currency_id, vals['balance']):
+                    if not currency_obj.is_zero(self._cr, self._uid, account.company_id.currency_id, vals['balance']):
                         flag = True
+                    if data['form']['enable_filter']:
+                        vals['balance_cmp'] = account_obj.browse(self._cr, self._uid, account.id, context=data['form']['comparison_context']).balance * report.sign or 0.0
+                        if not currency_obj.is_zero(self._cr, self._uid, account.company_id.currency_id, vals['balance_cmp']):
+                            flag = True
                     if flag:
                         lines.append(vals)
         return lines
-    
 
+    def get_selection_text(self,field,value):
+        for type,text in self.fields_get([field])[field]['selection']:
+                if text == value:
+                    return type
+        return None
+
+    def get_selection_value(self,field,value):
+        for type,text in self.fields_get([field])[field]['selection']:
+                if type == value:
+                    return text
+        return None
+     
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
