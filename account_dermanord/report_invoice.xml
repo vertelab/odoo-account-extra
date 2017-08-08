@@ -110,6 +110,23 @@
                     </t>
                 </t>
             </xpath>
+           <xpath expr="//tr[@t-foreach='o.invoice_line']" position="inside"> 
+               <t t-if="l.product_id.iskit or l.product_id.is_offer">
+               <tr>
+                    <td class="text-right">A</td>
+                <td class="text-right">B</td>
+                <td class="text-right">C</td>
+                <td class="text-right">D</td>
+                <td class="text-right">E</td>
+                <td class="text-right">F</td>
+                <td class="text-right">G</td>
+                <td class="text-right">H</td>
+                <td class="text-right">I</td>
+               </tr>
+               </t>
+               
+          </xpath>
+            
 
         </template>
 
