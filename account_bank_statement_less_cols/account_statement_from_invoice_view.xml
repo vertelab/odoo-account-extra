@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="view_account_statement_from_invoice_lines" model="ir.ui.view">
+      <field name="name">account.statement.from.invoice.lines.form</field>
+      <field name="model">account.statement.from.invoice.lines</field>
+      <field name="inherit_id" ref="account.view_account_statement_from_invoice_lines" />
+      <field name="arch" type="xml">
+        <field name="line_ids" position="replace">
+          <field height="300" width="700" name="line_ids" domain="[('account_id.type','in',['receivable','payable']), ('reconcile_id','=',False), ('state', '=', 'valid')]" context="{'currency':True}">
+            <tree colors="red:state == 'draft';black:state == 'valid'" string="Journal Items" create="true" on_write="on_create_write" editable="top">
+              <field name="journal_id" options='{"no_open":True}' />
+              <field name="period_id" options='{"no_open":True}' />
+              <field name="date" />
+              <field name="name" />
+              <field name="ref" />
+              <field name="statement_id" invisible="1" />
+              <field name="partner_id" domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]" on_change="onchange_partner_id(move_id, partner_id, account_id, debit, credit, date, journal_id)" />
+              <field name="account_id" options='{"no_open":True}' domain="[('journal_id','=',journal_id), ('company_id', '=', company_id)]" on_change="onchange_account_id(account_id, partner_id, context)" />
+              <field name="account_tax_id" options='{"no_open":True}' invisible="context.get('journal_type', False) not in ['sale','sale_refund','purchase','purchase_refund','general']" />
+              <field name="analytic_account_id" groups="analytic.group_analytic_accounting" domain="[('type','not in',['view','template'])]" invisible="not context.get('analytic_journal_id',False)" />
+              <field name="move_id" required="0" />
+              <field name="balance" sum="Total Debit" />
+<!--
+              <field name="debit" sum="Total Debit" />
+              <field name="credit" sum="Total Credit" />
+-->
+              <field name="date_maturity" invisible="context.get('journal_type', False) not in ['sale','sale_refund','purchase','purchase_refund']" />
+              <field name="reconcile_ref" />
+              <field name="invoice" invisible="1" />
+<!--
+              <field name="amount_currency" readonly="True" invisible="not context.get('currency',False)" />
+              <field name="currency_id" readonly="True" invisible="not context.get('currency',False)" />
+-->
+              <field name="state" invisible="1" />
+              <field name="company_id" invisible="1" />
+            </tree>
+          </field>
+        </field>
+      </field>
+    </record>
+  </data>
+</openerp>
