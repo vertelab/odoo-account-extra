@@ -23,7 +23,7 @@
 'version': '0.1',
 'summary': 'Account Bank statement with less columns',
 'category': 'account',
-'description': """Account Bank statement with less columns""",
+'description': """In core Odoo uses a lot of account move columns when searching for "invoices" to reconcile with bank statements. This module recude ""Account Bank statement with less columns""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
 'depends': ['account',],

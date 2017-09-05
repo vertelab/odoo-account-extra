@@ -46,6 +46,9 @@
       <field name="model">account.move.line</field>
       <field name="inherit_id" ref="account.view_move_line_tree" />
       <field name="arch" type="xml">
+        <field name='company_id' position='after'>
+            <field name="balance" invisible="context.get('less_cols', False)" />  
+        </field>
         <field name="debit" position="attributes">
           <attribute name="invisible">context.get('less_cols', False)</attribute>
         </field>
