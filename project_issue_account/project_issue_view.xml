@@ -52,36 +52,5 @@
         </page>
       </field>
     </record>
-<!-- Account Invoice -->
-    <record model="ir.ui.view" id="invoice_supplier_form">
-      <field name="name">account.invoice.form.in_voucher.inherit</field>
-      <field name="model">account.invoice</field>
-      <field name="inherit_id" ref="account.invoice_supplier_form" />
-      <field name="priority" eval="10" />
-      <field name="arch" type="xml">
-        <page string="Other Info" position="after">
-          <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('image','=',False)]}">
-            <group rows="20">
-              <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
-            </group>
-          </page>
-        </page>
-      </field>
-    </record>
-    <record model="ir.ui.view" id="invoice_form">
-      <field name="name">account.invoice.form.out_voucher.inherit</field>
-      <field name="model">account.invoice</field>
-      <field name="inherit_id" ref="account.invoice_form" />
-      <field name="priority" eval="10" />
-      <field name="arch" type="xml">
-        <page string="Other Info" position="after">
-          <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('image','=',False)]}">
-            <group rows="20">
-              <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
-            </group>
-          </page>
-        </page>
-      </field>
-    </record>    
   </data>
 </openerp>
