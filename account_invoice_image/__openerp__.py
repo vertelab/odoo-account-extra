@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Account Invoice Image',
-    'version': '0.2',
+    'version': '0.3',
     'summary': '',
     'category': 'account',
     'description': """Adds Image to Invoice 

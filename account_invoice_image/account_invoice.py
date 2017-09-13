@@ -35,9 +35,9 @@ class account_invoice(models.Model):
     @api.depends('period_id')
     def _image(self):
         image = self.env['ir.attachment'].search([('res_model','=','account.invoice'),('res_id','=',self.id)])
-        if image and image[0].mimetype == 'application/pdf':
+        if image and image[0].file_type == 'application/pdf':
             self.image = image[0].image
-        elif image and image[0].mimetype in ['image/jpeg','image/png','image/gif']:
+        elif image and image[0].file_type in ['image/jpeg','image/png','image/gif']:
             self.image = image[0].datas
         else:
             self.image = None
