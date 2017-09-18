@@ -92,9 +92,9 @@ class website_project_issue(http.Controller):
                     'datas': base64.encodestring(blob),
                     'datas_fname': post['ufile'].filename,
                 })
-            if attachment.mimetype == 'application/pdf':
+            if attachment.file_type == 'application/pdf':
                 attachment.pdf2image(800,1200)
-            elif attachment.mimetype in ['image/jpeg','image/png','image/gif']:
+            elif attachment.file_type in ['image/jpeg','image/png','image/gif']:
                 orientation = {
                     'top_left': 0,
                     'left_top': 0,
@@ -126,6 +126,6 @@ class website_project_issue(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
 
         return request.make_response(base64.b64decode(file.datas),
-                [('Content-Type', file.mimetype),
+                [('Content-Type', file.file_type),
                  ('Content-Disposition', content_disposition(file.name))])
 

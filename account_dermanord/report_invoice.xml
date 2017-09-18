@@ -111,6 +111,7 @@
                     </t>
                 </t>
             </xpath>
+<!--
            <xpath expr="//tr[@t-foreach='o.invoice_line']" position="inside">
                <t t-if="l.product_id.iskit or l.product_id.is_offer">
                <tr>
@@ -127,7 +128,7 @@
                </t>
 
           </xpath>
-
+-->
 
         </template>
 
