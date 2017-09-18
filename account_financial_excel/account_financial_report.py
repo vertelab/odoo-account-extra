@@ -43,7 +43,7 @@ class accounting_report(models.TransientModel):
         data = {}
         data['form'] = self.read(['date_from',  'date_to',  'fiscalyear_id', 'journal_ids', 'period_from', 'period_to',  'filter',  'chart_account_id', 'target_move','account_report_id', 'date_from_cmp',  'date_to_cmp',  'fiscalyear_id_cmp', 'journal_ids', 'period_from_cmp', 'period_to_cmp',  'filter_cmp',  'chart_account_id', 'target_move'])[0]
         data['form'] = self.read()[0]
-        for field in ['fiscalyear_id_cmp', 'chart_account_id', 'period_from_cmp', 'period_to_cmp', 'account_report_id']:
+        for field in ['fiscalyear_id','fiscalyear_id_cmp', 'chart_account_id', 'period_from_cmp', 'period_from','period_to_cmp','period_to', 'account_report_id']:
             if isinstance(data['form'][field], tuple):
                 data['form'][field] = data['form'][field][0]
         comparison_context = self._build_comparison_context(data)
@@ -64,7 +64,6 @@ class accounting_report(models.TransientModel):
                Font(size=10), # 6
                ]
         
-        #raise Warning(data['form']['account_report_id'][0])
         ws.title = self.account_report_id.name
         ws.merge_cells(start_row=1,end_row=1,start_column=1,end_column=6)
         ws.cell(row = 1, column = 1).value = ws.title
@@ -82,6 +81,7 @@ class accounting_report(models.TransientModel):
         ws.cell(row = r, column = 1).value = _('Filter by:')
         ws.cell(row = r, column = 4).value = self.get_selection_value('filter',self.filter)
         if self.filter == 'filter_period':
+            #~ raise Warning(self.period_from.name,self.period_to.name)
             ws.cell(row = r, column = 4).value = self.period_from.name
             ws.cell(row = r, column = 5).value = self.period_to.name
         if self.filter == 'filter_date':
