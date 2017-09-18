@@ -89,6 +89,7 @@
             <xpath expr="//p[@t-if='o.fiscal_position']" position="after">
                 <t t-if="o.incoterm or o.weight or o.volume or o.picking_id.carrier_tracking_ref or len(o.picking_id.package_ids) &gt; 0">
                     <p><strong>All products manufactured by Dermanord Svensk Hudvård AB</strong></p>
+                    <p><strong>Origin of products: Sweden</strong></p>
                     <t t-if="o.incoterm">
                         <strong>Delivery terms: </strong><span t-esc="o.incoterm.name"/><br/>
                     </t>
@@ -110,7 +111,7 @@
                     </t>
                 </t>
             </xpath>
-           <xpath expr="//tr[@t-foreach='o.invoice_line']" position="inside"> 
+           <xpath expr="//tr[@t-foreach='o.invoice_line']" position="inside">
                <t t-if="l.product_id.iskit or l.product_id.is_offer">
                <tr>
                     <td class="text-right">A</td>
@@ -124,9 +125,9 @@
                 <td class="text-right">I</td>
                </tr>
                </t>
-               
+
           </xpath>
-            
+
 
         </template>
 
