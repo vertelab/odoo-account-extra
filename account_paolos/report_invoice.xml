@@ -38,6 +38,17 @@
                 </div>
             </xpath>
         </template>
-
+        
+        <record id="invoice_delivery_dates_form" model="ir.ui.view">
+            <field name="model">account.invoice</field>
+            <field name="name">account.invoice.delivery.dates.form</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Other Info']//field[@name='name']" position="after">
+                    <field name="delivery_dates"/>
+                </xpath>
+            </field>
+        </record>
+        
     </data>
 </openerp>
