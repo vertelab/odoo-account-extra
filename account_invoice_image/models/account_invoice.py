@@ -19,6 +19,26 @@
 #
 ##############################################################################
 
-import models
+from odoo import api, models, fields, _
+from odoo.exceptions import except_orm, Warning, RedirectWarning,MissingError
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+import logging
+_logger = logging.getLogger(__name__)
+
+
+class account_invoice(models.Model):
+    _inherit = 'account.invoice'
+
+    image = fields.Binary(compute='_image')
+
+    @api.one
+    @api.depends('period_id')
+    def _image(self):
+        image = self.env['ir.attachment'].search([('res_model','=','account.invoice'),('res_id','=',self.id)])
+        if image and image[0].file_type == 'application/pdf':
+            self.image = image[0].image
+        elif image and image[0].file_type in ['image/jpeg','image/png','image/gif']:
+            self.image = image[0].datas
+        else:
+            self.image = None
+

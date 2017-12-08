@@ -19,6 +19,28 @@
 #
 ##############################################################################
 
-import models
+{
+    'name': 'Project issue upload attachement',
+    'version': '0.1',
+    'author': 'Vertel AB',
+    'category': 'base',
+    'website': 'http://www.vertel.se',
+    'summary': 'Add form for upload attachements to project_issue',
+    'description': """
+A new form for upload attachements to project_issue
+===================================================
+
+    """,
+    'depends': ['website', 'project_issue_account', 'attachment_pdf2image'],
+    'external_dependencies': {
+        'python': ['wand',],
+    },
+    'data': ['views/project_issue_view.xml',
+        ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -18,7 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+{
+    'name': 'Account Invoice Image',
+    'version': '0.3',
+    'summary': '',
+    'category': 'account',
+    'description': """Adds Image to Invoice
+        """,
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['account',],
+    'data': ['views/account_invoice_view.xml',],
+    'installable': True,
+}
 
-import models
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

@@ -19,6 +19,28 @@
 #
 ##############################################################################
 
-import models
+{
+    'name': 'Project issue create account',
+    'version': '0.1',
+    'author': 'Vertel AB',
+    'category': 'base',
+    'website': 'http://www.vertel.se',
+    'summary': 'Add buttons to create accounting objects from an issue',
+    'description': """
+Create accounting objects from an issue
+=======================================
+
+* account.invoice (supplier / customer)
+* pdf-files are converted to image
+
+    """,
+    'depends': ['project_issue','account', 'attachment_image','account_invoice_image'],
+    'data': ['views/project_issue_view.xml',
+        ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

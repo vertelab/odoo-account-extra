@@ -19,6 +19,6 @@
 #
 ##############################################################################
 
-import models
+import account_invoice
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
