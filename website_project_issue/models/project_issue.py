@@ -58,9 +58,8 @@ class website_project_issue(http.Controller):
 
     @http.route(['/project/issue/<model("project.issue"):issue>/attachment','/project/issue/new/attachment', '/upload_voucher'], type='http', auth="user", website=True)
     def upload_attachement(self, issue=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         message = {}
-        user = request.env['res.users'].browse(uid)
+        user = request.env['res.users'].browse(request.env.user.id)
         voucher_name = None
 
         if not issue and request.httprequest.method == 'POST':
@@ -123,8 +122,6 @@ class website_project_issue(http.Controller):
 
     @http.route(['/file/<model("ir.attachment"):file>',], type='http', auth='user')
     def file_download(self, file=False, **kw):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-
         return request.make_response(base64.b64decode(file.datas),
                 [('Content-Type', file.file_type),
                  ('Content-Disposition', content_disposition(file.name))])
