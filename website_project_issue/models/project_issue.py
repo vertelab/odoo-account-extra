@@ -91,9 +91,9 @@ class website_project_issue(http.Controller):
                     'datas': base64.encodestring(blob),
                     'datas_fname': post['ufile'].filename,
                 })
-            if attachment.file_type == 'application/pdf':
+            if attachment.mimetype == 'application/pdf':
                 attachment.pdf2image(800,1200)
-            elif attachment.file_type in ['image/jpeg','image/png','image/gif']:
+            elif attachment.mimetype in ['image/jpeg','image/png','image/gif']:
                 orientation = {
                     'top_left': 0,
                     'left_top': 0,
@@ -113,7 +113,7 @@ class website_project_issue(http.Controller):
             message['success'] = _('Voucher uploaded %s (%s)') % (issue.name,issue.id)
 
         _logger.error("This is a %s and %s and %s, %s" % (type(issue),isinstance(issue,models.Model),issue,request.httprequest.url))
-        return request.website.render("website_project_issue.upload_attachement", {
+        return request.render("website_project_issue.upload_attachement", {
                 'issue': False if re.search("upload_voucher",request.httprequest.url) is not None else issue,
                 'message': message,
                 'attachements': issue and request.env['ir.attachment'].search([('res_model','=','project.issue'),('res_id','=',issue.id)]) or False,
@@ -123,6 +123,6 @@ class website_project_issue(http.Controller):
     @http.route(['/file/<model("ir.attachment"):file>',], type='http', auth='user')
     def file_download(self, file=False, **kw):
         return request.make_response(base64.b64decode(file.datas),
-                [('Content-Type', file.file_type),
+                [('Content-Type', file.mimetype),
                  ('Content-Disposition', content_disposition(file.name))])
 
