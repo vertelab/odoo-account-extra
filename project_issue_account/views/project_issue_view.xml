@@ -18,7 +18,7 @@
         <notebook position="inside">
           <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('voucher_project','=',False)]}">
             <group rows="20">
-              <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
+              <field name="image" widget="image" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
             </group>
           </page>
         </notebook>
