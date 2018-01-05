@@ -52,7 +52,7 @@ class project_issue(models.Model):
     @api.one
     def _finnish(self,object,text):
         self.message_post(body=_('%s <a href="http:/web#model=%s&id=%s">%s</a>' % (text,object._name,object.id,object.name)))   #   #model=<model>&id=<id>
-        self.stage_id = self.env.ref('project.project_stage_2').id
+        #~ self.stage_id = self.env.ref('project.project_stage_2').id
         for file in self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)]):
             file.write({'res_model': object._name,'res_id': object.id })
     @api.model
