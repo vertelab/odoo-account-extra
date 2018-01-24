@@ -82,9 +82,9 @@ class DermanordPurchaseImport(models.TransientModel):
             
             if self.mime == 'html':
                 tree = html.fromstring(base64.b64decode(self.order_file))
-                data = tree.xpath('//tr/td/text()')
+                data = tree.xpath("//tr/td[text()='Kundnummer:']/../td[2]")
 
-                if len(data)>48 and data[48] == '4600113259':
+                if data and data[0].text == '4600113259':
                     self.import_type = 'dustin'
 
                                         
@@ -106,47 +106,39 @@ class DermanordPurchaseImport(models.TransientModel):
             if self.import_type == 'dustin':
 
                 tree = html.fromstring(base64.b64decode(self.order_file))
-                data = tree.xpath('//tr/td/text()')
+                
 
                 supplier = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type)),('supplier','=',True)])
                 customer = self.env['res.partner'].search([('name','=',u'Dermanord - Svensk Hudvård AB')])
                 order = self.env['purchase.order'].create({
                     'partner_id': supplier.id,
-                    'partner_ref': data[63],
+                    'partner_ref': tree.xpath("//tr/td[text()='Ordernummer:']/../td[2]")[0].text,
                     'location_id': supplier.property_stock_customer.id,
                     'pricelist_id': supplier.property_product_pricelist_purchase.id,
                     'dest_address_id': customer.id,
                 })
-                i = 79
-                while i < len(data):
-                    prod = data[i]
-                    ben  = data[i+1].strip().encode('iso-8859-1').decode('utf-8')
-                    qty  = int(data[i+2].strip())
-                    price_unit = float(data[i+3].strip().replace(' ','').replace('k','').replace('r',''))
-                    #~ price_net = float(data[i+4].strip())
-
-                    #~ product = self.env['product.product'].search([('default_code','=',prod)])
-                    product = self.env['product.product'].search([('default_code','=',u'Inköp 5410')])
-                    if not product:
-                        self.env['product.product'].create({
-                                    'name': u'Inköp 5410 förbrukningsmateriel',
-                                    'default_code': u'Inköp 5410',
+                date = tree.xpath("//tr/td[text()='Orderdatum:']/../td[2]")[0].text.strip()
+                data = tree.xpath("//tr/td[text()='Kundnummer:']/../../../../../../tr[4]/td/table/tbody/tr")
+                for row in data[1:]:
+                    if len(row) >= 5:
+                        prod = row[0].text.strip()
+                        ben  = row[1].text.strip()
+                        qty  = float(row[2].text.strip())
+                        price_unit = float(row[3].text.replace(' ','').replace('k','').replace('r','').strip())
+                        product = self.env['product.product'].search([('default_code','=',u'Inköp 5410')])
+                        if not product:
+                            self.env['product.product'].create({
+                                        'name': u'Inköp 5410 förbrukningsmateriel',
+                                        'default_code': u'Inköp 5410',
+                                    })
+                        self.env['purchase.order.line'].create({
+                                    'order_id': order.id,
+                                    'product_id': product.id,
+                                    'price_unit': price_unit,
+                                    'product_qty': int(qty),
+                                    'name': ben,
+                                    'date_planned': date,
                                 })
-                
-
-                    self.env['purchase.order.line'].create({
-                                'order_id': order.id,
-                                'product_id': product.id,
-                                'price_unit': price_unit,
-                                'product_qty': int(qty),
-                                'name': ben,
-                                'date_planned': data[61].strip(),
-                            })
-                    
-                    i += 5
-                    if data[i] == u'Varuv\xe4rde:':
-                        i = len(data)
-                
 #
 # END
 #
