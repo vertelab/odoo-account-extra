@@ -25,6 +25,7 @@
 'category': 'account,account_customer_no',
 'description': """Extends invoice with more text .""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'sequence': 99,
 'depends': ['report_intrastat', 'account_customer_no', 'stock', 'child_catagory_tags'],

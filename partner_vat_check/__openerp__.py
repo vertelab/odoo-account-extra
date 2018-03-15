@@ -34,6 +34,7 @@
     
 """,
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale','base_vat'],
 #'external_dependencies': {

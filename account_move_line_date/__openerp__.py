@@ -25,6 +25,7 @@
 'category': 'account',
 'description': """Account move line date""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['account',],
 'data': [

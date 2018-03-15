@@ -25,6 +25,7 @@
 'category': 'account',
 'description': """Show customer number for customer and supplier .""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['account', 'sale_customer_no', 'account_voucher'],
 'data': [

@@ -25,6 +25,7 @@
 'category': 'purchase',
 'description': """""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['decimal_precision', 'product', 'purchase'],
 'data': [

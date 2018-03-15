@@ -23,6 +23,7 @@
     'name': 'Project issue create voucher',
     'version': '0.1',
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'category': 'base',
     'website': 'http://www.vertel.se',
     'summary': 'Add buttons to create voucher from an issue',

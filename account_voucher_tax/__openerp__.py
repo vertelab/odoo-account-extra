@@ -23,6 +23,7 @@
     'name': 'Account Voucher Tax',
     'version': '0.1',
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'category': 'account',
     'website': 'http://www.vertel.se',
     'summary': 'Vouchers with more than one tax',

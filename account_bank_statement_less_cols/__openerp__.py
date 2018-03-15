@@ -25,6 +25,7 @@
 'category': 'account',
 'description': """In core Odoo uses a lot of account move columns when searching for "invoices" to reconcile with bank statements. This module recude ""Account Bank statement with less columns""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['account',],
 'data': [

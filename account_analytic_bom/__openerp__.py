@@ -25,6 +25,7 @@
     'category': 'account',
     'description': """Extends account_analytic_default for product reports""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['account_analytic_default', 'mrp','sale'],
     'data': [
