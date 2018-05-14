@@ -7,13 +7,13 @@
             <field name="inherit_id" ref="account_voucher.view_purchase_receipt_form" />
             <field name="priority" eval="10" />
             <field name="arch" type="xml">
-                <page string="Journal Items" position="after">
+                <notebook position="inside">
                     <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('image','=',None)]}">
                         <group rows="20">
                             <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
                         </group>
                     </page>
-                </page>
+                </notebook>
             </field>
         </record>
         <record model="ir.ui.view" id="view_sale_receipt_form">
@@ -21,13 +21,13 @@
             <field name="model">account.voucher</field>
             <field name="inherit_id" ref="account_voucher.view_sale_receipt_form" />
             <field name="arch" type="xml">
-                <page string="Journal Items" position="after">
+                <notebook position="inside">
                     <page string="Voucher" groups="base.group_user" attrs="{'invisible':[('image','=',None)]}">
                         <group rows="20">
                             <field name="image" widget="image" class="oe_left oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;,&quot;size&quot;: [800, 1200]}" nolabel="1" />
                         </group>
                     </page>
-                </page>
+                </notebook>
             </field>
         </record>
     </data>
