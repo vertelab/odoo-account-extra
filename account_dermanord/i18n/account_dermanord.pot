@@ -226,3 +226,7 @@ msgstr ""
 msgid "som referens vid betalning."
 msgstr ""
 
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Your credit"
+msgstr ""
