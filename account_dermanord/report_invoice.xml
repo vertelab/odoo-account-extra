@@ -16,6 +16,11 @@
         </template>
 
         <template id="report_invoice_document" inherit_id="account.report_invoice_document" >
+            
+            <xpath expr="//td/strong[text()='Total']" position="replace">
+                <strong t-if="o.type == 'out_refund'">Your credit</strong>
+                <strong t-if="o.type != 'out_refund'">Total</strong>
+            </xpath>
 
             <xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="before">
                 <div class="col-xs-5">

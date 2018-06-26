@@ -225,3 +225,8 @@ msgstr "o.tax_line and o.type != 'out_refund'"
 #: view:website:account.report_invoice_document
 msgid "som referens vid betalning."
 msgstr "som referens vid betalning."
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Your credit"
+msgstr "Er tillgodo"
