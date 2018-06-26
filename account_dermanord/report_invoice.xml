@@ -51,18 +51,6 @@
                 </div>
             </xpath>
 
-            <!-- important payment information -->
-            <xpath expr="//p[@t-if='o.comment']" position="after">
-                <p t-if="o.type != 'out_refund'">
-                    <strong>Viktig betalningsinformation:</strong><br/>
-                    <span>Förfallodattum: </span><span t-field="o.date_due"/><br/>
-                    <span>Ange fakturanummer <span t-field="o.number"/> som referens vid betalning.</span><br/>
-                    <span>Ange kundnummer <span t-field="o.customer_no"/> som referens vid betalning.</span><br/>
-                    <span>Summa att betala <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>.</span><br/>
-                    <span>Betalningskonto: BG 5723-7273</span>
-                </p>
-            </xpath>
-
         </template>
 
         <template id="report_intrastatinvoice_document_additional"  inherit_id="report_intrastat.report_intrastatinvoice_document">

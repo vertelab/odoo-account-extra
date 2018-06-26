@@ -44,7 +44,7 @@ class res_partner(models.Model):
             except Exception,e:
                 self.vat_check = e
                 #raise Warning('Exception %s' % e)
-            
+
     vat_check = fields.Char(string='VAT-check', compute='_vat_check',)  # store=True
 
 
@@ -55,11 +55,11 @@ class res_partner(models.Model):
         res = super(res_partner,self).check_vat()
         if res:
            self.vat_date = fields.Datetime.now()
-    
-           
+
+
     def vat_change(self, cr, uid, ids, value, context=None):
         return {'value': {'vat_subjected': bool(value)}}
-        
+
     @api.one
     def _construct_constraint_msg(self, cr, uid, ids, context=None):
         if not self.vat_subjected:
@@ -78,7 +78,7 @@ class sale_order(models.Model):
                     'author_id': self.env['res.users'].browse(self.env.uid).partner_id.id,
                     'res_id': self.id,
                     'model': self._name,
-                    'type': 'notification',}) 
+                    'type': 'notification',})
         return super(sale_order,self).action_button_confirm()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
