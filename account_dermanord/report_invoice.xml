@@ -16,7 +16,7 @@
         </template>
 
         <template id="report_invoice_document" inherit_id="account.report_invoice_document" >
-            
+
             <xpath expr="//td/strong[text()='Total']" position="replace">
                 <strong t-if="o.type == 'out_refund'">Your credit</strong>
                 <strong t-if="o.type != 'out_refund'">Total</strong>
@@ -56,6 +56,10 @@
                 </div>
             </xpath>
 
+            <xpath expr="//tr[@t-foreach='o.invoice_line']" position="attributes">
+                <attribute name="t-foreach">o.invoice_line.sorted(key=lambda line: line.name)</attribute>
+            </xpath>
+
         </template>
 
         <template id="report_intrastatinvoice_document_additional"  inherit_id="report_intrastat.report_intrastatinvoice_document">
@@ -75,8 +79,12 @@
                 <th class="text-right">Tariff</th>
             </xpath>
             <!-- tariff body -->
-            <xpath expr="//tr[@t-foreach='o.invoice_line']/td[3]" position="replace">
+            <xpath expr="//tr[@t-as='l']/td[3]" position="replace">
                 <td class="text-right"><span t-field="l.tariff"/></td>
+            </xpath>
+
+            <xpath expr="//tr[@t-foreach='o.invoice_line']" position="attributes">
+                <attribute name="t-foreach">o.invoice_line.sorted(key=lambda line: line.name)</attribute>
             </xpath>
 
             <xpath expr="//p[@t-if='o.fiscal_position']" position="after">
