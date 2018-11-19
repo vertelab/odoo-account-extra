@@ -48,7 +48,6 @@ class res_partner(models.Model):
             for p in self.partner_ids:
                 for categ in p.category_id:
                     categories |= categ
-            _logger.warn('here -------------------')
             self.child_category_ids = categories
 
 
