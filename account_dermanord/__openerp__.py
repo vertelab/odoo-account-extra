@@ -37,6 +37,7 @@
     'account_invoice_parcels_view.xml',
     'purchase_import_view.xml',
     'security/ir.model.access.csv',
+    'wizard/account_move_line_wizard.xml',
 ],
 'installable': True,
 }

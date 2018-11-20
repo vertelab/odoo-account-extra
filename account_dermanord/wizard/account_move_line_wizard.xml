@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <act_window id="action_show_journal_items_period_wizard"
+            key2="client_action_multi"
+            name="Journal Item Lines (with period)"
+            res_model="show.journal.items.wizard.period"
+            src_model="account.tax.code"
+            view_mode="form" target="new" view_type="form" />
+
+        <record model="ir.values" id="ir_values_show_journal_items_period_wizard">
+            <field name="name">Journal Item Lines (with period)</field>
+            <field name="model">model.model</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,%d' %action_show_journal_items_period_wizard"/>
+        </record>
+
+        <record id="show_journal_items_period_wizard_form" model="ir.ui.view">
+            <field name="name">show.journal.items.wizard.period.form</field>
+            <field name="model">show.journal.items.wizard.period</field>
+            <field name="arch" type="xml">
+                <form string="Show Journal Item Lines (with period)">
+                    <group>
+                        <group>
+                            <field name="period_start"/>
+                            <field name="period_stop"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                    </group>
+                    <div states="get">
+                         <h2>Generate Complete</h2>
+                         <p>Here is the generated ods-file: <field name="file_data" readonly="1" filename="name"/></p>
+                    </div>
+                    <footer states="choose">
+                        <div>
+                            <button name="generate_file" string="Generate File" type="object" class="oe_highlight"/> or
+                            <button special="cancel" string="Cancel" class="oe_link"/>
+                        </div>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_journal_item_without_tax_code_server_action" model="ir.actions.server">
+            <field name="name">Account moves without tax code</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="code">res_ids = []
+for move in env['account.move'].browse(context.get('active_ids', [])):
+    if len(move.mapped('line_id').mapped('tax_code_id')) == 0:
+        res_ids.append(move.id)
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Account moves without tax code',
+    'res_model': 'account.move',
+    'view_type': 'form',
+    'view_mode': 'tree,form',
+    'view_ids': [env.ref('account.view_move_tree').id, env.ref('account.view_move_form').id],
+    'domain': [('id', 'in', res_ids)],
+    'target': 'current',
+    'context': {},
+}</field>
+        </record>
+
+        <record id="ir_values_account_journal_item_without_tax_code" model="ir.values">
+            <field name="name">Account moves without tax code</field>
+            <field name="model">account.move</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.server,%s' %ref('account_dermanord.account_journal_item_without_tax_code_server_action')"/>
+        </record>
+
+    </data>
+</openerp>
