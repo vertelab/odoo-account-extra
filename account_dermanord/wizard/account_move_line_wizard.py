@@ -39,19 +39,30 @@ class show_journal_items_period_wizard(models.TransientModel):
     state = fields.Selection([('choose', 'choose'), ('get', 'get')], default='choose')
 
     @api.multi
-    def generate_file(self):
+    def generate_file_tax(self):
+        return self.generate_file(self._context.get('active_ids', []), 'tax')
+
+    @api.multi
+    def generate_file_account(self):
+        return self.generate_file(self._context.get('active_ids', []), 'account')
+
+    @api.multi
+    def generate_file(self, account_ids, obj):
         self.ensure_one()
         date_start = self.period_start.date_start
         date_stop = self.period_stop.date_stop
         if date_start > date_stop:
             raise Warning(_('Period Stop must be later than or same as period start.'))
         period_ids = self.env['account.period'].search([('date_start', '>=', date_start), ('date_stop', '<=', date_stop)])
-        tax_code_ids = self._context.get('active_ids', [])
         data = OrderedDict()
         title = ['Name', 'Date', 'Entry', 'Period', 'Company', 'Account', 'Tax', 'Debit', 'Kredit']
-        for tax_code_id in tax_code_ids:
-            tax_account = self.env['account.tax.code'].browse(tax_code_id)
-            move_lines = self.env['account.move.line'].search([('move_id.period_id', 'in', period_ids.mapped('id')), ('tax_code_id', '=', tax_code_id), ('move_id.state', '=', 'posted')])
+        for account_id in account_ids:
+            if obj == 'tax':
+                account = self.env['account.tax.code'].browse(account_id)
+                move_lines = self.env['account.move.line'].search([('move_id.period_id', 'in', period_ids.mapped('id')), ('tax_code_id', '=', account_id), ('move_id.state', '=', 'posted')])
+            elif obj == 'account':
+                account = self.env['account.account'].browse(account_id)
+                move_lines = self.env['account.move.line'].search([('move_id.period_id', 'in', period_ids.mapped('id')), ('account_id', '=', account_id), ('move_id.state', '=', 'posted')])
             sheet = [title]
             credit = 0.0
             debit = 0.0
@@ -61,7 +72,7 @@ class show_journal_items_period_wizard(models.TransientModel):
                 debit += float(line.debit)
             sheet.append(['Result', credit-debit])
             data.update({
-                tax_account.name: sheet
+                account.name: sheet
             })
 
         f = tempfile.NamedTemporaryFile('w+b', suffix='.ods')

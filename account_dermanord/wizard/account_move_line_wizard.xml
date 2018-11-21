@@ -2,22 +2,8 @@
 <openerp>
     <data>
 
-        <act_window id="action_show_journal_items_period_wizard"
-            key2="client_action_multi"
-            name="Journal Item Lines (with period)"
-            res_model="show.journal.items.wizard.period"
-            src_model="account.tax.code"
-            view_mode="form" target="new" view_type="form" />
-
-        <record model="ir.values" id="ir_values_show_journal_items_period_wizard">
-            <field name="name">Journal Item Lines (with period)</field>
-            <field name="model">model.model</field>
-            <field name="key2">client_action_multi</field>
-            <field name="value" eval="'ir.actions.act_window,%d' %action_show_journal_items_period_wizard"/>
-        </record>
-
-        <record id="show_journal_items_period_wizard_form" model="ir.ui.view">
-            <field name="name">show.journal.items.wizard.period.form</field>
+        <record id="show_journal_items_period_wizard_tax_form" model="ir.ui.view">
+            <field name="name">show.journal.items.wizard.period.tax.form</field>
             <field name="model">show.journal.items.wizard.period</field>
             <field name="arch" type="xml">
                 <form string="Show Journal Item Lines (with period)">
@@ -34,13 +20,59 @@
                     </div>
                     <footer states="choose">
                         <div>
-                            <button name="generate_file" string="Generate File" type="object" class="oe_highlight"/> or
+                            <button name="generate_file_tax" string="Generate File" type="object" class="oe_highlight"/> or
                             <button special="cancel" string="Cancel" class="oe_link"/>
                         </div>
                     </footer>
                 </form>
             </field>
         </record>
+
+        <act_window id="action_show_journal_items_period_tax_wizard"
+            key2="client_action_multi"
+            name="Journal Item Lines (with period)"
+            res_model="show.journal.items.wizard.period"
+            src_model="account.tax.code"
+            view_mode="form"
+            target="new"
+            view_type="form"
+            view_id="account_dermanord.show_journal_items_period_wizard_tax_form" />
+
+        <record id="show_journal_items_period_wizard_account_form" model="ir.ui.view">
+            <field name="name">show.journal.items.wizard.period.account.form</field>
+            <field name="model">show.journal.items.wizard.period</field>
+            <field name="arch" type="xml">
+                <form string="Show Journal Item Lines (with period)">
+                    <group>
+                        <group>
+                            <field name="period_start"/>
+                            <field name="period_stop"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                    </group>
+                    <div states="get">
+                         <h2>Generate Complete</h2>
+                         <p>Here is the generated ods-file: <field name="file_data" readonly="1" filename="name"/></p>
+                    </div>
+                    <footer states="choose">
+                        <div>
+                            <button name="generate_file_account" string="Generate File" type="object" class="oe_highlight"/> or
+                            <button special="cancel" string="Cancel" class="oe_link"/>
+                        </div>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_show_journal_items_period_account_wizard"
+            key2="client_action_multi"
+            name="Journal Item Lines (with period)"
+            res_model="show.journal.items.wizard.period"
+            src_model="account.account"
+            view_mode="form"
+            target="new"
+            view_type="form"
+            view_id="account_dermanord.show_journal_items_period_wizard_account_form" />
 
         <record id="account_journal_item_without_tax_code_server_action" model="ir.actions.server">
             <field name="name">Account moves without tax code</field>
