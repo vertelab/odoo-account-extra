@@ -77,11 +77,14 @@ class show_journal_items_period_wizard(models.TransientModel):
 
         f = tempfile.NamedTemporaryFile('w+b', suffix='.ods')
         save_data(f.name, data)
-        save_data('/tmp/tax.ods', data)
+        file_name = 'account.ods'
+        if obj == 'tax':
+            file_name = 'tax.ods'
+        save_data('/tmp/%s' %file_name, data)
         nf = open(f.name, 'rb')
         self.write({
             'state': 'get',
-            'name': 'tax.ods',
+            'name': file_name,
             'file_data': base64.b64encode(nf.read())
         })
         f.close()
