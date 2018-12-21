@@ -84,21 +84,29 @@ class project_issue(models.Model):
         return result
 
     @api.multi
-    def in_invoice(self,):
+    def in_invoice(self,): # vendor invoice
         invoices = []
         for issue in self:
+            if not issue.partner_id:
+                raise Warning(_('Please add a contact.'))
             invoice = self.env['account.invoice'].create({
                 'origin': '%s (%d)' % (issue.name,issue.id),
                 'type': 'in_invoice',
                 'comment': issue.description,
                 'company_id': issue.company_id.id,
                 'user_id': issue.user_id.id,
-                'account_id': issue.partner_id.property_account_receivable_id.id,
+                'account_id': issue.partner_id.property_account_payable_id.id,
                 'partner_id': issue.partner_id.id,
+                'journal_id': self.env['account.journal'].search([('type', '=', 'purchase')], order='sequence', limit=1).id or None,
             })
+            # move the attachment to invoice
+            attachment = self.env['ir.attachment'].search([('type', '=', 'binary'), ('res_model', '=', 'project.issue'), ('res_id', '=', issue.id)], limit=1)
+            if attachment:
+                attachment.res_model = 'account.invoice'
+                attachment.res_id = invoice.id
             issue._finnish(invoice,_('Supplier invoice created'))
             invoices.append(invoice)
-        return self._get_views(invoice,'account.action_invoice_tree2',form='account.invoice_form') #,tree='account.action_invoice_tree2')
+        return self._get_views(invoice,'account.action_invoice_tree2',form='account.invoice_supplier_form') #,tree='account.action_invoice_tree2')
         result = self.env.ref('account.action_invoice_tree2').read()[0]
         result['views'] = [(self.env.ref('account.invoice_form').id,'form'),(self.env.ref('account.invoice_tree').id,'tree')]
         result['res_id'] = invoice.id # self.id
@@ -107,9 +115,11 @@ class project_issue(models.Model):
         return result
 
     @api.multi
-    def out_invoice(self,):
+    def out_invoice(self,): # customer invoice
         invoices = []
         for issue in self:
+            if not issue.partner_id:
+                raise Warning(_('Please add a contact.'))
             invoice = self.env['account.invoice'].create({
                 'origin': '%s (%d)' % (issue.name,issue.id),
                 'type': 'out_invoice',
@@ -118,7 +128,13 @@ class project_issue(models.Model):
                 'user_id': issue.user_id.id,
                 'account_id': issue.partner_id.property_account_receivable.id,
                 'partner_id': issue.partner_id.id,
+                'journal_id': self.env['account.journal'].search([('type', '=', 'sale')], order='sequence', limit=1).id or None,
             })
+            # move the attachment to invoice
+            attachment = self.env['ir.attachment'].search([('type', '=', 'binary'), ('res_model', '=', 'project.issue'), ('res_id', '=', issue.id)], limit=1)
+            if attachment:
+                attachment.res_model = 'account.invoice'
+                attachment.res_id = invoice.id
             issue._finnish(invoice,_('Customer invoice created'))
             invoices.append(invoice)
         return self._get_views(invoice,'account.action_invoice_tree1',form='account.invoice_form')
