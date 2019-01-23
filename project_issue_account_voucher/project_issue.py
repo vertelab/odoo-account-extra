@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution, third party addon
+#    Odoo, Open Source Management Solution, third party addon
 #    Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, _
-from openerp.exceptions import except_orm, Warning, RedirectWarning
+from odoo import models, fields, api, _
+from odoo.exceptions import except_orm, Warning, RedirectWarning
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -36,14 +36,15 @@ class project_issue(models.Model):
             record = self.env['account.voucher'].with_context({'default_type': 'purchase', 'type': 'purchase'}).default_get(['journal_id','date','period_id'])
             record.update({
                 'type': 'purchase',
-                'account_id': issue.partner_id.property_account_receivable.id,
+                'account_id': issue.partner_id.property_account_receivable_id.id,
                 'name': issue.description,
                 'reference': issue.name,
             })
             voucher = self.env['account.voucher'].create(record)
             issue._finnish(voucher,_('Supplier voucher created'))
             vouchers.append(voucher)
-        return self._get_views(voucher,'account_voucher.action_voucher_list', form='account_voucher.view_purchase_receipt_form')
+        # TODO: how to pass in context key voucher_type?
+        return self._get_views(voucher,'account_voucher.action_review_voucher_list', form='account_voucher.view_purchase_receipt_form')
 
     @api.multi
     def voucher_out(self,):
@@ -52,7 +53,7 @@ class project_issue(models.Model):
             record = self.env['account.voucher'].with_context({'default_type': 'sale', 'type': 'sale'}).default_get(['journal_id','date','period_id'])
             record.update({
                 'type': 'sale',
-                'account_id': issue.partner_id.property_account_payable.id,
+                'account_id': issue.partner_id.property_account_payable_id.id,
                 'name': issue.description,
                 'reference': issue.name,
             })
