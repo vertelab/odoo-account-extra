@@ -43,7 +43,6 @@ class project_issue(models.Model):
             voucher = self.env['account.voucher'].create(record)
             issue._finnish(voucher,_('Supplier voucher created'))
             vouchers.append(voucher)
-        # TODO: how to pass in context key voucher_type?
         return self._get_views(voucher,'account_voucher.action_review_voucher_list', form='account_voucher.view_purchase_receipt_form')
 
     @api.multi

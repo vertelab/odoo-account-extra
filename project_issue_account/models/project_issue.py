@@ -99,11 +99,6 @@ class project_issue(models.Model):
                 'partner_id': issue.partner_id.id,
                 'journal_id': self.env['account.journal'].search([('type', '=', 'purchase')], order='sequence', limit=1).id or None,
             })
-            # move the attachment to invoice
-            attachment = self.env['ir.attachment'].search([('type', '=', 'binary'), ('res_model', '=', 'project.issue'), ('res_id', '=', issue.id)], limit=1)
-            if attachment:
-                attachment.res_model = 'account.invoice'
-                attachment.res_id = invoice.id
             issue._finnish(invoice,_('Supplier invoice created'))
             invoices.append(invoice)
         return self._get_views(invoice,'account.action_invoice_tree2',form='account.invoice_supplier_form') #,tree='account.action_invoice_tree2')
@@ -130,11 +125,6 @@ class project_issue(models.Model):
                 'partner_id': issue.partner_id.id,
                 'journal_id': self.env['account.journal'].search([('type', '=', 'sale')], order='sequence', limit=1).id or None,
             })
-            # move the attachment to invoice
-            attachment = self.env['ir.attachment'].search([('type', '=', 'binary'), ('res_model', '=', 'project.issue'), ('res_id', '=', issue.id)], limit=1)
-            if attachment:
-                attachment.res_model = 'account.invoice'
-                attachment.res_id = invoice.id
             issue._finnish(invoice,_('Customer invoice created'))
             invoices.append(invoice)
         return self._get_views(invoice,'account.action_invoice_tree1',form='account.invoice_form')
