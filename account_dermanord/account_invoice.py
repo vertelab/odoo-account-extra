@@ -22,6 +22,7 @@
 from openerp import api, models, fields, _
 import openerp.addons.decimal_precision as dp
 from openerp.osv import osv
+from openerp.exceptions import Warning
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -38,6 +39,12 @@ class account_invoice(models.Model):
     weight_uom_id = fields.Many2one(string='Unit of Measure', comodel_name='product.uom')
     volume = fields.Float(string='Volume', digits_compute=dp.get_precision('Stock Weight'), help="The Volume in m3.")
 
+    @api.multi
+    def action_invoice_sent(self):
+        if not self.partner_id.email:
+            raise Warning("Kund saknar epostadress")
+        return super(account_invoice, self).action_invoice_sent()
+        
 class sale_order(models.Model):
     _inherit = 'sale.order'
 
