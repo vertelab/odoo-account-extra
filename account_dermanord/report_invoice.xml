@@ -50,7 +50,7 @@
             </xpath>
 
             <xpath expr="//div[@t-if='o.partner_id.ref']" position="replace">
-                <div class="col-xs-2" t-if="o.date_due">
+                <div class="col-xs-2" t-if="o.date_due and o.type != 'out_refund'">
                     <strong>Due Date:</strong>
                     <p t-field="o.date_due"/>
                 </div>
@@ -58,6 +58,26 @@
 
             <xpath expr="//tr[@t-foreach='o.invoice_line']" position="attributes">
                 <attribute name="t-foreach">o.invoice_line.sorted(key=lambda line: line.name)</attribute>
+            </xpath>
+            
+            <xpath expr="//div[@class='col-xs-4 pull-right']/table[@class='table table-condensed']/tr[@class='border-black'][1]/td[1]" position="replace">
+				<td>Total Without Taxes</td>
+            </xpath>
+            <xpath expr="//span[@t-field='o.amount_total']" position="replace">
+				<strong>
+					<span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+				</strong>
+            </xpath>
+            <xpath expr="//p[@t-if='o.comment']" position="after">
+				<p />
+            </xpath>
+            <xpath expr="//span[@t-field='o.payment_term.note']/.." position="after">
+				<t t-if="o.type == 'out_refund'">
+					<strong>Refund Term:</strong>
+					<span>Utilise this refund by deducting the credit note amount from any of your upcoming payments. Remember to state the credit note reference (</span>
+					<strong t-field="o.number" />
+					<span>) in the message field with the payment.</span>
+				</t>
             </xpath>
 
         </template>
