@@ -1,0 +1,29 @@
+<openerp>
+    <data>
+        
+<!--
+        <report 
+            id="account_invoices"
+            model="account.invoice"
+            string="Invoices"
+            report_type="qweb-pdf"
+            name="fiscal_position_report_template.invoice"
+            file="fiscal_position_report_template.invoice"
+            attachment_use="True"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        />
+-->
+        
+        <record id="view_account_position_form" model="ir.ui.view">
+            <field name="name">customer.must.have.vat.fiscal_position_form</field>
+            <field name="model">account.fiscal.position</field>
+            <field name="inherit_id" ref="account.view_account_position_form" />
+            <field name="arch" type="xml">
+                <field name="country_group_id" position="after">
+                    <field name="report_default" domain="[('id', 'in', [%(report_intrastat.account_intrastatinvoices)d, %(account.account_invoices)d,])]"/>
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
