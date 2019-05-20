@@ -30,8 +30,7 @@ class account_fiscal_position(models.Model):
 
 
 class account_invoice(models.Model):
-    _name = "account.invoice"
-    _inherit = ['mail.thread']
+    _inherit = "account.invoice"
     
     
     @api.multi
