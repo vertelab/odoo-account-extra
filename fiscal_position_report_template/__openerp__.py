@@ -26,7 +26,7 @@
     'description': """""",
     'author': 'Vertel',
     'website': 'http://www.vertel.se',
-    'depends': ['account_payment', 'base_vat', 'account_chart'],
+    'depends': ['account',],
     'init_xml': [],
     'data': [
         'fiscal_position_report.xml',
