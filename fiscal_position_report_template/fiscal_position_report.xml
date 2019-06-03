@@ -1,18 +1,30 @@
 <openerp>
     <data>
         
-<!--
         <report 
             id="account_invoices"
             model="account.invoice"
-            string="Invoices"
+            string="Invoice selection template"
             report_type="qweb-pdf"
-            name="fiscal_position_report_template.invoice"
-            file="fiscal_position_report_template.invoice"
+            name="fiscal_position_report_template.report_invoice"
+            file="fiscal_position_report_template.report_invoice"
             attachment_use="True"
             attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
         />
--->
+        
+        <template id="report_invoice">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-set="invoice" t-value="env['account.invoice'].browse(doc_id)"/>
+                    <t t-if="invoice.commercial_partner_id.property_account_position.report_default.report_name == 'account.report_invoice'">
+                        <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'account.report_invoice_document')"/>
+                    </t>
+                    <t t-if="invoice.commercial_partner_id.property_account_position.report_default.report_name == 'report_intrastat.report_intrastatinvoice'">
+                        <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'report_intrastat.report_intrastatinvoice_document')"/>
+                    </t>
+                </t>
+            </t>
+        </template>
         
         <record id="view_account_position_form" model="ir.ui.view">
             <field name="name">customer.must.have.vat.fiscal_position_form</field>
