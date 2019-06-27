@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0-20161227\n"
+"Project-Id-Version: Odoo Server 8.0-20171009\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-04 16:02+0000\n"
-"PO-Revision-Date: 2017-01-04 17:15+0100\n"
+"POT-Creation-Date: 2019-06-27 12:31+0000\n"
+"PO-Revision-Date: 2019-06-27 14:37+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
 "Language: sv\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid ") in the message field with the payment."
+msgstr ") in the message field with the payment."
+
+#. module: account_dermanord
+#: model:ir.actions.server,name:account_dermanord.account_journal_item_without_tax_code_server_action
+msgid "Account moves without tax code"
+msgstr "Account moves without tax code"
 
 #. module: account_dermanord
 #: view:stock.picking:account_dermanord.view_picking_form
@@ -28,19 +38,16 @@ msgid "All products manufactured by Dermanord Svensk Hudvård AB"
 msgstr "Alla produkter som tillverkas av Dermanord Svensk Hudvård AB"
 
 #. module: account_dermanord
-#: view:website:account.report_invoice_document
-msgid "Ange fakturanummer"
-msgstr "Ange fakturanummer"
+#: view:purchase.dermanord.import.wizard:account_dermanord.view_cavarosa_import_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_account_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_tax_form
+msgid "Cancel"
+msgstr "Cancel"
 
 #. module: account_dermanord
-#: view:website:account.report_invoice_document
-msgid "Ange kundnummer"
-msgstr "Ange kundnummer"
-
-#. module: account_dermanord
-#: view:website:account.report_invoice_document
-msgid "Betalningskonto: BG 5723-7273"
-msgstr "Betalningskonto: BG 5723-7273"
+#: view:purchase.dermanord.import.wizard:account_dermanord.view_cavarosa_import_form
+msgid "Cavarosa PRoduct Import"
+msgstr "Cavarosa PRoduct Import"
 
 #. module: account_dermanord
 #: view:website:report_intrastat.report_intrastatinvoice_document
@@ -51,6 +58,20 @@ msgstr "Cbm:"
 #: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "Colli Nbr:"
 msgstr "Kolli nr:"
+
+#. module: account_dermanord
+#: field:multi.partner,create_uid:0
+#: field:purchase.dermanord.import.wizard,create_uid:0
+#: field:show.journal.items.wizard.period,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: account_dermanord
+#: field:multi.partner,create_date:0
+#: field:purchase.dermanord.import.wizard,create_date:0
+#: field:show.journal.items.wizard.period,create_date:0
+msgid "Created on"
+msgstr "Created on"
 
 #. module: account_dermanord
 #: view:website:account.report_invoice_document
@@ -73,14 +94,53 @@ msgid "Delivery terms:"
 msgstr "Leveransvillkor:"
 
 #. module: account_dermanord
+#: field:multi.partner,display_name:0
+#: field:purchase.dermanord.import.wizard,display_name:0
+#: field:show.journal.items.wizard.period,display_name:0
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Draft Supplier Invoice"
+msgstr "Leverantörsfaktura i utkast"
+
+#. module: account_dermanord
 #: view:website:account.report_invoice_document
 msgid "Due Date:"
 msgstr "Förfallodatum:"
 
 #. module: account_dermanord
-#: view:website:account.report_invoice_document
-msgid "Förfallodattum:"
-msgstr "Förfallodattum:"
+#: selection:purchase.dermanord.import.wizard,import_type:0
+msgid "Dustin"
+msgstr "Dustin"
+
+#. module: account_dermanord
+#: view:purchase.dermanord.import.wizard:account_dermanord.view_cavarosa_import_form
+msgid "Dustin AB (html)"
+msgstr "Dustin AB (html)"
+
+#. module: account_dermanord
+#: field:show.journal.items.wizard.period,file_data:0
+msgid "File"
+msgstr "File"
+
+#. module: account_dermanord
+#: view:purchase.dermanord.import.wizard:account_dermanord.view_cavarosa_import_form
+msgid "Filer vi har stöd för"
+msgstr "Filer vi har stöd för"
+
+#. module: account_dermanord
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_account_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_tax_form
+msgid "Generate Complete"
+msgstr "Generate Complete"
+
+#. module: account_dermanord
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_account_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_tax_form
+msgid "Generate File"
+msgstr "Generate File"
 
 #. module: account_dermanord
 #: view:account.invoice:account_dermanord.picking_in_invoice_form
@@ -89,9 +149,36 @@ msgid "Gross Weight"
 msgstr "Bruttovikt"
 
 #. module: account_dermanord
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_account_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_tax_form
+msgid "Here is the generated ods-file:"
+msgstr "Here is the generated ods-file:"
+
+#. module: account_dermanord
+#: field:multi.partner,id:0 field:purchase.dermanord.import.wizard,id:0
+#: field:show.journal.items.wizard.period,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: account_dermanord
+#: view:purchase.dermanord.import.wizard:account_dermanord.view_cavarosa_import_form
+msgid "Import"
+msgstr "Import"
+
+#. module: account_dermanord
+#: field:purchase.dermanord.import.wizard,import_type:0
+msgid "Import type"
+msgstr "Import type"
+
+#. module: account_dermanord
 #: field:account.invoice,incoterm:0 field:res.partner,incoterm:0
 msgid "Incoterm"
 msgstr "Incoterm"
+
+#. module: account_dermanord
+#: field:purchase.dermanord.import.wizard,info:0
+msgid "Info"
+msgstr "Info"
 
 #. module: account_dermanord
 #: help:account.invoice,incoterm:0 help:res.partner,incoterm:0
@@ -104,10 +191,78 @@ msgid "Invoice"
 msgstr "Faktura"
 
 #. module: account_dermanord
+#: model:ir.actions.act_window,name:account_dermanord.action_show_journal_items_period_account_wizard
+#: model:ir.actions.act_window,name:account_dermanord.action_show_journal_items_period_tax_wizard
+msgid "Journal Item Lines (with period)"
+msgstr "Journal Item Lines (with period)"
+
+#. module: account_dermanord
+#: field:multi.partner,__last_update:0
+#: field:purchase.dermanord.import.wizard,__last_update:0
+#: field:show.journal.items.wizard.period,__last_update:0
+msgid "Last Modified on"
+msgstr "Last Modified on"
+
+#. module: account_dermanord
+#: field:multi.partner,write_uid:0
+#: field:purchase.dermanord.import.wizard,write_uid:0
+#: field:show.journal.items.wizard.period,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: account_dermanord
+#: field:multi.partner,write_date:0
+#: field:purchase.dermanord.import.wizard,write_date:0
+#: field:show.journal.items.wizard.period,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: account_dermanord
+#: field:purchase.dermanord.import.wizard,mime:0
+msgid "Mime"
+msgstr "Mime"
+
+#. module: account_dermanord
+#: field:res.partner,partner_ids:0
+msgid "Multi Clients"
+msgstr "Multi Clients"
+
+#. module: account_dermanord
+#: field:show.journal.items.wizard.period,name:0
+msgid "Name"
+msgstr "Name"
+
+#. module: account_dermanord
 #: view:account.invoice:account_dermanord.picking_in_invoice_form
 #: field:account.invoice,weight_net:0
 msgid "Net Weight"
 msgstr "Nettovikt"
+
+#. module: account_dermanord
+#: view:stock.quant.package:account_dermanord.view_quant_package_tree
+msgid "Open Form"
+msgstr "Open Form"
+
+#. module: account_dermanord
+#: model:ir.actions.act_window,name:account_dermanord.action_dermanord_import_order
+#: model:ir.ui.menu,name:account_dermanord.menu_dermanord_order_import
+msgid "Order Import"
+msgstr "Order Import"
+
+#. module: account_dermanord
+#: field:purchase.dermanord.import.wizard,order_file:0
+msgid "Order file"
+msgstr "Order file"
+
+#. module: account_dermanord
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Origin of products: Sweden"
+msgstr "Origin of products: Sweden"
+
+#. module: account_dermanord
+#: view:stock.quant.package:account_dermanord.view_quant_package_tree
+msgid "Package"
+msgstr "Package"
 
 #. module: account_dermanord
 #: field:stock.picking,package_ids:0
@@ -122,17 +277,58 @@ msgstr "paket"
 #. module: account_dermanord
 #: model:ir.model,name:account_dermanord.model_stock_picking
 msgid "Packing List"
-msgstr "Packlista"
+msgstr "Plocklista"
+
+#. module: account_dermanord
+#: field:account.invoice,parcel_count:0 field:account.invoice,parcel_ids:0
+msgid "Parcels"
+msgstr "Parcels"
+
+#. module: account_dermanord
+#: field:multi.partner,parent_id:0
+msgid "Parent id"
+msgstr "Parent id"
 
 #. module: account_dermanord
 #: model:ir.model,name:account_dermanord.model_res_partner
 msgid "Partner"
-msgstr "Kund"
+msgstr "Återförsäljare"
+
+#. module: account_dermanord
+#: field:multi.partner,partner_id:0
+msgid "Partner id"
+msgstr "Partner id"
+
+#. module: account_dermanord
+#: field:show.journal.items.wizard.period,period_start:0
+msgid "Period Start"
+msgstr "Period Start"
+
+#. module: account_dermanord
+#: field:show.journal.items.wizard.period,period_stop:0
+msgid "Period Stop"
+msgstr "Period Stop"
+
+#. module: account_dermanord
+#: code:addons/account_dermanord/wizard/account_move_line_wizard.py:55
+#, python-format
+msgid "Period Stop must be later than or same as period start."
+msgstr "Period Stop must be later than or same as period start."
+
+#. module: account_dermanord
+#: model:ir.model,name:account_dermanord.model_stock_quant_package
+msgid "Physical Packages"
+msgstr "Fysiska paket"
 
 #. module: account_dermanord
 #: field:account.invoice,picking_id:0
 msgid "Picking"
 msgstr "Plockning"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Refund Term:"
+msgstr "Refund Term:"
 
 #. module: account_dermanord
 #: model:ir.model,name:account_dermanord.model_sale_order
@@ -145,20 +341,25 @@ msgid "Sale order"
 msgstr "Kundorder"
 
 #. module: account_dermanord
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Shipping Ref.:"
-msgstr "Fraktreferens"
-
-#. module: account_dermanord
-#: field:account.invoice,shipping_ref:0
 #: field:stock.quant.package,shipping_ref:0
 msgid "Shipping Reference"
 msgstr "Fraktreferens"
 
 #. module: account_dermanord
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_account_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_tax_form
+msgid "Show Journal Item Lines (with period)"
+msgstr "Show Journal Item Lines (with period)"
+
+#. module: account_dermanord
+#: field:show.journal.items.wizard.period,state:0
+msgid "State"
+msgstr "State"
+
+#. module: account_dermanord
 #: view:website:account.report_invoice_document
-msgid "Summa att betala"
-msgstr "Summa att betala"
+msgid "Supplier Invoice"
+msgstr "Leverantörsfaktura"
 
 #. module: account_dermanord
 #: view:website:report_intrastat.report_intrastatinvoice_document
@@ -181,6 +382,21 @@ msgid "The weight in Kg."
 msgstr "Nettovikten i kg."
 
 #. module: account_dermanord
+#: field:purchase.dermanord.import.wizard,tmp_file:0
+msgid "Tmp File"
+msgstr "Tmp File"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Total"
+msgstr "Total"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+msgid "Total Without Taxes"
+msgstr "Total Without Taxes"
+
+#. module: account_dermanord
 #: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "Tracking Nbr:"
 msgstr "Spårningsnummer:"
@@ -192,8 +408,8 @@ msgstr "Måttenhet"
 
 #. module: account_dermanord
 #: view:website:account.report_invoice_document
-msgid "Viktig betalningsinformation:"
-msgstr "Viktig betalningsinformation:"
+msgid "Utilise this refund by deducting the credit note amount from any of your upcoming payments. Remember to state the credit note reference ("
+msgstr "Utilise this refund by deducting the credit note amount from any of your upcoming payments. Remember to state the credit note reference ("
 
 #. module: account_dermanord
 #: field:account.invoice,volume:0
@@ -207,9 +423,30 @@ msgstr "Vikt:"
 
 #. module: account_dermanord
 #: view:website:account.report_invoice_document
+msgid "Your credit"
+msgstr "Er tillgodo"
+
+#. module: account_dermanord
+#: selection:show.journal.items.wizard.period,state:0
+msgid "choose"
+msgstr "choose"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
 #: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "col-xs-5 col-xs-offset-2"
 msgstr "col-xs-5 col-xs-offset-2"
+
+#. module: account_dermanord
+#: selection:show.journal.items.wizard.period,state:0
+msgid "get"
+msgstr "get"
+
+#. module: account_dermanord
+#: view:website:account.report_invoice_document
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "o.invoice_line.sorted(key=lambda line: line.name)"
+msgstr "o.invoice_line.sorted(key=lambda line: line.name)"
 
 #. module: account_dermanord
 #: view:website:account.report_invoice_document
@@ -222,11 +459,13 @@ msgid "o.tax_line and o.type != 'out_refund'"
 msgstr "o.tax_line and o.type != 'out_refund'"
 
 #. module: account_dermanord
-#: view:website:account.report_invoice_document
-msgid "som referens vid betalning."
-msgstr "som referens vid betalning."
+#: view:purchase.dermanord.import.wizard:account_dermanord.view_cavarosa_import_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_account_form
+#: view:show.journal.items.wizard.period:account_dermanord.show_journal_items_period_wizard_tax_form
+msgid "or"
+msgstr "or"
 
 #. module: account_dermanord
-#: view:website:account.report_invoice_document
-msgid "Your credit"
-msgstr "Er tillgodo"
+#: selection:purchase.dermanord.import.wizard,mime:0
+msgid "text/html"
+msgstr "text/html"
