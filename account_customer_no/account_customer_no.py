@@ -26,19 +26,40 @@ _logger = logging.getLogger(__name__)
 class account_invoice(models.Model):
     _inherit = 'account.invoice'
 
-    customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=True)
-
+    # ~ customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=False)
+    customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=False, search="search_customer_no")
+    
+    @api.model
+    def search_customer_no(self, op, value):
+        partner_ids = [p['id'] for p in self.env['res.partner'].search_read([('customer_no',op,value)], ['id'])]
+        return [('partner_id','in',partner_ids)]
+    
 class account_move(models.Model):
     _inherit = 'account.move'
 
-    customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)
+    customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=False, search="search_customer_no")
 
+    @api.model
+    def search_customer_no(self, op, value):
+        partner_ids = [p['id'] for p in self.env['res.partner'].search_read([('customer_no',op,value)], ['id'])]
+        return [('partner_id','in',partner_ids)]
+        
 class account_move_line(models.Model):
     _inherit = 'account.move.line'
 
-    customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)
+    customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=False, search="search_customer_no")
+
+    @api.model
+    def search_customer_no(self, op, value):
+        partner_ids = [p['id'] for p in self.env['res.partner'].search_read([('customer_no',op,value)], ['id'])]
+        return [('partner_id','in',partner_ids)]
 
 class account_voucher(models.Model):
     _inherit = 'account.voucher'
 
-    customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=True)
+    customer_no = fields.Char('Customer/Supplier Number', related="partner_id.customer_no", store=False, search="search_customer_no")
+
+    @api.model
+    def search_customer_no(self, op, value):
+        partner_ids = [p['id'] for p in self.env['res.partner'].search_read([('customer_no',op,value)], ['id'])]
+        return [('partner_id','in',partner_ids)]
