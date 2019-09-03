@@ -39,7 +39,7 @@ class account_payment_term(models.Model):
 
     no_followup = fields.Boolean(string='No follow up', help='This option excludes invoices with this payment term from the follow up process.')
 
-class account_followup_print(models.Model):
+class account_followup_print(models.TransientModel):
     _inherit = 'account_followup.print'
 
     def _get_partners_followp(self, cr, uid, ids, context=None):
