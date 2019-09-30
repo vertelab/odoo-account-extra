@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <!-- res.partner -->
+        <record model="ir.ui.view" id="partner_view_buttons">
+            <field name="name">view.partner.form.inherit</field>
+            <field name="inherit_id" ref="account.partner_view_buttons" />
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <!-- 2019-09-27
+                -->
+                <xpath expr="//button[@id='invoice_button']" position="replace">
+                    <button type="action" class="oe_stat_button" id="invoice_button" icon="fa-pencil-square-o" name="%(account.action_invoice_refund_out_tree)d" attrs="{'invisible': [('customer', '=', False)]}" context="{'search_default_partner_id': active_id,'default_partner_id': active_id}">
+                        <div>
+                            <strong>xxxx</strong>
+                            <br />
+                            Fakturerad
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
         <template id="assets_backend" name="module_name assets" inherit_id="web.assets_backend">
             <xpath expr="//link[last()]" position="after">
-                <style>
-                    .partner_tag .oe_tag, .child_tag .oe_tag { background-color: #FFF282; }
-                </style>
+                <style>.partner_tag .oe_tag, .child_tag .oe_tag { background-color: #FFF282; }</style>
             </xpath>
         </template>
         <record id="view_partner_form" model="ir.ui.view">
@@ -24,30 +41,30 @@
                 </h4>
                 <i position="before">
                     <div class="oe_kanban_footer_left">
-                        <field name="category_id" class="partner_tag"/>
+                        <field name="category_id" class="partner_tag" />
                     </div>
                 </i>
                 <field name="title" position="after">
-                    <field name="incoterm"/>
+                    <field name="incoterm" />
                 </field>
                 <xpath expr="//page[@string='Contacts']/field[@name='child_ids']" position="after">
-                    <label for="partner_ids"/>
-                    <field name="partner_ids"/>
+                    <label for="partner_ids" />
+                    <field name="partner_ids" />
                 </xpath>
             </field>
         </record>
         <record id="res_partner_kanban_view" model="ir.ui.view">
             <field name="name">res.partner.kanban.inherited.account_dermanord</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="inherit_id" ref="base.res_partner_kanban_view" />
             <field name="arch" type="xml">
                 <field name="has_image" position="after">
-                    <field name="child_category_ids"/>
+                    <field name="child_category_ids" />
                 </field>
                 <div class="oe_kanban_partner_categories" position="after">
                     <div class="oe_kanban_partner_child_category_ids">
                         <span class="oe_kanban_list_many2many">
-                            <field name="child_category_ids" class="child_tag"/>
+                            <field name="child_category_ids" class="child_tag" />
                         </span>
                     </div>
                 </div>
