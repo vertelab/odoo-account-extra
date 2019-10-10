@@ -35,7 +35,7 @@ class project_issue(models.Model):
         for issue in self:
             record = self.env['account.voucher'].with_context({'default_type': 'purchase', 'type': 'purchase'}).default_get(['journal_id','date','period_id'])
             record.update({
-                'type': 'purchase',
+                'voucher_type': 'purchase',
                 'account_id': issue.partner_id.property_account_receivable_id.id,
                 'name': issue.description,
                 'reference': issue.name,
@@ -43,7 +43,7 @@ class project_issue(models.Model):
             voucher = self.env['account.voucher'].create(record)
             issue._finnish(voucher,_('Supplier voucher created'))
             vouchers.append(voucher)
-        return self._get_views(voucher,'account_voucher.action_review_voucher_list', form='account_voucher.view_purchase_receipt_form')
+        return self._get_views(voucher,'account_voucher.action_purchase_receipt', form='account_voucher.view_purchase_receipt_form')
 
     @api.multi
     def voucher_out(self,):
@@ -51,7 +51,7 @@ class project_issue(models.Model):
         for issue in self:
             record = self.env['account.voucher'].with_context({'default_type': 'sale', 'type': 'sale'}).default_get(['journal_id','date','period_id'])
             record.update({
-                'type': 'sale',
+                'voucher_type': 'sale',
                 'account_id': issue.partner_id.property_account_payable_id.id,
                 'name': issue.description,
                 'reference': issue.name,
@@ -59,6 +59,7 @@ class project_issue(models.Model):
             voucher = self.env['account.voucher'].create(record)
             issue._finnish(voucher,_('Customer voucher created'))
             vouchers.append(voucher)
+        _logger.warn('jakob :::::: %s' % self._get_views(voucher,'account_voucher.action_sale_receipt', form='account_voucher.view_sale_receipt_form') )
         return self._get_views(voucher,'account_voucher.action_sale_receipt', form='account_voucher.view_sale_receipt_form')
 
 class account_voucher(models.Model):
@@ -69,9 +70,9 @@ class account_voucher(models.Model):
     @api.depends('partner_id')
     def _image(self):
         image = self.env['ir.attachment'].search([('res_model','=',self._name),('res_id','=',self.id)])
-        if image and image[0].file_type == 'application/pdf':
+        if image and image[0].mimetype == 'application/pdf':
             self.image = image[0].image
-        elif image and image[0].file_type in ['image/jpeg','image/png','image/gif']:
+        elif image and image[0].mimetype in ['image/jpeg','image/png','image/gif']:
             self.image = image[0].datas
         else:
             self.image = None
