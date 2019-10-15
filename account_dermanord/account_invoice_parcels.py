@@ -31,13 +31,14 @@ class account_invoice(models.Model):
     
     @api.one
     def _get_parcel_ids(self):
-        if self.picking_id:
+        picking = self.picking_id.sudo()
+        if picking:
             def get_top_package(package):
                 if package.parent_id:
                     return get_top_package(package.parent_id)
                 return package
             parcels = self.env['stock.quant.package'].browse()
-            for package in self.picking_id.package_ids:
+            for package in picking.package_ids:
                 parcels |= get_top_package(package)
             self.parcel_ids = parcels
             self.parcel_count = len(parcels)
