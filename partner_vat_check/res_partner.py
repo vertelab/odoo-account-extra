@@ -55,6 +55,7 @@ class res_partner(models.Model):
         res = super(res_partner,self).check_vat()
         if res:
            self.vat_date = fields.Datetime.now()
+        return res
 
 
     def vat_change(self, cr, uid, ids, value, context=None):
