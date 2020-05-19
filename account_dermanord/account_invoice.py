@@ -44,6 +44,14 @@ class account_invoice(models.Model):
         if not self.partner_id.email:
             raise Warning("Kund saknar epostadress")
         return super(account_invoice, self).action_invoice_sent()
+    
+    @api.model
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals):
+        invoice = super(account_invoice, self).create(vals)
+        if invoice.amount_total == 0:
+            invoice.signal_workflow('invoice_open')
+        return invoice
         
 class sale_order(models.Model):
     _inherit = 'sale.order'
