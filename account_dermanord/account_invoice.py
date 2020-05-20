@@ -47,9 +47,11 @@ class account_invoice(models.Model):
     
     @api.model
     @api.returns('self', lambda value: value.id)
+    # ~ This is the controller for 0 amount auto confirm invoice
     def create(self, vals):
         invoice = super(account_invoice, self).create(vals)
-        if invoice.amount_total == 0:
+        # ~ _logger.warn('\n\ncontext: %s\n' % self.env.context)
+        if not self.env.context.get('override_0_invoice_confirm') and invoice.amount_total == 0:
             invoice.signal_workflow('invoice_open')
         return invoice
         
@@ -75,7 +77,7 @@ class StockPicking(models.Model):
     @api.model
     def _create_invoice_from_picking(self, picking, vals):
         vals['picking_id'] = picking.id
-        invoice_id = super(StockPicking, self)._create_invoice_from_picking(picking, vals)
+        invoice_id = super(StockPicking, self.with_context(override_0_invoice_confirm=True))._create_invoice_from_picking(picking, vals)
         self.env['account.invoice'].browse(invoice_id).write({'incoterm': picking.sale_id.incoterm.id,
                        'weight': picking.weight,
                        'weight_net': picking.weight_net,
