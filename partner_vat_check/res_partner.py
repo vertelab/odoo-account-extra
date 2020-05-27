@@ -69,7 +69,11 @@ class res_partner(models.Model):
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
-
+    
+    vat_date = fields.Datetime(related="partner_id.vat_date", required=True)
+    
+   
+    
     @api.one
     def action_button_confirm(self):
         if not self.partner_id.check_vat():
@@ -81,5 +85,12 @@ class sale_order(models.Model):
                     'model': self._name,
                     'type': 'notification',})
         return super(sale_order,self).action_button_confirm()
+        
+# ~ class account_fiscal_position_tax(models.Model):
+    # ~ _inherit = 'account.fiscal.position.tax'
+
+    # ~ vat_warning = fields.Boolean(string = "Warning check", help = "check valid VAT VIES-control") 
+    
+    
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

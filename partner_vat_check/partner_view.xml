@@ -45,5 +45,31 @@
       <field name="view_id" ref="view_partner_tree" />
     </record>
     <menuitem id="menu_partner_vat" name="Partner VAT" parent="base.menu_sales" action='action_res_partner_vat' />
+    
+    <record id="view_order_form" model="ir.ui.view">
+      <field name="name">res.partner.vat_date</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form" />
+      <field name="arch" type="xml">
+        <field name="fiscal_position" position="after">
+            <field name="vat_date" class="oe_inline" />
+        </field>
+      </field>
+    </record>
+    
+<!--
+    <record id="view_account_position_form" model="ir.ui.view">
+      <field name="name">res.partner.vat.warning</field>
+      <field name="model">account.fiscal.position.tax</field>
+      <field name="inherit_id" ref="account.view_account_position_form" />
+      <field name="arch" type="xml">
+        <field name="vat_required" position="after">
+            <field name="vat_warning" />
+        </field>
+      </field>
+    </record>
+-->
+    
+    
   </data>
 </openerp>
