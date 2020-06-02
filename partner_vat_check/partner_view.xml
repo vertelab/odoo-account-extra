@@ -52,15 +52,15 @@
       <field name="inherit_id" ref="sale.view_order_form" />
       <field name="arch" type="xml">
         <field name="fiscal_position" position="after">
-            <field name="vat_date" class="oe_inline" />
+            <field name="vat_warning" invisible="1" />
+            <field name="vat_date" class="oe_inline" attrs="{'invisible': [('vat_warning', '=', False)], 'required':[('vat_warning', '=', True)]}"/>
         </field>
       </field>
     </record>
     
-<!--
     <record id="view_account_position_form" model="ir.ui.view">
       <field name="name">res.partner.vat.warning</field>
-      <field name="model">account.fiscal.position.tax</field>
+      <field name="model">account.fiscal.position</field>
       <field name="inherit_id" ref="account.view_account_position_form" />
       <field name="arch" type="xml">
         <field name="vat_required" position="after">
@@ -68,7 +68,6 @@
         </field>
       </field>
     </record>
--->
     
     
   </data>
