@@ -50,9 +50,11 @@ class account_invoice(models.Model):
     # ~ This is the controller for 0 amount auto confirm invoice
     def create(self, vals):
         invoice = super(account_invoice, self).create(vals)
+        # This breaks tools like invoice merge. Probably best to define the situations
+        # when we want to do this and make sure it only happens there.
         # ~ _logger.warn('\n\ncontext: %s\n' % self.env.context)
-        if not self.env.context.get('override_0_invoice_confirm') and invoice.amount_total == 0:
-            invoice.signal_workflow('invoice_open')
+        # ~ if not self.env.context.get('override_0_invoice_confirm') and invoice.amount_total == 0:
+            # ~ invoice.signal_workflow('invoice_open')
         return invoice
         
 class sale_order(models.Model):
