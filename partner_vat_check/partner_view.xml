@@ -53,7 +53,11 @@
       <field name="arch" type="xml">
         <field name="fiscal_position" position="after">
             <field name="vat_warning" invisible="1" />
-            <field name="vat_date" class="oe_inline" attrs="{'invisible': [('vat_warning', '=', False)], 'required':[('vat_warning', '=', True)]}"/>
+            <label for="vat_date" attrs="{'invisible': [('vat_warning', '=', False)], 'required':[('vat_warning', '=', True)]}"/>
+            <span attrs="{'invisible': [('vat_warning', '=', False)], 'required':[('vat_warning', '=', True)]}">
+                <field name="vat_date" class="oe_inline" />
+                <button type="object" class="oe_inline" name="button_check_vat" string="VIES Control" />
+            </span>
         </field>
       </field>
     </record>

@@ -84,6 +84,10 @@ class sale_order(models.Model):
                     'model': self._name,
                     'type': 'notification',})
         return super(sale_order,self).action_button_confirm()
+    
+    @api.multi
+    def button_check_vat(self):
+        return self.partner_id.button_check_vat()
         
 class account_fiscal_position(models.Model):
     _inherit = 'account.fiscal.position'
