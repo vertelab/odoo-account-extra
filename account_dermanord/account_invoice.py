@@ -103,19 +103,26 @@ class AccountMoveLine(models.Model):
     @api.multi
     def create_analytic_lines(self):
         acc_ana_line_obj = self.env['account.analytic.line']
+        invoice = self.env.context.get('invoice')
         for obj_line in self:
             if obj_line.analytic_account_id.log_invoice_lines:
                 if not obj_line.journal_id.analytic_journal_id:
                     raise osv.except_osv(_('No Analytic Journal!'),_("You have to define an analytic journal on the '%s' journal!") % (obj_line.journal_id.name, ))
-                vals_line = self._prepare_analytic_line_products(obj_line)
+                vals_line = self._prepare_analytic_line_products(obj_line, invoice)
                 if vals_line:
-                    acc_ana_line_obj.create(vals_line)
+                    line = obj_line.analytic_lines.filtered(lambda l: l.product_id == obj_line.product_id)
+                    if line:
+                        # Update existing analytic line
+                        line.write(vals_line)
+                    else:
+                        # Create new analytic line
+                        acc_ana_line_obj.create(vals_line)
             else:
                 super(AccountMoveLine, obj_line).create_analytic_lines()
         return True
         
     @api.model
-    def _prepare_analytic_line_products(self, obj_line):
+    def _prepare_analytic_line_products(self, obj_line, invoice):
         """
         Prepare the values given at the create() of account.analytic.line upon the validation of a journal item having
         an analytic account. This method is intended to be extended in other modules.
@@ -123,15 +130,14 @@ class AccountMoveLine(models.Model):
         :param obj_line: browse record of the account.move.line that triggered the analytic line creation
         """
         res = None
-        invoice = self.env.context.get('invoice')
-        _logger.warn("%s\n %s\n " %(self.env.context, obj_line.product_id))
         if invoice and obj_line.product_id:
             res = self._prepare_analytic_line(obj_line)
             price_total = 0.0
+            quantity_total = 0.0
             _logger.warn(invoice.invoice_line.filtered(lambda l: l.product_id == obj_line.product_id))
             for invoice_line in invoice.invoice_line.filtered(lambda l: l.product_id == obj_line.product_id):
-                _logger.warn('%s %s' % (invoice_line.price_unit , invoice_line.quantity))
                 price_total += invoice_line.price_unit * invoice_line.quantity
+                quantity_total += invoice_line.quantity
             res['amount'] = price_total
-        _logger.warn('%s' %res)
+            res['unit_amount'] = quantity_total
         return res

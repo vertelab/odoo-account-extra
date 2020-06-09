@@ -63,5 +63,16 @@
                 </xpath>
             </field>
         </record>
+        
+        <record id="view_account_analytic_account_form_log" model="ir.ui.view">
+            <field name="name">analytic.analytic.account.form (account_analytic_invoice_log)</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="log_invoice_lines"/>
+                </field>
+            </field>
+        </record>
     </data>
 </openerp>
