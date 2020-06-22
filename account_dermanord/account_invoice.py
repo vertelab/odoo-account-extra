@@ -27,6 +27,8 @@ from openerp.exceptions import Warning
 import logging
 _logger = logging.getLogger(__name__)
 
+    
+
 class account_invoice(models.Model):
     _inherit = 'account.invoice'
 
@@ -59,7 +61,7 @@ class account_invoice(models.Model):
         
 class sale_order(models.Model):
     _inherit = 'sale.order'
-
+    
     @api.model
     def _make_invoice(self, order, lines):
         inv_id = super(sale_order, self)._make_invoice(order, lines)
@@ -95,7 +97,7 @@ class StockPicking(models.Model):
 class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
     
-    log_invoice_lines = fields.Boolean(string='Log Invoice Lines')
+    use_cost_price = fields.Boolean(string='Use Cost Price', help = 'If you check this, cost price (standard_price) is used instead of Price (price_unit)')
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
@@ -105,7 +107,7 @@ class AccountMoveLine(models.Model):
         acc_ana_line_obj = self.env['account.analytic.line']
         invoice = self.env.context.get('invoice')
         for obj_line in self:
-            if obj_line.analytic_account_id.log_invoice_lines:
+            if obj_line.analytic_account_id.use_cost_price:
                 if not obj_line.journal_id.analytic_journal_id:
                     raise osv.except_osv(_('No Analytic Journal!'),_("You have to define an analytic journal on the '%s' journal!") % (obj_line.journal_id.name, ))
                 vals_line = self._prepare_analytic_line_products(obj_line, invoice)
@@ -136,7 +138,7 @@ class AccountMoveLine(models.Model):
             quantity_total = 0.0
             _logger.warn(invoice.invoice_line.filtered(lambda l: l.product_id == obj_line.product_id))
             for invoice_line in invoice.invoice_line.filtered(lambda l: l.product_id == obj_line.product_id):
-                price_total += invoice_line.price_unit * invoice_line.quantity
+                price_total += invoice_line.product_id.standard_price * invoice_line.quantity
                 quantity_total += invoice_line.quantity
             res['amount'] = price_total
             res['unit_amount'] = quantity_total

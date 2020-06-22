@@ -70,9 +70,11 @@
             <field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
-                    <field name="log_invoice_lines"/>
+                    <field name="use_cost_price"/>
                 </field>
             </field>
         </record>
+        
+        
     </data>
 </openerp>
