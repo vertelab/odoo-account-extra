@@ -32,6 +32,7 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     vat_date = fields.Datetime(string="VIES-kontroll")
+    
 
     @api.one
     @api.depends('vat')
@@ -71,7 +72,8 @@ class sale_order(models.Model):
     _inherit = 'sale.order'
     
     vat_date = fields.Datetime(related="partner_id.vat_date")
-    vat_warning = fields.Boolean(related="fiscal_position.vat_warning")
+    vat_warning = fields.Boolean(related="fiscal_position.vat_warning", readonly=True)
+    
 
     @api.one
     def action_button_confirm(self):
@@ -93,6 +95,10 @@ class account_fiscal_position(models.Model):
     _inherit = 'account.fiscal.position'
 
     vat_warning = fields.Boolean(string="VIES Control", help="check valid VAT VIES-control") 
+    
+   
+        
+        
     
     
 
