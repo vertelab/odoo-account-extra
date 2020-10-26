@@ -77,7 +77,7 @@ class sale_order(models.Model):
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
-
+    
     @api.model
     def _create_invoice_from_picking(self, picking, vals):
         vals['picking_id'] = picking.id
@@ -89,11 +89,19 @@ class StockPicking(models.Model):
                        'volume': picking.volume})
         return invoice_id
 
-    @api.one
-    def _package_ids(self):
-        self.package_ids = [(6,0,set(self.pack_operation_ids.mapped('result_package_id.id')))]
-    package_ids = fields.Many2many(comodel_name="stock.quant.package", compute='_package_ids')
-
+    # ~ @api.one
+    # ~ def _package_ids(self):
+        # ~ self.package_ids = [(6,0,set(self.pack_operation_ids.mapped('result_package_id.id')))]
+        # ~ self.package_ids = [(4,shipping_weight)]
+    # ~ package_ids = fields.Many2many(comodel_name="stock.quant.package", compute='_package_ids') #
+    package_ids = fields.Many2many(comodel_name="stock.quant.package",store=True)
+    
+    shipping_weight = fields.Float(string='Shipping Weight')
+    
+class StockQuantPackage(models.Model):
+    _inherit = "stock.quant.package"
+    shipping_weight = fields.Float(string='Shipping Weight')
+    
 class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
     

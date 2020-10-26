@@ -7,10 +7,45 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <page string="Additional Info" position="after">
-                    <page string="Packages" attrs="{'invisible': [('state', 'in', ['draft', 'cancel', 'waiting', 'confirmed', 'partially_available', 'assigned'])]}">
-                        <field name="package_ids"/>
+                    <page string="Packages" >
+                        <field name="package_ids" attrs="{'readonly':False}" force_save="1">
+							<tree editable="top">
+								<field name="name" force_save="1"/>
+								<field name="packaging_id" force_save="1"/>
+								<field name="shipping_weight" force_save="1"/>
+							</tree>
+                        </field>
                     </page>
                 </page>
+            </field>
+        </record>
+        <record id="view_quant_package_form_DHL" model="ir.ui.view" >
+            <field name="name">stock.quant.package.form.DHL</field>
+            <field name="model">stock.quant.package</field>
+            <field name="inherit_id" ref="stock.view_quant_package_form"/>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="quant_ids" position="replace">
+                    <field name="quant_ids" attrs="{'readonly':False}">
+                        <tree string="Quants">
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                            <field name="location_id"/>
+                            <field name="in_date"/>
+                        </tree>
+                    </field>
+                </field>
+                <field name="children_ids" position="replace">
+                    <field name="children_ids" attrs="{'readonly':False}">
+                        <tree string="Contained Packages">
+                            <field name="complete_name"/>
+                            <field name="ul_id"/>
+                            <field name="packaging_id"/>
+                            <field name="shipping_weight"/>
+                            <field name="location_id"/>
+                        </tree>
+                    </field>
+                </field>
             </field>
         </record>
     </data>
