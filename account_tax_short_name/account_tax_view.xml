@@ -36,5 +36,34 @@
                 </tbody>
             </xpath>
         </template>
+        
+        <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document" >
+            <xpath expr="//tbody[@class='sale_tbody']" position="replace">
+                <tbody class="sale_tbody">
+                      <tr t-foreach="o.order_line" t-as="l">
+                        <td>
+                          <span t-field="l.name"/>
+                        </td>
+                        <td>
+                          <span t-esc="', '.join(map(lambda x: x.name if isinstance(x.short_name, bool) else x.short_name, l.tax_id))"/>
+                        </td>
+                        <td class="text-right">
+                          <span t-field="l.product_uom_qty"/>
+                          <span groups="product.group_uom" t-field="l.product_uom"/>
+                        </td>
+                        <td class="text-right">
+                          <span t-field="l.price_unit"/>
+                        </td>
+                        <td groups="sale.group_discount_per_so_line">
+                          <span t-field="l.discount"/>
+                        </td>
+                        <td class="text-right">
+                          <span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.pricelist_id.currency_id&quot;}"/>
+                        </td>
+                      </tr>
+                </tbody>
+            </xpath>
+        </template>
+        
     </data>
 </openerp>
