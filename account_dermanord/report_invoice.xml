@@ -84,6 +84,15 @@
 					<span>) in the message field with the payment.</span>
 				</t>
             </xpath>
+            
+            <xpath expr="//table[@class='table table-condensed']/thead/tr/th" position="before">
+                <th>EAN</th>
+            </xpath>
+            <xpath expr="//tbody[@class='invoice_tbody']/tr/td" position="before">
+                <td>
+                    <span t-field="l.product_id.ean13"/>
+                </td>
+            </xpath>
 
         </template>
 
