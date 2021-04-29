@@ -23,7 +23,7 @@
 'version': '0.1',
 'summary': '',
 'category': 'account',
-'description': """Account tax short name""",
+'description': """Account tax short name. This module also inserts the name of the price list into the invoice.""",
 'author': 'Vertel AB',
     'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
