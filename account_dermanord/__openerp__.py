@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2017 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2017 Vertel Sverige AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -24,7 +24,7 @@
 'summary': '',
 'category': 'account,account_customer_no',
 'description': """Extends invoice with more text .""",
-'author': 'Vertel AB',
+'author': 'Vertel Sverige AB',
     'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'sequence': 99,
